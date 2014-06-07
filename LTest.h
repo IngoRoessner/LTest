@@ -4,6 +4,7 @@
 #include <iostream>
 #include <functional>
 #include <list>
+#include <map>
 #include <string>
 #include <tuple>
 
@@ -16,10 +17,15 @@ class LTest
         TestListType testCases;
         list<string> ok;
         list<string> fail;
+        map<string, bool> ignores;
+        bool nexIgnore;
+        unsigned int nextIgnores;
+        list<string> actualIgnore;
         list<tuple<string, string>> error;
         string prefix;
         LTest();
         static LTest& getInstanz();
+        unsigned int counter;
     public:
 
         static void runTests();
@@ -35,6 +41,12 @@ class LTest
         static void run(ostream& os = cout);
 
         static void addTest(string testName, function<bool ()> test);
+
+        static void ignore(string testName);
+
+        static void ignore(unsigned int number);
+
+        static void ignore();
 
 };
 

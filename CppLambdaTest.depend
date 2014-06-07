@@ -1,14 +1,15 @@
 # depslib dependency file v1.0
-1402075409 source:c:\workspaces\cpp_workspace\cpplambdatest\ltest.cpp
+1402137137 source:c:\workspaces\cpp_workspace\cpplambdatest\ltest.cpp
 	"LTest.h"
 
-1402075068 c:\workspaces\cpp_workspace\cpplambdatest\ltest.h
+1402136597 c:\workspaces\cpp_workspace\cpplambdatest\ltest.h
 	<iostream>
 	<functional>
 	<list>
+	<map>
 	<string>
 	<tuple>
 
-1402075441 source:c:\workspaces\cpp_workspace\cpplambdatest\main.cpp
+1402137827 source:c:\workspaces\cpp_workspace\cpplambdatest\main.cpp
 	"LTest.h"
 
