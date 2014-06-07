@@ -36,6 +36,10 @@ class LTest
 
         static void okOut(ostream& os = cout);
 
+        static void ignoreOut(ostream& os = cout);
+
+        static void countOut(ostream& os = cout);
+
         static void testOut(ostream& os = cout);
 
         static void run(ostream& os = cout);

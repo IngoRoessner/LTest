@@ -49,10 +49,23 @@ LTest& LTest::getInstanz(){
             }
         }
 
+        void LTest::ignoreOut(ostream& os){
+            for (list<string>::iterator it = getInstanz().actualIgnore.begin(); it != getInstanz().actualIgnore.end(); it++){
+                os<<(*it)+": Ignore"<<endl;
+            }
+        }
+
+
+        void LTest::countOut(ostream& os){
+            os<<"Ignored("<<getInstanz().actualIgnore.size()<<"), OK("<<getInstanz().ok.size()<<"), Fail("<<getInstanz().fail.size()<<"), Exception("<<getInstanz().error.size()<<")"<<endl;
+        }
+
         void LTest::testOut(ostream& os){
             okOut(os);
             failOut(os);
             errorOut(os);
+            ignoreOut(os);
+            countOut(os);
         }
 
         void LTest::run(ostream& os){
