@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <tuple>
+#include "LTestAssert.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ class LTest
         unsigned int nextIgnores;
         list<string> actualIgnore;
         list<tuple<string, string>> error;
+        list<tuple<string, string>> assert;
         string prefix;
         LTest();
         static LTest& getInstanz();
@@ -31,6 +33,8 @@ class LTest
         static void runTests();
 
         static void errorOut(ostream& os = cout);
+
+        static void assertOut(ostream& os = cout);
 
         static void failOut(ostream& os = cout);
 

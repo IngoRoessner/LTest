@@ -20,7 +20,9 @@ LTest& LTest::getInstanz(){
                         }else{
                             getInstanz().fail.push_back(testName);
                         }
-                    }catch(exception e){getInstanz().error.push_back(make_tuple(testName, e.what()));}
+                    }
+                    catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_tuple(testName, a.what()));}
+                    catch(exception e){getInstanz().error.push_back(make_tuple(testName, e.what()));}
                     catch(int e){getInstanz().error.push_back(make_tuple(testName, "int exception: "+e));}
                     catch(char e){getInstanz().error.push_back(make_tuple(testName, "char exception: "+e));}
                     catch(...){getInstanz().error.push_back(make_tuple(testName, "Unknown Exception"));}
@@ -33,6 +35,12 @@ LTest& LTest::getInstanz(){
 
         void LTest::errorOut(ostream& os){
             for (list<tuple<string, string>>::iterator it = getInstanz().error.begin(); it != getInstanz().error.end(); it++){
+                os<<get<0>(*it)+": "+get<1>(*it)<<endl;
+            }
+        }
+
+        void LTest::assertOut(ostream& os){
+            for (list<tuple<string, string>>::iterator it = getInstanz().assert.begin(); it != getInstanz().assert.end(); it++){
                 os<<get<0>(*it)+": "+get<1>(*it)<<endl;
             }
         }
@@ -55,14 +63,14 @@ LTest& LTest::getInstanz(){
             }
         }
 
-
         void LTest::countOut(ostream& os){
-            os<<"Ignored("<<getInstanz().actualIgnore.size()<<"), OK("<<getInstanz().ok.size()<<"), Fail("<<getInstanz().fail.size()<<"), Exception("<<getInstanz().error.size()<<")"<<endl;
+            os<<"Ignored("<<getInstanz().actualIgnore.size()<<"), OK("<<getInstanz().ok.size()<<"), Fail("<<getInstanz().fail.size()<<"), Assert("<<getInstanz().assert.size()<<")"<<"), Exception("<<getInstanz().error.size()<<")"<<endl;
         }
 
         void LTest::testOut(ostream& os){
             okOut(os);
             failOut(os);
+            assertOut(os);
             errorOut(os);
             ignoreOut(os);
             countOut(os);
