@@ -18,16 +18,16 @@ namespace LTAssert{
     };
 
     template<typename T>
-    void Equal(T a, T b){
+    void Equal(T a, T b, string message){
         if(!(a==b)){
-            throw FalseAssert("not equal");
+            throw FalseAssert(message);
         }
     }
 
     template<typename T>
-    void UnEqual(T a, T b){
+    void UnEqual(T a, T b, string message){
         if(a==b){
-            throw FalseAssert("is equal, should be unequal");
+            throw FalseAssert(message);
         }
     }
 
@@ -39,9 +39,23 @@ namespace LTAssert{
     }
 
     template<typename T>
+    void True(T b, string message){
+        if(!b){
+            throw FalseAssert(message);
+        }
+    }
+
+    template<typename T>
     void False(T b){
         if(b){
             throw FalseAssert("bool = true, should be false");
+        }
+    }
+
+    template<typename T>
+    void False(T b, string message){
+        if(b){
+            throw FalseAssert(message);
         }
     }
 

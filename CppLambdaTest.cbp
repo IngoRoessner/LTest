@@ -35,6 +35,7 @@
 		</Compiler>
 		<Unit filename="LTest.cpp" />
 		<Unit filename="LTest.h" />
+		<Unit filename="LTestAssert.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
