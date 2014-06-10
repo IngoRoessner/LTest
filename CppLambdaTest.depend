@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1402143651 source:c:\workspaces\cpp_workspace\cpplambdatest\ltest.cpp
+1402390484 source:c:\workspaces\cpp_workspace\cpplambdatest\ltest.cpp
 	"LTest.h"
 
-1402143662 c:\workspaces\cpp_workspace\cpplambdatest\ltest.h
+1402390550 c:\workspaces\cpp_workspace\cpplambdatest\ltest.h
 	<iostream>
 	<functional>
 	<list>
@@ -10,11 +10,16 @@
 	<string>
 	<tuple>
 	"LTestAssert.h"
+	"toStringPatch.h"
 
-1402311905 source:c:\workspaces\cpp_workspace\cpplambdatest\main.cpp
+1402388665 source:c:\workspaces\cpp_workspace\cpplambdatest\main.cpp
 	"LTest.h"
 
 1402311815 c:\workspaces\cpp_workspace\cpplambdatest\ltestassert.h
 	<exception>
 	<string>
+
+1402390578 c:\workspaces\cpp_workspace\cpplambdatest\tostringpatch.h
+	<string>
+	<sstream>
 

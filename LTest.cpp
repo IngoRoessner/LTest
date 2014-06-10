@@ -82,13 +82,10 @@ LTest& LTest::getInstanz(){
         }
 
         void LTest::addTest(string testName, function<bool ()> test){
-            if(getInstanz().ignores.count(""+getInstanz().counter)){
+            if(getInstanz().ignores.count(patch::to_string(getInstanz().counter))){
                 ignore(testName);
             }
-            if(getInstanz().nexIgnore){
-                ignore(testName);
-                getInstanz().nexIgnore = false;
-            }
+
             getInstanz().counter++;
             getInstanz().testCases.push_back(make_tuple(testName, test));
         }
@@ -101,10 +98,7 @@ void LTest::ignore(unsigned int number){
     unsigned int start = getInstanz().counter;
     unsigned int stop = start+number;
     for(unsigned int i = start; i<stop; i++){
-        getInstanz().ignore(""+i);
+        getInstanz().ignore(patch::to_string(i));
     }
 }
 
-void LTest::ignore(){
-    getInstanz().nexIgnore = true;
-}

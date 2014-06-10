@@ -3,9 +3,9 @@
 using namespace std;
 
 void tests_1(){
-    LTest::ignore();
     LTest::ignore("test 1");
     LTest::addTest("test 1", [](){return true;});
+    LTest::ignore();
     LTest::addTest("test 2", [](){return true;});
     LTest::addTest("test 3", [](){return true;});
     LTest::addTest("test 4", [](){return true;});

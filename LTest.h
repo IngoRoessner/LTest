@@ -8,6 +8,7 @@
 #include <string>
 #include <tuple>
 #include "LTestAssert.h"
+#include "toStringPatch.h"
 
 using namespace std;
 
@@ -19,8 +20,6 @@ class LTest
         list<string> ok;
         list<string> fail;
         map<string, bool> ignores;
-        bool nexIgnore;
-        unsigned int nextIgnores;
         list<string> actualIgnore;
         list<tuple<string, string>> error;
         list<tuple<string, string>> assert;
@@ -28,6 +27,7 @@ class LTest
         LTest();
         static LTest& getInstanz();
         unsigned int counter;
+        unsigned int testNumber;
     public:
 
         static void runTests();
@@ -52,9 +52,7 @@ class LTest
 
         static void ignore(string testName);
 
-        static void ignore(unsigned int number);
-
-        static void ignore();
+        static void ignore(unsigned int number = 1);
 
 };
 
