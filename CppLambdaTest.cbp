@@ -37,6 +37,7 @@
 		<Unit filename="LTest.h" />
 		<Unit filename="LTestAssert.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="toStringPatch.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
