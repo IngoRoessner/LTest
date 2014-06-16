@@ -10,10 +10,10 @@ LTest& LTest::getInstanz(){
 }
 
         void LTest::runTests(){
-            for (TestListType::iterator it = getInstanz().testCases.begin(); it != getInstanz().testCases.end(); it++){
-                string testName = get<0>(*it);
+            for(auto const & element : getInstanz().testCases) {
+                string testName = get<0>(element);
                 if(!(getInstanz().ignores.count(testName))){
-                    function<bool ()> test = get<1>(*it);
+                    function<bool ()> test = get<1>(element);
                     try{
                         if(test()){
                             getInstanz().ok.push_back(testName);
@@ -34,32 +34,32 @@ LTest& LTest::getInstanz(){
 
 
         void LTest::errorOut(ostream& os){
-            for (list<tuple<string, string>>::iterator it = getInstanz().error.begin(); it != getInstanz().error.end(); it++){
-                os<<get<0>(*it)+": "+get<1>(*it)<<endl;
+            for(auto const & element : getInstanz().error) {
+                os << get<0>(element) + ": " + get<1>(element) << endl;
             }
         }
 
         void LTest::assertOut(ostream& os){
-            for (list<tuple<string, string>>::iterator it = getInstanz().assert.begin(); it != getInstanz().assert.end(); it++){
-                os<<get<0>(*it)+": "+get<1>(*it)<<endl;
+            for(auto const & element : getInstanz().assert) {
+                os << get<0>(element) + ": " + get<1>(element) << endl;
             }
         }
 
         void LTest::failOut(ostream& os){
-            for (list<string>::iterator it = getInstanz().fail.begin(); it != getInstanz().fail.end(); it++){
-                os<<(*it)+": Fail"<<endl;
+            for(auto const & element : getInstanz().fail) {
+                os << element << ": Fail" << endl;
             }
         }
 
         void LTest::okOut(ostream& os){
-            for (list<string>::iterator it = getInstanz().ok.begin(); it != getInstanz().ok.end(); it++){
-                os<<(*it)+": OK"<<endl;
+            for(auto const & element : getInstanz().ok) {
+                os << element << ": OK" << endl;
             }
         }
 
         void LTest::ignoreOut(ostream& os){
-            for (list<string>::iterator it = getInstanz().actualIgnore.begin(); it != getInstanz().actualIgnore.end(); it++){
-                os<<(*it)+": Ignore"<<endl;
+            for(auto const & element : getInstanz().actualIgnore) {
+                os << element + ": Ignore" << endl;
             }
         }
 
