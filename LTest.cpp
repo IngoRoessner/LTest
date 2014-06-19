@@ -9,29 +9,42 @@ LTest& LTest::getInstanz(){
     return instanz;
 }
 
+        void LTest::runTest(const string& testName, function<bool ()>& testFunction){
+            try{
+                if(testFunction()){
+                    getInstanz().ok.push_back(testName);
+                }else{
+                    getInstanz().fail.push_back(testName);
+                }
+            }
+            catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_tuple(testName, a.what()));}
+            catch(exception e){getInstanz().error.push_back(make_tuple(testName, e.what()));}
+            catch(int e){getInstanz().error.push_back(make_tuple(testName, "int exception: "+e));}
+            catch(char e){getInstanz().error.push_back(make_tuple(testName, "char exception: "+e));}
+            catch(...){getInstanz().error.push_back(make_tuple(testName, "Unknown Exception"));}
+        }
+
         void LTest::runTests(){
             for(auto const & element : getInstanz().testCases) {
                 string testName = get<0>(element);
+                function<bool ()> testFunction = get<1>(element);
                 if(!(getInstanz().ignores.count(testName))){
-                    function<bool ()> test = get<1>(element);
-                    try{
-                        if(test()){
-                            getInstanz().ok.push_back(testName);
-                        }else{
-                            getInstanz().fail.push_back(testName);
-                        }
-                    }
-                    catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_tuple(testName, a.what()));}
-                    catch(exception e){getInstanz().error.push_back(make_tuple(testName, e.what()));}
-                    catch(int e){getInstanz().error.push_back(make_tuple(testName, "int exception: "+e));}
-                    catch(char e){getInstanz().error.push_back(make_tuple(testName, "char exception: "+e));}
-                    catch(...){getInstanz().error.push_back(make_tuple(testName, "Unknown Exception"));}
+                    runTest(testName, testFunction);
                 }else{
                     getInstanz().actualIgnore.push_back(testName);
                 }
             }
         }
 
+        void LTest::runTest(const string& test){
+            for(auto const & element : getInstanz().testCases) {
+                string testName = get<0>(element);
+                function<bool ()> testFunction = get<1>(element);
+                if(testName.compare(test) == 0){
+                    runTest(testName, testFunction);
+                }
+            }
+        }
 
         void LTest::errorOut(ostream& os){
             for(auto const & element : getInstanz().error) {
@@ -67,7 +80,7 @@ LTest& LTest::getInstanz(){
             os<<"Ignored("<<getInstanz().actualIgnore.size()<<"), OK("<<getInstanz().ok.size()<<"), Fail("<<getInstanz().fail.size()<<"), Assert("<<getInstanz().assert.size()<<")"<<"), Exception("<<getInstanz().error.size()<<")"<<endl;
         }
 
-        void LTest::testOut(ostream& os){
+        void LTest::output(ostream& os){
             okOut(os);
             failOut(os);
             assertOut(os);
@@ -78,7 +91,12 @@ LTest& LTest::getInstanz(){
 
         void LTest::run(ostream& os){
             runTests();
-            testOut(os);
+            output(os);
+        }
+
+        void LTest::run(string test, ostream& os){
+            runTest(test);
+            output(os);
         }
 
         void LTest::addTest(string testName, function<bool ()> test){
