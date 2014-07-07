@@ -3,12 +3,12 @@
 
 template<typename T, typename U>
 struct same{
-    static constexpr bool value = false;
+    static const bool value = false;
 };
 
 template<typename T>
 struct same<T, T>{
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 
 template<bool B, class T = void>
@@ -17,6 +17,7 @@ struct enableIf {};
 template<class T>
 struct enableIf<true, T> { typedef T type; };
 
+//TODO c++03
 template <typename T>
 struct function_traits : public function_traits<decltype(&T::operator())>
 {};

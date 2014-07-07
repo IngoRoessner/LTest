@@ -9,6 +9,16 @@
 #include <utility>
 #include "LTestAssert.h"
 #include "toStringPatch.h"
+#include "function_traits.h"
+
+//c++11??
+#if __cplusplus > 199711L
+#include "LTest11.h"
+typedef function<bool ()> LTestFunctionPointer;
+#else
+#include "LTest03.h"
+typedef bool(*LTestFunctionPointer)();
+#endif // __cplusplus
 
 
 using namespace std;
@@ -16,14 +26,7 @@ using namespace std;
 class LTest
 {
     private:
-        //c++11??
-        #if __cplusplus > 199711L
-        typedef function<bool ()> funktionPointer;
-        #else
-        typedef bool(*funktionPointer)();
-        #endif // __cplusplus
-
-        typedef list<pair<string, funktionPointer> > TestListType;
+        typedef list<pair<string, LTestFunctionPointer> > TestListType;
         TestListType testCases;
         list<string> ok;
         list<string> fail;
@@ -37,11 +40,32 @@ class LTest
         unsigned int counter;
         unsigned int testNumber;
 
-        static void runTest(const string& testName, funktionPointer& testFunction);
+        static void runTest(const string& testName, LTestFunctionPointer& testFunction);
 
     public:
+
         //adds a test function to the test list, execution via run(), runTests() or runTest()
-        static void addTest(string testName, funktionPointer test);
+        static void addTestFunction(string testName, LTestFunctionPointer test);
+
+        template<typename FunctType>
+        static typename RetIs<FunctType, bool>::type addTest(string testName, FunctType test){
+            boolLambdaAdd<LTest, FunctType>(testName, test);
+        }
+
+        template<typename FunctType>
+        static typename RetIs<FunctType, void>::type addTest(string testName, FunctType test){
+            voidLambdaAdd<LTest, FunctType>(testName, test);
+        }
+
+        template<typename FunctType>
+        static typename RetIs<FunctType, bool(*)()>::type addTest(string testName, FunctType test){
+            boolFunctionAdd<LTest, FunctType>(testName, test);
+        }
+
+        template<typename FunctType>
+        static typename RetIs<FunctType, void(*)()>::type addTest(string testName, FunctType test){
+            voidFunctionAdd<LTest, FunctType>(testName, test);
+        }
 
         //runTests() & output()
         static void run(ostream& os = cout);

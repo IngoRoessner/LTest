@@ -1,20 +1,18 @@
-#ifndef LTEST11_H_INCLUDED
-#define LTEST11_H_INCLUDED
+#ifndef LTEST03_H_INCLUDED
+#define LTEST03_H_INCLUDED
+
 
 #include <string>
-#include <functional>
 
 using namespace std;
-
 template<typename LT, typename FunctType>
 void boolLambdaAdd(string testName, FunctType test){
-    LT::addTestFunction(testName, test);
+    throw "there should be no lambda in c++03";
 }
 
 template<typename LT, typename FunctType>
 void voidLambdaAdd(string testName, FunctType test){
-    function<bool()> foo = [&](){test(); return true;};
-    LT::addTestFunction(testName, foo);
+    throw "there should be no lambda in c++03";
 }
 
 template<typename LT, typename FunctType>
@@ -24,8 +22,7 @@ void boolFunctionAdd(string testName, FunctType test){
 
 template<typename LT, typename FunctType>
 void voidFunctionAdd(string testName, FunctType test){
-    function<bool()> foo = [=](){test(); return true;};
-    LT::addTestFunction(testName, foo);
+    //TODO
 }
 
-#endif // LTEST11_H_INCLUDED
+#endif // LTEST03_H_INCLUDED

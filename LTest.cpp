@@ -9,7 +9,7 @@ LTest& LTest::getInstanz(){
     return instanz;
 }
 
-void LTest::runTest(const string& testName, funktionPointer& testFunction){
+void LTest::runTest(const string& testName, LTestFunctionPointer& testFunction){
     try{
         if(testFunction()){
             getInstanz().ok.push_back(testName);
@@ -26,9 +26,9 @@ void LTest::runTest(const string& testName, funktionPointer& testFunction){
 
 void LTest::runTests(){
     for(TestListType::iterator it = getInstanz().testCases.begin(); it!=getInstanz().testCases.end(); it++){
-        pair<string, funktionPointer>& element = *it;
+        pair<string, LTestFunctionPointer>& element = *it;
         string testName = element.first;
-        funktionPointer testFunction = element.second;
+        LTestFunctionPointer testFunction = element.second;
         if(!(getInstanz().ignores.count(testName))){
             runTest(testName, testFunction);
         }else{
@@ -39,9 +39,9 @@ void LTest::runTests(){
 
 void LTest::runTest(const string& test){
     for(TestListType::iterator it = getInstanz().testCases.begin(); it!=getInstanz().testCases.end(); it++){
-        pair<string, funktionPointer>& element = *it;
+        pair<string, LTestFunctionPointer>& element = *it;
         string testName = element.first;
-        funktionPointer testFunction = element.second;
+        LTestFunctionPointer testFunction = element.second;
         if(testName.compare(test) == 0){
             runTest(testName, testFunction);
         }
@@ -106,11 +106,10 @@ void LTest::run(string test, ostream& os){
     output(os);
 }
 
-void LTest::addTest(string testName, funktionPointer test){
+void LTest::addTestFunction(string testName, LTestFunctionPointer test){
     if(getInstanz().ignores.count(patch::to_string(getInstanz().counter))){
         ignore(testName);
     }
-
     getInstanz().counter++;
     getInstanz().testCases.push_back(make_pair(testName, test));
 }
