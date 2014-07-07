@@ -9,7 +9,7 @@ LTest& LTest::getInstanz(){
     return instanz;
 }
 
-        void LTest::runTest(const string& testName, function<bool ()>& testFunction){
+        void LTest::runTest(const string& testName, funktionPointer& testFunction){
             try{
                 if(testFunction()){
                     getInstanz().ok.push_back(testName);
@@ -17,17 +17,17 @@ LTest& LTest::getInstanz(){
                     getInstanz().fail.push_back(testName);
                 }
             }
-            catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_tuple(testName, a.what()));}
-            catch(exception e){getInstanz().error.push_back(make_tuple(testName, e.what()));}
-            catch(int e){getInstanz().error.push_back(make_tuple(testName, "int exception: "+e));}
-            catch(char e){getInstanz().error.push_back(make_tuple(testName, "char exception: "+e));}
-            catch(...){getInstanz().error.push_back(make_tuple(testName, "Unknown Exception"));}
+            catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_pair(testName, a.what()));}
+            catch(exception e){getInstanz().error.push_back(make_pair(testName, e.what()));}
+            catch(int e){getInstanz().error.push_back(make_pair(testName, "int exception: "+e));}
+            catch(char e){getInstanz().error.push_back(make_pair(testName, "char exception: "+e));}
+            catch(...){getInstanz().error.push_back(make_pair(testName, "Unknown Exception"));}
         }
 
         void LTest::runTests(){
             for(auto const & element : getInstanz().testCases) {
-                string testName = get<0>(element);
-                function<bool ()> testFunction = get<1>(element);
+                string testName = element.first;
+                funktionPointer testFunction = element.second;
                 if(!(getInstanz().ignores.count(testName))){
                     runTest(testName, testFunction);
                 }else{
@@ -38,8 +38,8 @@ LTest& LTest::getInstanz(){
 
         void LTest::runTest(const string& test){
             for(auto const & element : getInstanz().testCases) {
-                string testName = get<0>(element);
-                function<bool ()> testFunction = get<1>(element);
+                string testName = element.first;
+                funktionPointer testFunction = element.second;
                 if(testName.compare(test) == 0){
                     runTest(testName, testFunction);
                 }
@@ -48,13 +48,13 @@ LTest& LTest::getInstanz(){
 
         void LTest::errorOut(ostream& os){
             for(auto const & element : getInstanz().error) {
-                os << get<0>(element) + ": " + get<1>(element) << endl;
+                os << element.first + ": " + element.second << endl;
             }
         }
 
         void LTest::assertOut(ostream& os){
             for(auto const & element : getInstanz().assert) {
-                os << get<0>(element) + ": " + get<1>(element) << endl;
+                os << element.first + ": " + element.second << endl;
             }
         }
 
@@ -99,13 +99,13 @@ LTest& LTest::getInstanz(){
             output(os);
         }
 
-        void LTest::addTest(string testName, function<bool ()> test){
+        void LTest::addTest(string testName, funktionPointer test){
             if(getInstanz().ignores.count(patch::to_string(getInstanz().counter))){
                 ignore(testName);
             }
 
             getInstanz().counter++;
-            getInstanz().testCases.push_back(make_tuple(testName, test));
+            getInstanz().testCases.push_back(make_pair(testName, test));
         }
 
 void LTest::ignore(string testName){

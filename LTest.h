@@ -6,34 +6,42 @@
 #include <list>
 #include <map>
 #include <string>
-#include <tuple>
+#include <utility>
 #include "LTestAssert.h"
 #include "toStringPatch.h"
+
 
 using namespace std;
 
 class LTest
 {
     private:
-        typedef list<tuple<string, function<bool ()>>> TestListType;
+        //c++11??
+        #if __cplusplus > 199711L
+        typedef function<bool ()> funktionPointer;
+        #else
+        typedef bool(*funktionPointer)();
+        #endif // __cplusplus
+
+        typedef list<pair<string, funktionPointer>> TestListType;
         TestListType testCases;
         list<string> ok;
         list<string> fail;
         map<string, bool> ignores;
         list<string> actualIgnore;
-        list<tuple<string, string>> error;
-        list<tuple<string, string>> assert;
+        list<pair<string, string>> error;
+        list<pair<string, string>> assert;
         string prefix;
         LTest();
         static LTest& getInstanz();
         unsigned int counter;
         unsigned int testNumber;
 
-        static void runTest(const string& testName, function<bool ()>& testFunction);
+        static void runTest(const string& testName, funktionPointer& testFunction);
 
     public:
         //adds a test function to the test list, execution via run(), runTests() or runTest()
-        static void addTest(string testName, function<bool ()> test);
+        static void addTest(string testName, funktionPointer test);
 
         //runTests() & output()
         static void run(ostream& os = cout);
