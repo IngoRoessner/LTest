@@ -2,6 +2,7 @@
 
 using namespace std;
 
+#if __cplusplus > 199711L
 void tests_1(){
     LTest::ignore("test 1");
     LTest::addTest("test 1", [](){return true;});
@@ -26,11 +27,22 @@ void tests_1(){
     LTest::addTest("test ignored 9", [](){return true;});
     LTest::addTest("test ignored 10", [](){return true;});
 }
+#else
+    bool testFooOld(){
+        return true;
+    }
+
+    void tests_1(){
+        LTest::addTest("old cpp", testFooOld);
+    }
+#endif // __cplusplus
+
+
+
 
 int main()
 {
     tests_1();
-    LTest::run("test ignored 7");
     LTest::run();
     return 0;
 }
