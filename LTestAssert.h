@@ -7,11 +7,11 @@
 using namespace std;
 
 namespace LTAssert{
-    class FalseAssert: public exception{
+    class FalseAssert{
     private:
         string text;
     public:
-        FalseAssert(string str):exception(), text(str){}
+        FalseAssert(string str):text(str){}
         string what(){
             return text;
         }

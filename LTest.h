@@ -23,14 +23,14 @@ class LTest
         typedef bool(*funktionPointer)();
         #endif // __cplusplus
 
-        typedef list<pair<string, funktionPointer>> TestListType;
+        typedef list<pair<string, funktionPointer> > TestListType;
         TestListType testCases;
         list<string> ok;
         list<string> fail;
         map<string, bool> ignores;
         list<string> actualIgnore;
-        list<pair<string, string>> error;
-        list<pair<string, string>> assert;
+        list<pair<string, string> > error;
+        list<pair<string, string> > assert;
         string prefix;
         LTest();
         static LTest& getInstanz();
