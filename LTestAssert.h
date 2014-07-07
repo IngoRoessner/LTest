@@ -1,7 +1,6 @@
 #ifndef LTESTASSERT_H_INCLUDED
 #define LTESTASSERT_H_INCLUDED
 
-#include <exception>
 #include <string>
 
 using namespace std;
