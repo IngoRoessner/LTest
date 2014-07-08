@@ -5,6 +5,8 @@
 #include <string>
 
 using namespace std;
+
+
 template<typename LT, typename FunctType>
 void boolLambdaAdd(string testName, FunctType test){
     throw "there should be no lambda in c++03";
