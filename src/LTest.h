@@ -152,7 +152,7 @@ public:
 
     static TestResultSet runTests(const initializer_list<string> testsuite, bool force = false);
 
-    static string getIgnoreLable();
+    static string getIgnoreLabel();
 
     //ignore the given test
     static string ignore(string testName);
