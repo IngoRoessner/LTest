@@ -94,6 +94,15 @@ void LTest::output(ostream& os){
     errorOut(os);
     ignoreOut(os);
     countOut(os);
+    clearOutput();
+}
+
+void LTest::clearOutput(){
+    getInstanz().ok.clear();
+    getInstanz().fail.clear();
+    getInstanz().assert.clear();
+    getInstanz().error.clear();
+    getInstanz().actualIgnore.clear();
 }
 
 void LTest::run(ostream& os){

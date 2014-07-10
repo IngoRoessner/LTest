@@ -12,7 +12,6 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-std=c++11" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
@@ -35,7 +34,10 @@
 		</Compiler>
 		<Unit filename="LTest.cpp" />
 		<Unit filename="LTest.h" />
+		<Unit filename="LTest03.h" />
+		<Unit filename="LTest11.h" />
 		<Unit filename="LTestAssert.h" />
+		<Unit filename="function_traits.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="toStringPatch.h" />
 		<Extensions>

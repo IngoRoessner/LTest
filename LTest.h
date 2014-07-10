@@ -34,7 +34,6 @@ class LTest
         list<string> actualIgnore;
         list<pair<string, string> > error;
         list<pair<string, string> > assert;
-        string prefix;
         LTest();
         static LTest& getInstanz();
         unsigned int counter;
@@ -50,21 +49,25 @@ class LTest
         template<typename FunctType>
         static typename RetIs<FunctType, bool>::type addTest(string testName, FunctType test){
             boolLambdaAdd<LTest, FunctType>(testName, test);
+            return testName;
         }
 
         template<typename FunctType>
         static typename RetIs<FunctType, void>::type addTest(string testName, FunctType test){
             voidLambdaAdd<LTest, FunctType>(testName, test);
+            return testName;
         }
 
         template<typename FunctType>
         static typename RetIs<FunctType, bool(*)()>::type addTest(string testName, FunctType test){
             boolFunctionAdd<LTest, FunctType>(testName, test);
+            return testName;
         }
 
         template<typename FunctType>
         static typename RetIs<FunctType, void(*)()>::type addTest(string testName, FunctType test){
             voidFunctionAdd<LTest, FunctType>(testName, test);
+            return testName;
         }
 
         //runTests() & output()
@@ -84,6 +87,8 @@ class LTest
 
         //ignores the next #number tests
         static void ignore(unsigned int number = 1);
+
+        static void clearOutput();
 
         //run errorOut(), assertOut(), failOut(), okOut(), ignoreOut() and countOut()
         static void output(ostream& os = cout);
