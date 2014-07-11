@@ -1,7 +1,7 @@
 #include "LTest.h"
 
 LTest::LTest():counter(0){
-
+    mutedStreams.setMuteMode(cout, MuteMode::FAIL);
 }
 
 LTest& LTest::getInstanz(){
@@ -10,9 +10,12 @@ LTest& LTest::getInstanz(){
 }
 
 void LTest::runTest(const string& testName, LTestFunctionPointer& testFunction){
+    bool testFailed = true;
+    getInstanz().mutedStreams.muteOut();
     try{
         if(testFunction()){
             getInstanz().ok.push_back(testName);
+            testFailed = false;
         }else{
             getInstanz().fail.push_back(testName);
         }
@@ -22,6 +25,7 @@ void LTest::runTest(const string& testName, LTestFunctionPointer& testFunction){
     catch(int e){getInstanz().error.push_back(make_pair(testName, "int exception: "+e));}
     catch(char e){getInstanz().error.push_back(make_pair(testName, "char exception: "+e));}
     catch(...){getInstanz().error.push_back(make_pair(testName, "Unknown Exception"));}
+    getInstanz().mutedStreams.flushOut(testName, testFailed);
 }
 
 void LTest::runTests(){

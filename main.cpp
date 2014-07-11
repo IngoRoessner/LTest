@@ -1,4 +1,5 @@
 #include "LTest.h"
+#include "MuteStream.h"
 #include "extern_testsuite_example.h"
 
 using namespace std;
@@ -38,6 +39,10 @@ void tests_1(){
 
 int main()
 {
+    //LTest::setMuteMode(cout, MuteMode::NONE);
+    //LTest::setMuteMode(cout, MuteMode::EVERYTHING);
+    //LTest::setMuteMode(cout, MuteMode::FAIL);
+    //default LTest::setMuteMode(cout, MuteMode::FAIL);
     tests_1();
     LTest::run();
 

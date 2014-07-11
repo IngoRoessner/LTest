@@ -10,6 +10,7 @@
 #include "LTestAssert.h"
 #include "toStringPatch.h"
 #include "function_traits.h"
+#include "MuteStream.h"
 
 //c++11??
 #if __cplusplus > 199711L
@@ -38,10 +39,14 @@ class LTest
         static LTest& getInstanz();
         unsigned int counter;
         unsigned int testNumber;
+        MuteStreamMap mutedStreams;
 
         static void runTest(const string& testName, LTestFunctionPointer& testFunction);
 
     public:
+        static void setMuteMode(ostream& os, MuteMode mode){
+            getInstanz().mutedStreams.setMuteMode(os, mode);
+        }
 
         //adds a test function to the test list, execution via run(), runTests() or runTest()
         static void addTestFunction(string testName, LTestFunctionPointer test);

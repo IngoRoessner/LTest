@@ -8,7 +8,9 @@
 string str = "hallo";
 list<string> ExternTestSuiteExample = {
     LTest::addTest("testCase", [&](){cout<<"testCase"<<str<<endl;}),
-    LTest::addTest("testCase2", [](){cout<<"testCase2"<<endl;})
+    LTest::addTest("testCase2", [](){cout<<"testCase2"<<endl;}),
+
+    LTest::addTest("fail cout", [](){cout<<"testCase2"<<endl;return false;})
 };
 
 
