@@ -52,25 +52,25 @@ class LTest
         static void addTestFunction(string testName, LTestFunctionPointer test);
 
         template<typename FunctType>
-        static typename RetIs<FunctType, bool>::type addTest(string testName, FunctType test){
+        static typename FunctionTypeIs<FunctType, bool>::type addTest(string testName, FunctType test){
             boolLambdaAdd<LTest, FunctType>(testName, test);
             return testName;
         }
 
         template<typename FunctType>
-        static typename RetIs<FunctType, void>::type addTest(string testName, FunctType test){
+        static typename FunctionTypeIs<FunctType, void>::type addTest(string testName, FunctType test){
             voidLambdaAdd<LTest, FunctType>(testName, test);
             return testName;
         }
 
         template<typename FunctType>
-        static typename RetIs<FunctType, bool(*)()>::type addTest(string testName, FunctType test){
+        static typename FunctionTypeIs<FunctType, bool(*)()>::type addTest(string testName, FunctType test){
             boolFunctionAdd<LTest, FunctType>(testName, test);
             return testName;
         }
 
         template<typename FunctType>
-        static typename RetIs<FunctType, void(*)()>::type addTest(string testName, FunctType test){
+        static typename FunctionTypeIs<FunctType, void(*)()>::type addTest(string testName, FunctType test){
             voidFunctionAdd<LTest, FunctType>(testName, test);
             return testName;
         }

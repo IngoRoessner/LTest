@@ -47,7 +47,7 @@ struct function_traits<bool(*)()>
 
 
 template<typename Functor, typename ret>
-struct RetIs : enableIf<same<typename function_traits<Functor>::ret, ret>::value, string>
+struct FunctionTypeIs : enableIf<same<typename function_traits<Functor>::ret, ret>::value, string>
 {};
 
 //Using
