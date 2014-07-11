@@ -37,9 +37,12 @@ class MuteStream{
         void flushOut(string testName, bool testFailed){
             mutedStream.rdbuf(mutedStreamRdbuf);
             if(muteMode == MuteMode::EVERYTHING || (testFailed && muteMode == MuteMode::FAIL)){
-                mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
-                mutedStream<<mutedStreamBuffer.str();
-                mutedStream<<"--------------- OUTPUT END: "<<testName<<" -----------------"<<endl;
+                string output = mutedStreamBuffer.str();
+                if(output.size()){
+                    mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
+                    mutedStream<<output<<endl;
+                    mutedStream<<"--------------- OUTPUT END: "<<testName<<" -----------------"<<endl;
+                }
             }
             mutedStreamBuffer.str("");
         }
