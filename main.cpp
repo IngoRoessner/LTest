@@ -1,5 +1,5 @@
 #include "LTest.h"
-#include "extern_testcase_example.h"
+#include "extern_testsuite_example.h"
 
 using namespace std;
 
@@ -42,9 +42,12 @@ int main()
     LTest::run();
 
     cout<<endl<<endl;
-    for(int i = 0; i<sizeof(ExternTestCaseExample) / sizeof(ExternTestCaseExample[0]); i++){
-        LTest::runTest(ExternTestCaseExample[i]);
-    }
+    LTest::runTest(ExternTestSuiteExample);
     LTest::output();
+
+    cout<<endl<<endl;
+    LTest::ignore(ExternTestSuiteExample);
+    LTest::run();
+
     return 0;
 }

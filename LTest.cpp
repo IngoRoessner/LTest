@@ -48,6 +48,12 @@ void LTest::runTest(const string& test){
     }
 }
 
+void LTest::runTest(list<string>& testsuite){
+    for (list<string>::iterator it = testsuite.begin(); it != testsuite.end(); it++){
+        LTest::runTest(*it);
+    }
+}
+
 void LTest::errorOut(ostream& os){
     for(list<pair<string, string> >::iterator it = getInstanz().error.begin(); it!=getInstanz().error.end(); it++){
         pair<string, string>& element = *it;
@@ -135,3 +141,8 @@ void LTest::ignore(unsigned int number){
     }
 }
 
+void LTest::ignore(list<string>& testsuite){
+    for (list<string>::iterator it = testsuite.begin(); it != testsuite.end(); it++){
+        LTest::ignore(*it);
+    }
+}

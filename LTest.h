@@ -76,17 +76,21 @@ class LTest
         //runTest() & output()
         static void run(string test, ostream& os = cout);
 
-        //loop all tests, execute only not ignored tests (result output via output())
+        //loop all tests, execute only not ignored tests (you can get the result output via output())
         static void runTests();
 
         //execute all tests with the given name by force (no ignores). (result output via output())
         static void runTest(const string& test);
+
+        static void runTest(list<string>& testsuite);
 
         //ignore the given test
         static void ignore(string testName);
 
         //ignores the next #number tests
         static void ignore(unsigned int number = 1);
+
+        static void ignore(list<string>& testsuite);
 
         static void clearOutput();
 
