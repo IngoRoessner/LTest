@@ -28,15 +28,24 @@ void LTest::runTest(const string& testName, LTestFunctionPointer& testFunction){
     getInstanz().mutedStreams.flushOut(testName, testFailed);
 }
 
+bool LTest::isIgnored(string testName){
+    bool result;
+    if(getInstanz().ignores.count(testName)){
+        result = true;
+        getInstanz().actualIgnore.push_back(testName);
+    }else{
+        result = false;
+    }
+    return result;
+}
+
 void LTest::runTests(){
     for(TestListType::iterator it = getInstanz().testCases.begin(); it!=getInstanz().testCases.end(); it++){
         pair<string, LTestFunctionPointer>& element = *it;
         string testName = element.first;
         LTestFunctionPointer testFunction = element.second;
-        if(!(getInstanz().ignores.count(testName))){
+        if(!isIgnored(testName)){
             runTest(testName, testFunction);
-        }else{
-            getInstanz().actualIgnore.push_back(testName);
         }
     }
 }
@@ -52,9 +61,11 @@ void LTest::runTest(const string& test){
     }
 }
 
-void LTest::runTest(list<string>& testsuite){
+void LTest::runTest(list<string>& testsuite, bool force){
     for (list<string>::iterator it = testsuite.begin(); it != testsuite.end(); it++){
-        LTest::runTest(*it);
+        if((*it) != getIgnoreLable() && (force || !isIgnored(*it))){
+            LTest::runTest(*it);
+        }
     }
 }
 
@@ -87,7 +98,7 @@ void LTest::okOut(ostream& os){
 }
 
 void LTest::ignoreOut(ostream& os){
-        for(list<string>::iterator it = getInstanz().actualIgnore.begin(); it!=getInstanz().actualIgnore.end(); it++){
+    for(list<string>::iterator it = getInstanz().actualIgnore.begin(); it!=getInstanz().actualIgnore.end(); it++){
         string& element = *it;
         os << element + ": Ignore" << endl;
     }
@@ -133,20 +144,29 @@ void LTest::addTestFunction(string testName, LTestFunctionPointer test){
     getInstanz().testCases.push_back(make_pair(testName, test));
 }
 
-void LTest::ignore(string testName){
+string LTest::ignore(string testName){
     getInstanz().ignores[testName] = true;
+    return getIgnoreLable();
 }
 
-void LTest::ignore(unsigned int number){
+string LTest::ignore(unsigned int number){
     unsigned int start = getInstanz().counter;
     unsigned int stop = start+number;
     for(unsigned int i = start; i<stop; i++){
         getInstanz().ignore(patch::to_string(i));
     }
+    return getIgnoreLable();
 }
 
-void LTest::ignore(list<string>& testsuite){
+string LTest::ignore(list<string>& testsuite){
     for (list<string>::iterator it = testsuite.begin(); it != testsuite.end(); it++){
-        LTest::ignore(*it);
+        if((*it) != getIgnoreLable()){
+            LTest::ignore(*it);
+        }
     }
+    return getIgnoreLable();
+}
+
+string LTest::getIgnoreLable(){
+    return "___LTEST::IGNORE___";
 }

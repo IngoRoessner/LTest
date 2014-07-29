@@ -41,6 +41,8 @@ class LTest
         unsigned int testNumber;
         MuteStreamMap mutedStreams;
 
+        static bool isIgnored(string testName);
+
         static void runTest(const string& testName, LTestFunctionPointer& testFunction);
 
     public:
@@ -87,15 +89,17 @@ class LTest
         //execute all tests with the given name by force (no ignores). (result output via output())
         static void runTest(const string& test);
 
-        static void runTest(list<string>& testsuite);
+        static void runTest(list<string>& testsuite, bool force = false);
+
+        static string getIgnoreLable();
 
         //ignore the given test
-        static void ignore(string testName);
+        static string ignore(string testName);
 
         //ignores the next #number tests
-        static void ignore(unsigned int number = 1);
+        static string ignore(unsigned int number = 1);
 
-        static void ignore(list<string>& testsuite);
+        static string ignore(list<string>& testsuite);
 
         static void clearOutput();
 
