@@ -12,22 +12,12 @@
 #include "function_traits.h"
 #include "MuteStream.h"
 
-//c++11??
-#if __cplusplus > 199711L
-#include "LTest11.h"
-typedef function<bool ()> LTestFunctionPointer;
-#else
-#include "LTest03.h"
-typedef bool(*LTestFunctionPointer)();
-#endif // __cplusplus
-
-
 using namespace std;
 
 class LTest
 {
     private:
-        typedef list<pair<string, LTestFunctionPointer> > TestListType;
+        typedef list<pair<string, function<bool ()>>> TestListType;
         TestListType testCases;
         list<string> ok;
         list<string> fail;
@@ -43,7 +33,7 @@ class LTest
 
         static bool isIgnored(string testName);
 
-        static void runTest(const string& testName, LTestFunctionPointer& testFunction);
+        static void runTest(const string& testName, function<bool ()>& testFunction);
 
     public:
         static void setMuteMode(ostream& os, MuteMode mode){
@@ -51,29 +41,31 @@ class LTest
         }
 
         //adds a test function to the test list, execution via run(), runTests() or runTest()
-        static void addTestFunction(string testName, LTestFunctionPointer test);
+        static void addTestFunction(string testName, function<bool ()> test);
 
         template<typename FunctType>
         static typename FunctionTypeIs<FunctType, bool>::type addTest(string testName, FunctType test){
-            boolLambdaAdd<LTest, FunctType>(testName, test);
+            addTestFunction(testName, test);
             return testName;
         }
 
         template<typename FunctType>
         static typename FunctionTypeIs<FunctType, void>::type addTest(string testName, FunctType test){
-            voidLambdaAdd<LTest, FunctType>(testName, test);
+            function<bool()> foo = [&](){test(); return true;};
+            addTestFunction(testName, foo);
             return testName;
         }
 
         template<typename FunctType>
         static typename FunctionTypeIs<FunctType, bool(*)()>::type addTest(string testName, FunctType test){
-            boolFunctionAdd<LTest, FunctType>(testName, test);
+            addTestFunction(testName, test);
             return testName;
         }
 
         template<typename FunctType>
         static typename FunctionTypeIs<FunctType, void(*)()>::type addTest(string testName, FunctType test){
-            voidFunctionAdd<LTest, FunctType>(testName, test);
+            function<bool()> foo = [=](){test(); return true;};
+            addTestFunction(testName, foo);
             return testName;
         }
 

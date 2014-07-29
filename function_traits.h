@@ -17,8 +17,6 @@ struct enableIf {};
 template<class T>
 struct enableIf<true, T> { typedef T type; };
 
-//No need in c++ 03 (no Lambdas)
-#if __cplusplus > 199711L
 template <typename T>
 struct function_traits : public function_traits<decltype(&T::operator())>
 {};
@@ -28,10 +26,6 @@ struct function_traits<ReturnType(ClassType::*)(Args...) const>
 {
     typedef ReturnType ret;
 };
-#else
-template <typename T>
-struct function_traits;
-#endif // __cplusplus
 
 template <>
 struct function_traits<void(*)()>
