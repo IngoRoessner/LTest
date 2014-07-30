@@ -72,7 +72,7 @@ class LTest
         }
 
         template<typename ReturnType, typename... ParameterTypes>
-        static string addDataTest(string testName, ReturnType(*testFunction)(ParameterTypes...), function<void()> testDataFoo){
+        static string addTest(string testName, ReturnType(*testFunction)(ParameterTypes...), function<void()> testDataFoo){
             function<bool()> foo = [=](){
                 auto datafunct = DataFunction<ReturnType, ParameterTypes...>(testFunction);
                 getInstanz().dataFunction = &datafunct;
