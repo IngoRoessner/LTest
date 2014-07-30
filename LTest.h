@@ -11,6 +11,7 @@
 #include "toStringPatch.h"
 #include "function_traits.h"
 #include "MuteStream.h"
+#include "DataFunction.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ class LTest
         unsigned int counter;
         unsigned int testNumber;
         MuteStreamMap mutedStreams;
+        DataFunctionBase* dataFunction;
 
         static bool isIgnored(string testName);
 
@@ -67,6 +69,27 @@ class LTest
             function<bool()> foo = [=](){test(); return true;};
             addTestFunction(testName, foo);
             return testName;
+        }
+
+        template<typename ReturnType, typename... ParameterTypes>
+        static string addDataTest(string testName, ReturnType(*testFunction)(ParameterTypes...), function<void()> testDataFoo){
+            function<bool()> foo = [=](){
+                auto datafunct = DataFunction<ReturnType, ParameterTypes...>(testFunction);
+                getInstanz().dataFunction = &datafunct;
+                testDataFoo();
+                return true;
+            };
+            addTestFunction(testName, foo);
+            return testName;
+        }
+
+        template <class... Types>
+        static void fixture(Types&&... args){
+            if(getInstanz().dataFunction->isVoidReturn()){
+                (dynamic_cast<DataFunction<void, Types...>*>(getInstanz().dataFunction))->run(args...);
+            }else{
+                (dynamic_cast<DataFunction<Types...>*>(getInstanz().dataFunction))->run(args...);
+            }
         }
 
         //runTests() & output()
