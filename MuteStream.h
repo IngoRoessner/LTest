@@ -22,11 +22,9 @@ class MuteStream{
 
     public:
 
-        MuteStream(ostream& os, MuteMode mode = MuteMode::FAIL):mutedStream(os){
+        MuteStream(ostream& os = cout, MuteMode mode = MuteMode::FAIL):mutedStream(os){
             muteMode = mode;
         }
-
-        MuteStream():mutedStream(cout){}
 
         void muteOut(){
             mutedStreamBuffer.str("");
