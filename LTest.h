@@ -100,6 +100,8 @@ class LTest
         //runTest() & output()
         static void run(string test, ostream& os = cout);
 
+        static void run(TestSuite& testsuite, bool force = false, ostream& os = cout);
+
         //loop all tests, execute only not ignored tests (you can get the result output via output())
         static void runTests();
 

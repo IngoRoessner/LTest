@@ -129,6 +129,11 @@ void LTest::run(string test, ostream& os){
     output(os);
 }
 
+void LTest::run(TestSuite& testsuite, bool force, ostream& os){
+    runTest(testsuite, force);
+    output(os);
+}
+
 void LTest::addTestFunction(string testName, function<bool ()> test){
     if(getInstanz().ignores.count(patch::to_string(getInstanz().counter))){
         ignore(testName);
