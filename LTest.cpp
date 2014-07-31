@@ -59,7 +59,7 @@ void LTest::runTest(const string& test){
     }
 }
 
-void LTest::runTest(list<string>& testsuite, bool force){
+void LTest::runTest(TestSuite& testsuite, bool force){
     for (auto testName : testsuite){
         if(testName != getIgnoreLable() && (force || !isIgnored(testName))){
             LTest::runTest(testName);
@@ -151,7 +151,7 @@ string LTest::ignore(unsigned int number){
     return getIgnoreLable();
 }
 
-string LTest::ignore(list<string>& testsuite){
+string LTest::ignore(TestSuite& testsuite){
     for (auto testName : testsuite){
         if(testName != getIgnoreLable()){
             LTest::ignore(testName);

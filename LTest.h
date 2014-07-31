@@ -106,7 +106,7 @@ class LTest
         //execute all tests with the given name by force (no ignores). (result output via output())
         static void runTest(const string& test);
 
-        static void runTest(list<string>& testsuite, bool force = false);
+        static void runTest(TestSuite& testsuite, bool force = false);
 
         static string getIgnoreLable();
 
@@ -116,7 +116,7 @@ class LTest
         //ignores the next #number tests
         static string ignore(unsigned int number = 1);
 
-        static string ignore(list<string>& testsuite);
+        static string ignore(TestSuite& testsuite);
 
         static void clearOutput();
 
