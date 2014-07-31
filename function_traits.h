@@ -1,21 +1,7 @@
 #ifndef FUNCTION_TRAITS_H_INCLUDED
 #define FUNCTION_TRAITS_H_INCLUDED
 
-template<typename T, typename U>
-struct same{
-    static const bool value = false;
-};
-
-template<typename T>
-struct same<T, T>{
-    static const bool value = true;
-};
-
-template<bool B, class T = void>
-struct enableIf {};
-
-template<class T>
-struct enableIf<true, T> { typedef T type; };
+#include <type_traits>
 
 template <typename T>
 struct function_traits : public function_traits<decltype(&T::operator())>
@@ -41,7 +27,7 @@ struct function_traits<bool(*)()>
 
 
 template<typename Functor, typename ret>
-struct FunctionTypeIs : enableIf<same<typename function_traits<Functor>::ret, ret>::value, string>
+struct FunctionTypeIs : enable_if<is_same<typename function_traits<Functor>::ret, ret>::value, string>
 {};
 
 //Using
