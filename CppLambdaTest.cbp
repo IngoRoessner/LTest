@@ -33,15 +33,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="DataFunction.h" />
 		<Unit filename="LTest.cpp" />
 		<Unit filename="LTest.h" />
-		<Unit filename="LTest03.h" />
-		<Unit filename="LTest11.h" />
 		<Unit filename="LTestAssert.h" />
 		<Unit filename="MuteStream.h" />
-		<Unit filename="extern_testsuite_example.h" />
 		<Unit filename="function_traits.h" />
-		<Unit filename="main.cpp" />
 		<Unit filename="toStringPatch.h" />
 		<Extensions>
 			<code_completion />
