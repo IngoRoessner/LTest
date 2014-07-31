@@ -15,6 +15,8 @@
 
 using namespace std;
 
+using TestSuite = list<string>;
+
 class LTest
 {
     private:
