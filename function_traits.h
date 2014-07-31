@@ -30,17 +30,4 @@ template<typename Functor, typename ret>
 struct FunctionTypeIs : enable_if<is_same<typename function_traits<Functor>::ret, ret>::value, string>
 {};
 
-//Using
-/*
-template<typename Functor>
-typename RetIs<Functor, void>::type foo(Functor funct){
-    cout<<"void"<<endl;
-}
-
-template<typename Functor>
-typename RetIs<Functor, bool>::type foo(Functor funct){
-    cout<<"bool"<<endl;
-}
-*/
-
 #endif // FUNCTION_TRAITS_H_INCLUDED
