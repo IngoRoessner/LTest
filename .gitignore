@@ -1,3 +1,11 @@
 LTest.h.gch
+.project
+CppLambdaTest.depend
+.cproject
+.objs/
+.settings/
 obj/
 bin/
+Default/
+
+
