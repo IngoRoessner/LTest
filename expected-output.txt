@@ -69,6 +69,125 @@ test ignored 8: Ignore
 test ignored 9: Ignore
 test ignored 10: Ignore
 Ignored(16), OK(9), Fail(2), Assert(10)), Exception(0)
+*******************************
+programmatic access to: Suite testCase
+state: 0
+content of cout, if any: *******************************
+programmatic access to: Suite testCase2
+state: 0
+content of cout, if any: *******************************
+programmatic access to: Suite fail cout
+state: 1
+content of cout, if any: Suite testCase2
+*******************************
+programmatic access to: Suite ignored 1
+state: 3
+*******************************
+programmatic access to: Suite ignored 2
+state: 3
+*******************************
+programmatic access to: Suite ignored 3
+state: 3
+*******************************
+programmatic access to: Suite ignored 4
+state: 3
+*******************************
+programmatic access to: Suite after ignores
+state: 1
+content of cout, if any: Suite after ignores
+*******************************
+programmatic access to: viii
+state: 0
+content of cout, if any: *******************************
+programmatic access to: iii
+state: 2
+content of cout, if any: viii23
+viii43
+*******************************
+programmatic access to: iiie
+state: 2
+content of cout, if any: viii23
+viii43
+*******************************
+programmatic access to: ili
+state: 2
+content of cout, if any: *******************************
+programmatic access to: csi
+state: 2
+content of cout, if any: *******************************
+programmatic access to: vi
+state: 2
+content of cout, if any: *******************************
+programmatic access to: ir
+state: 2
+content of cout, if any: *******************************
+programmatic access to: lambdaiii
+state: 2
+content of cout, if any: lambdaiii23
+lambdaiii33
+*******************************
+programmatic access to: ccsi
+state: 2
+content of cout, if any: *******************************
+programmatic access to: void funkt pointer
+state: 0
+content of cout, if any: *******************************
+programmatic access to: bool funkt pointer
+state: 0
+content of cout, if any: *******************************
+programmatic access to: test 1
+state: 3
+*******************************
+programmatic access to: test 2
+state: 3
+*******************************
+programmatic access to: test 3
+state: 0
+content of cout, if any: *******************************
+programmatic access to: test 4
+state: 0
+content of cout, if any: *******************************
+programmatic access to: test 5
+state: 2
+content of cout, if any: *******************************
+programmatic access to: test 6
+state: 2
+content of cout, if any: *******************************
+programmatic access to: test 7
+state: 0
+content of cout, if any: *******************************
+programmatic access to: test 8
+state: 0
+content of cout, if any: *******************************
+programmatic access to: test ignored 1
+state: 3
+*******************************
+programmatic access to: test ignored 2
+state: 3
+*******************************
+programmatic access to: test ignored 3
+state: 3
+*******************************
+programmatic access to: test ignored 4
+state: 3
+*******************************
+programmatic access to: test ignored 5
+state: 3
+*******************************
+programmatic access to: test ignored 6
+state: 3
+*******************************
+programmatic access to: test ignored 7
+state: 3
+*******************************
+programmatic access to: test ignored 8
+state: 3
+*******************************
+programmatic access to: test ignored 9
+state: 3
+*******************************
+programmatic access to: test ignored 10
+state: 3
 
 
 -------------- OUTPUT START: Suite fail cout ----------------
@@ -114,6 +233,36 @@ Suite ignored 4
 Suite after ignores
 
 --------------- OUTPUT END: Suite after ignores -----------------
+*******************************
+programmatic access to: Suite testCase
+state: 0
+content of cout, if any: *******************************
+programmatic access to: Suite testCase2
+state: 0
+content of cout, if any: *******************************
+programmatic access to: Suite fail cout
+state: 1
+content of cout, if any: Suite testCase2
+*******************************
+programmatic access to: Suite ignored 1
+state: 1
+content of cout, if any: Suite ignored 1
+*******************************
+programmatic access to: Suite ignored 2
+state: 1
+content of cout, if any: Suite ignored 2
+*******************************
+programmatic access to: Suite ignored 3
+state: 1
+content of cout, if any: Suite ignored 3
+*******************************
+programmatic access to: Suite ignored 4
+state: 1
+content of cout, if any: Suite ignored 4
+*******************************
+programmatic access to: Suite after ignores
+state: 1
+content of cout, if any: Suite after ignores
 Suite testCase: OK
 Suite testCase2: OK
 Suite fail cout: Fail
