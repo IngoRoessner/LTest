@@ -78,20 +78,18 @@ TestSuite DataTests = {
     }),
 
     //cast lambda to functionpointer (only capture less lambdas)
-    LTest::addTest("ir", (void(*)(int))([](int i){ir(i);}), [](){
+    LTest::addTest("ir", [](int i){ir(i);}, [](){
         LTest::fixture(1);
         LTest::fixture(2);
         LTest::fixture(3);
     }),
 
-    //wrap functions with reference or pointer parameter with lambda
-    //because the wouldnt work with the fixture function
     LTest::addTest(
         "lambdaiii",
-        (int(*)(int, int))([](int a, int b)->int{
+        [](int a, int b)->int{
             cout<<"lambdaiii"<<a<<b<<endl;
             return 1;
-        }),
+        },
         [](){
             LTest::fixture(1,2,3);
             LTest::fixture(2,3,3);
@@ -99,20 +97,37 @@ TestSuite DataTests = {
         }
     ),
 
-    //you cann use the lambda to convert your fixtures to test specific parameters
-    //(the function ccsi is tested in the example)
     LTest::addTest(
         "ccsi",
-        (char(*)(string, int))([](string s, int i){
+        [](string s, int i){
             char* cs = const_cast<char*>(s.c_str());
             return ccsi(cs, i);
-        }),
+        },
         [](){
             LTest::fixture('d',string("abcde"),3);
             LTest::fixture('a',string("abcde"),0);
             LTest::fixture('a',string("abcde"),1);
         }
+    ),
+
+    //add to expected output
+    /*
+    LTest::addTest("ir2", ir, [](){
+        int i1=1, i2=2, i3=3;
+        LTest::fixture<int&>(i1);
+        LTest::fixture<int&>(i2);
+        LTest::fixture<int&>(i3);
+    }),
+
+    LTest::addTest(
+        "ccsi2",ccsi,
+        [](){
+            LTest::fixture<char, char*, int>('d',"abcde",3);
+            LTest::fixture<char, char*, int>('a',"abcde",0);
+            LTest::fixture<char, char*, int>('a',"abcde",1);
+        }
     )
+    //*/
 };
 
 #endif // DATATEST_H_INCLUDED
