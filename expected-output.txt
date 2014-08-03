@@ -1,0 +1,180 @@
+test -d bin/Debug || mkdir -p bin/Debug
+test -d obj/Debug || mkdir -p obj/Debug
+g++ -Wall -fexceptions -std=c++11 -g  -c LTest.cpp -o obj/Debug/LTest.o
+ar rcs bin/Debug/libCppLambdaTest.a obj/Debug/LTest.o
+test -d bin/Debug || mkdir -p bin/Debug
+test -d obj/Debug/__ || mkdir -p obj/Debug/__
+test -d obj/Debug || mkdir -p obj/Debug
+g++ -Wall -fexceptions -std=c++11 -g  -I../ -c ../LTest.cpp -o obj/Debug/__/LTest.o
+g++ -Wall -fexceptions -std=c++11 -g  -I../ -c main.cpp -o obj/Debug/main.o
+g++  -L../ -o bin/Debug/LTestUse obj/Debug/__/LTest.o obj/Debug/main.o   
+-------------- OUTPUT START: Suite fail cout ----------------
+Suite testCase2
+
+--------------- OUTPUT END: Suite fail cout -----------------
+-------------- OUTPUT START: Suite after ignores ----------------
+Suite after ignores
+
+--------------- OUTPUT END: Suite after ignores -----------------
+-------------- OUTPUT START: iii ----------------
+viii23
+viii43
+
+--------------- OUTPUT END: iii -----------------
+-------------- OUTPUT START: iiie ----------------
+viii23
+viii43
+
+--------------- OUTPUT END: iiie -----------------
+-------------- OUTPUT START: lambdaiii ----------------
+lambdaiii23
+lambdaiii33
+
+--------------- OUTPUT END: lambdaiii -----------------
+Suite testCase: OK
+Suite testCase2: OK
+viii: OK
+void funkt pointer: OK
+bool funkt pointer: OK
+test 3: OK
+test 4: OK
+test 7: OK
+test 8: OK
+Suite fail cout: Fail
+Suite after ignores: Fail
+iii: Fail at fixture 2
+iiie: Exception at fixture 2
+ili: Fail at fixture 3
+csi: Fail at fixture 3
+vi: Exception at fixture 3
+ir: Exception at fixture 3
+lambdaiii: Fail at fixture 2
+ccsi: Fail at fixture 3
+test 5: my message
+test 6: bool = false, should be true
+Suite ignored 1: Ignore
+Suite ignored 2: Ignore
+Suite ignored 3: Ignore
+Suite ignored 4: Ignore
+test 1: Ignore
+test 2: Ignore
+test ignored 1: Ignore
+test ignored 2: Ignore
+test ignored 3: Ignore
+test ignored 4: Ignore
+test ignored 5: Ignore
+test ignored 6: Ignore
+test ignored 7: Ignore
+test ignored 8: Ignore
+test ignored 9: Ignore
+test ignored 10: Ignore
+Ignored(16), OK(9), Fail(2), Assert(10)), Exception(0)
+
+
+-------------- OUTPUT START: Suite fail cout ----------------
+Suite testCase2
+
+--------------- OUTPUT END: Suite fail cout -----------------
+-------------- OUTPUT START: Suite after ignores ----------------
+Suite after ignores
+
+--------------- OUTPUT END: Suite after ignores -----------------
+Suite testCase: OK
+Suite testCase2: OK
+Suite fail cout: Fail
+Suite after ignores: Fail
+Suite ignored 1: Ignore
+Suite ignored 2: Ignore
+Suite ignored 3: Ignore
+Suite ignored 4: Ignore
+Ignored(4), OK(2), Fail(2), Assert(0)), Exception(0)
+
+
+-------------- OUTPUT START: Suite fail cout ----------------
+Suite testCase2
+
+--------------- OUTPUT END: Suite fail cout -----------------
+-------------- OUTPUT START: Suite ignored 1 ----------------
+Suite ignored 1
+
+--------------- OUTPUT END: Suite ignored 1 -----------------
+-------------- OUTPUT START: Suite ignored 2 ----------------
+Suite ignored 2
+
+--------------- OUTPUT END: Suite ignored 2 -----------------
+-------------- OUTPUT START: Suite ignored 3 ----------------
+Suite ignored 3
+
+--------------- OUTPUT END: Suite ignored 3 -----------------
+-------------- OUTPUT START: Suite ignored 4 ----------------
+Suite ignored 4
+
+--------------- OUTPUT END: Suite ignored 4 -----------------
+-------------- OUTPUT START: Suite after ignores ----------------
+Suite after ignores
+
+--------------- OUTPUT END: Suite after ignores -----------------
+Suite testCase: OK
+Suite testCase2: OK
+Suite fail cout: Fail
+Suite ignored 1: Fail
+Suite ignored 2: Fail
+Suite ignored 3: Fail
+Suite ignored 4: Fail
+Suite after ignores: Fail
+Ignored(0), OK(2), Fail(6), Assert(0)), Exception(0)
+
+
+-------------- OUTPUT START: iii ----------------
+viii23
+viii43
+
+--------------- OUTPUT END: iii -----------------
+-------------- OUTPUT START: iiie ----------------
+viii23
+viii43
+
+--------------- OUTPUT END: iiie -----------------
+-------------- OUTPUT START: lambdaiii ----------------
+lambdaiii23
+lambdaiii33
+
+--------------- OUTPUT END: lambdaiii -----------------
+viii: OK
+void funkt pointer: OK
+bool funkt pointer: OK
+test 3: OK
+test 4: OK
+test 7: OK
+test 8: OK
+iii: Fail at fixture 2
+iiie: Exception at fixture 2
+ili: Fail at fixture 3
+csi: Fail at fixture 3
+vi: Exception at fixture 3
+ir: Exception at fixture 3
+lambdaiii: Fail at fixture 2
+ccsi: Fail at fixture 3
+test 5: my message
+test 6: bool = false, should be true
+Suite testCase: Ignore
+Suite testCase2: Ignore
+Suite fail cout: Ignore
+Suite ignored 1: Ignore
+Suite ignored 2: Ignore
+Suite ignored 3: Ignore
+Suite ignored 4: Ignore
+Suite after ignores: Ignore
+test 1: Ignore
+test 2: Ignore
+test ignored 1: Ignore
+test ignored 2: Ignore
+test ignored 3: Ignore
+test ignored 4: Ignore
+test ignored 5: Ignore
+test ignored 6: Ignore
+test ignored 7: Ignore
+test ignored 8: Ignore
+test ignored 9: Ignore
+test ignored 10: Ignore
+Ignored(20), OK(7), Fail(0), Assert(10)), Exception(0)
