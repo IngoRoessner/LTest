@@ -8,5 +8,6 @@ current-output.txt
 obj/
 bin/
 Default/
+build_lib/
 
 
