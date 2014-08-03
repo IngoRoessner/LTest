@@ -12,13 +12,13 @@ TestSuite ExternTestSuiteExample = {
 
     LTest::addTest("Suite fail cout", [](){cout<<"Suite testCase2"<<endl;return false;}),
 
-    LTest::ignore(),
+    LTest::ignoreNext(),
     LTest::addTest("Suite ignored 1", [](){cout<<"Suite ignored 1"<<endl;return false;}),
 
     LTest::ignore("Suite ignored 2"),
     LTest::addTest("Suite ignored 2", [](){cout<<"Suite ignored 2"<<endl;return false;}),
 
-    LTest::ignore(2),
+    LTest::ignoreNext(2),
     LTest::addTest("Suite ignored 3", [](){cout<<"Suite ignored 3"<<endl;return false;}),
     LTest::addTest("Suite ignored 4", [](){cout<<"Suite ignored 4"<<endl;return false;}),
 

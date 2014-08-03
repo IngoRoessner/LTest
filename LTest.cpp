@@ -1,5 +1,7 @@
 #include "LTest.h"
 
+double CLOCKS_PER_SEC_AS_DOUBLE = static_cast<double>(CLOCKS_PER_SEC);
+
 LTest::LTest():counter(0){
     mutedStreams.setMuteMode(cout, MuteMode::FAIL);
 }
@@ -9,23 +11,43 @@ LTest& LTest::getInstanz(){
     return instanz;
 }
 
-void LTest::runTest(const string& testName, function<bool ()>& testFunction){
+double measure_time_taken(const clock_t& before){
+    clock_t after = clock();
+    return static_cast<double>(after - before) / CLOCKS_PER_SEC_AS_DOUBLE;
+}
+
+TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction){
     bool testFailed = true;
     getInstanz().mutedStreams.muteOut();
+    double time_taken_sec;
+    TestState state;
     try{
-        if(testFunction()){
-            getInstanz().ok.push_back(testName);
-            testFailed = false;
-        }else{
-            getInstanz().fail.push_back(testName);
+        clock_t before;
+        before = clock();
+        try {
+            bool&& test_successful = testFunction();
+            time_taken_sec = measure_time_taken(before);
+            if(test_successful){
+                getInstanz().ok.push_back(tname);
+                testFailed = false;
+                state = TestState::OK;
+            }else{
+                getInstanz().fail.push_back(tname);
+                state = TestState::FAILED;
+            }
+        } catch(...){
+            time_taken_sec = measure_time_taken(before);
+            state = TestState::ABORTED;
+            throw;
         }
     }
-    catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_pair(testName, a.what()));}
-    catch(exception e){getInstanz().error.push_back(make_pair(testName, e.what()));}
-    catch(int e){getInstanz().error.push_back(make_pair(testName, "int exception: "+e));}
-    catch(char e){getInstanz().error.push_back(make_pair(testName, "char exception: "+e));}
-    catch(...){getInstanz().error.push_back(make_pair(testName, "Unknown Exception"));}
-    getInstanz().mutedStreams.flushOut(testName, testFailed);
+    catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_pair(tname, a.what()));}
+    catch(exception e){getInstanz().error.push_back(make_pair(tname, e.what()));}
+    catch(int e){getInstanz().error.push_back(make_pair(tname, "int exception: "+e));}
+    catch(char e){getInstanz().error.push_back(make_pair(tname, "char exception: "+e));}
+    catch(...){getInstanz().error.push_back(make_pair(tname, "Unknown Exception"));}
+    map<ostream*, string>&& output_mapping = getInstanz().mutedStreams.flushOut(tname, testFailed);
+    return TestResult(state, time_taken_sec, move(output_mapping), tname);
 }
 
 bool LTest::isIgnored(string testName){
@@ -39,54 +61,50 @@ bool LTest::isIgnored(string testName){
     return result;
 }
 
-void LTest::runTests(){
-    for(auto element : getInstanz().testCases){
-        string testName = element.first;
-        function<bool ()> testFunction = element.second;
-        if(!isIgnored(testName)){
-            runTest(testName, testFunction);
-        }
-    }
+list<TestResult> LTest::runTests(){
+	return runTests(getInstanz().test_inserted_order);
 }
 
-void LTest::runTest(const string& test){
-    for(auto element : getInstanz().testCases){
-        string testName = element.first;
-        function<bool ()> testFunction = element.second;
-        if(testName.compare(test) == 0){
-            runTest(testName, testFunction);
-        }
-    }
+TestResult LTest::runTest(const string& test){
+	function<bool ()> testFunction = getInstanz().testCases.at(test);
+	return runTest(test, testFunction);
 }
 
-void LTest::runTest(TestSuite& testsuite, bool force){
-    for (auto testName : testsuite){
-        if(testName != getIgnoreLable() && (force || !isIgnored(testName))){
-            LTest::runTest(testName);
-        }
+list<TestResult> LTest::runTests(const TestSuite& testsuite, bool force){
+	list<TestResult> results;
+    for (auto &testName : testsuite){
+    	if(testName != getIgnoreLable()){
+			if(force || !isIgnored(testName)){
+				results.push_back(move(LTest::runTest(testName)));
+			} else {
+				TestResult ignored_result(testName);
+				results.push_back(forward<TestResult>(ignored_result));
+			}
+    	}
     }
+    return results;
 }
 
 void LTest::errorOut(ostream& os){
-    for(auto element : getInstanz().error){
+    for(auto &element : getInstanz().error){
         os << element.first + ": " + element.second << endl;
     }
 }
 
 void LTest::assertOut(ostream& os){
-    for(auto element : getInstanz().assert){
+    for(auto &element : getInstanz().assert){
         os << element.first + ": " + element.second << endl;
     }
 }
 
 void LTest::failOut(ostream& os){
-    for(auto element : getInstanz().fail){
+    for(auto &element : getInstanz().fail){
         os << element << ": Fail" << endl;
     }
 }
 
 void LTest::okOut(ostream& os){
-    for(auto element : getInstanz().ok){
+    for(auto &element : getInstanz().ok){
         os << element << ": OK" << endl;
     }
 }
@@ -130,7 +148,7 @@ void LTest::run(string test, ostream& os){
 }
 
 void LTest::run(TestSuite& testsuite, bool force, ostream& os){
-    runTest(testsuite, force);
+    runTests(testsuite, force);
     output(os);
 }
 
@@ -139,7 +157,8 @@ void LTest::addTestFunction(string testName, function<bool ()> test){
         ignore(testName);
     }
     getInstanz().counter++;
-    getInstanz().testCases.push_back(make_pair(testName, test));
+    getInstanz().testCases.emplace(testName, test);
+    getInstanz().test_inserted_order.push_back(move(testName));
 }
 
 string LTest::ignore(string testName){
@@ -147,9 +166,9 @@ string LTest::ignore(string testName){
     return getIgnoreLable();
 }
 
-string LTest::ignore(unsigned int number){
+string LTest::ignoreNext(unsigned int nextNTests){
     unsigned int start = getInstanz().counter;
-    unsigned int stop = start+number;
+    unsigned int stop = start + nextNTests;
     for(unsigned int i = start; i<stop; i++){
         getInstanz().ignore(patch::to_string(i));
     }

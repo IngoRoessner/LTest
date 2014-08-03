@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <memory>
 
 using namespace std;
 
@@ -32,10 +33,11 @@ class MuteStream{
             mutedStream.rdbuf(mutedStreamBuffer.rdbuf());
         }
 
-        void flushOut(string testName, bool testFailed){
+        string flushOut(string testName, bool testFailed){
+        	string output = "";
             mutedStream.rdbuf(mutedStreamRdbuf);
             if(muteMode == MuteMode::EVERYTHING || (testFailed && muteMode == MuteMode::FAIL)){
-                string output = mutedStreamBuffer.str();
+                output = mutedStreamBuffer.str();
                 if(output.size()){
                     mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
                     mutedStream<<output<<endl;
@@ -43,16 +45,17 @@ class MuteStream{
                 }
             }
             mutedStreamBuffer.str("");
+            return output;
         }
 
 };
 
-class MuteStreamMap: public map<ostream*, MuteStream*>{
+class MuteStreamMap: public map<ostream*, unique_ptr<MuteStream>>{
 public:
 
     void setMuteMode(ostream& os, MuteMode mode){
         MuteStreamMap& that = *this;
-        that[&os] = new MuteStream(os, mode);
+        that[&os] = unique_ptr<MuteStream>(new MuteStream(os, mode));
     }
 
     void muteOut(){
@@ -61,11 +64,15 @@ public:
         }
     }
 
-    void flushOut(string testName, bool testFailed){
+    map<ostream*, string> flushOut(string testName, bool testFailed){
+    	map<ostream*, string> returnable;
         for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-            it->second->flushOut(testName, testFailed);
+            string&& flushed_output = it->second->flushOut(testName, testFailed);
+            returnable.emplace(it->first, move(flushed_output));
         }
+        return returnable;
     }
+
 };
 
 #endif // MUTESTREAM_H_INCLUDED
