@@ -20,7 +20,7 @@ public:
 template<typename ReturnType, typename... ParameterTypes>
 class DataFunction: public DataFunctionBase{
 public:
-    typedef ReturnType(*FooType)(ParameterTypes...);
+    typedef function<ReturnType(ParameterTypes...)> FooType;
     FooType foo;
 
     DataFunction(FooType f){
@@ -31,7 +31,7 @@ public:
     template <typename T, class... Types>
     void run(T ret, Types&&... args){
         ++count;
-        ReturnType result;
+        typename conditional<is_reference<ReturnType>::value, typename remove_reference<ReturnType>::type, ReturnType>::type result;
         stringstream sstm;
         string msg;
         try{
@@ -50,7 +50,7 @@ public:
 template<typename... ParameterTypes>
 class DataFunction<void, ParameterTypes...>: public DataFunctionBase{
 public:
-    typedef void(*FooType)(ParameterTypes...);
+    typedef function<void(ParameterTypes...)> FooType;
     FooType foo;
 
     DataFunction(FooType f){
@@ -74,6 +74,24 @@ public:
     bool isVoidReturn(){
         return true;
     }
+};
+
+template<typename Functor>
+struct DataFunctionTypeWrapper{
+    typedef typename DataFunctionTypeWrapper<decltype(&Functor::operator())>::type type;
+};
+
+
+template <typename ClassType, typename ReturnType, typename... ParameterTypes>
+struct DataFunctionTypeWrapper<ReturnType(ClassType::*)(ParameterTypes...) const>
+{
+    typedef DataFunction<ReturnType, ParameterTypes...> type;
+};
+
+template <typename ReturnType, typename... ParameterTypes>
+struct DataFunctionTypeWrapper<ReturnType(*)(ParameterTypes...)>
+{
+    typedef DataFunction<ReturnType, ParameterTypes...> type;
 };
 
 

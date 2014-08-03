@@ -73,10 +73,12 @@ class LTest
             return testName;
         }
 
-        template<typename ReturnType, typename... ParameterTypes>
-        static string addTest(string testName, ReturnType(*testFunction)(ParameterTypes...), function<void()> testDataFoo){
+
+        template<typename Funct>
+        static string addTest(string testName, Funct testFunction, function<void()> testDataFoo){
             function<bool()> foo = [=](){
-                auto datafunct = DataFunction<ReturnType, ParameterTypes...>(testFunction);
+                typedef typename DataFunctionTypeWrapper<Funct>::type DataFunctionType;
+                auto datafunct = DataFunctionType(testFunction);
                 getInstanz().dataFunction = &datafunct;
                 testDataFoo();
                 return true;
