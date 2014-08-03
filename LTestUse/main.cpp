@@ -36,7 +36,18 @@ void tests_1(){
     LTest::addTest("test ignored 10", [](){return true;});
 }
 
+void printResults(const std::list<TestResult>& results) {
+	for (auto& result : results) {
+		cerr << result.get_testname() << endl;
+		cerr << result.get_state() << endl;
+		cerr << result.get_time_taken() << endl;
+		try {
+			cerr << result.get_output_mapping().at(&cout);
+		} catch (...) {
 
+		}
+	}
+}
 
 int main()
 {
@@ -51,19 +62,15 @@ int main()
     tests_1();
 
     //you can run all
-    LTest::run();
+    std::list<TestResult> results = LTest::run();
+    printResults(results);
     cout<<endl<<endl;
 
     //you can run one TestSuite (TestSuite == list<string>)
     LTest::run(ExternTestSuiteExample);
     cout<<endl<<endl;
-	std::list<TestResult> results = LTest::runTests(ExternTestSuiteExample, true);
-	for(auto &result : results){
-		cerr << result.get_testname() << endl;
-		cerr << result.get_state() << endl;
-		cerr << result.get_time_taken() << endl;
-		cerr << result.get_output_mapping().at(&cout);
-	}
+	results = LTest::runTests(ExternTestSuiteExample, true);
+	printResults(results);
     //you can run without output and do the output later
     LTest::output();
     cout<<endl<<endl;

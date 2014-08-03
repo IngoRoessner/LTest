@@ -137,19 +137,22 @@ void LTest::clearOutput(){
     getInstanz().actualIgnore.clear();
 }
 
-void LTest::run(ostream& os){
-    runTests();
+list<TestResult> LTest::run(ostream& os){
+	auto&& returnable = runTests();
     output(os);
+    return returnable;
 }
 
-void LTest::run(string test, ostream& os){
-    runTest(test);
+TestResult LTest::run(string test, ostream& os){
+    auto&& returnable = runTest(test);
     output(os);
+    return returnable;
 }
 
-void LTest::run(TestSuite& testsuite, bool force, ostream& os){
-    runTests(testsuite, force);
+list<TestResult> LTest::run(TestSuite& testsuite, bool force, ostream& os){
+	auto&& returnable = runTests(testsuite, force);
     output(os);
+    return returnable;
 }
 
 void LTest::addTestFunction(string testName, function<bool ()> test){

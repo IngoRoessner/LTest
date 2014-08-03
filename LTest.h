@@ -157,12 +157,12 @@ public:
     }
 
     //runTests() & output()
-    static void run(ostream& os = cout);
+    static list<TestResult>run(ostream& os = cout);
 
     //runTest() & output()
-    static void run(string test, ostream& os = cout);
+    static TestResult run(string test, ostream& os = cout);
 
-    static void run(TestSuite& testsuite, bool force = false, ostream& os = cout);
+    static list<TestResult> run(TestSuite& testsuite, bool force = false, ostream& os = cout);
 
     //loop all tests, execute only not ignored tests (you can get the result output via output())
     static list<TestResult> runTests();
