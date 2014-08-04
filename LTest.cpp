@@ -50,36 +50,48 @@ TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction)
     return TestResult(state, time_taken_sec, move(output_mapping), tname);
 }
 
-bool LTest::isIgnored(string testName){
-    bool result;
+bool LTest::isIgnored(testname testName){
+    bool ignored = false;
     if(getInstanz().ignores.count(testName)){
-        result = true;
+        ignored = true;
         getInstanz().actualIgnore.push_back(testName);
-    }else{
-        result = false;
     }
-    return result;
+    return ignored;
+}
+
+bool LTest::isIgnored(uint testIndex){
+    bool ignored = false;
+    if(getInstanz().ignored_indexes.count(testIndex)){
+        ignored = true;
+        getInstanz().actualIgnore.push_back(getInstanz().test_inserted_order.at(testIndex));
+    }
+    return ignored;
 }
 
 list<TestResult> LTest::runTests(){
-	return runTests(getInstanz().test_inserted_order);
+	map<uint, testname> inserted_map = getInstanz().test_inserted_order;
+	list<testname> test_names_sorted_by_insertion_order;
+	transform(inserted_map.begin(), inserted_map.end(), back_inserter(test_names_sorted_by_insertion_order), [](map<uint, testname>::value_type& val){return val.second;});
+	return runTests(test_names_sorted_by_insertion_order);
 }
 
-TestResult LTest::runTest(const string& test){
+TestResult LTest::runTest(const testname& test){
 	function<bool ()> testFunction = getInstanz().testCases.at(test);
 	return runTest(test, testFunction);
 }
 
 list<TestResult> LTest::runTests(const TestSuite& testsuite, bool force){
 	list<TestResult> results;
+	uint current_index = 0;
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLable()){
-			if(force || !isIgnored(testName)){
+			if(force || !(isIgnored(testName) || isIgnored(current_index))){
 				results.push_back(move(LTest::runTest(testName)));
 			} else {
 				TestResult ignored_result(testName);
 				results.push_back(forward<TestResult>(ignored_result));
 			}
+			current_index++;
     	}
     }
     return results;
@@ -143,7 +155,7 @@ list<TestResult> LTest::run(ostream& os){
     return returnable;
 }
 
-TestResult LTest::run(string test, ostream& os){
+TestResult LTest::run(testname test, ostream& os){
     auto&& returnable = runTest(test);
     output(os);
     return returnable;
@@ -155,25 +167,23 @@ list<TestResult> LTest::run(TestSuite& testsuite, bool force, ostream& os){
     return returnable;
 }
 
-void LTest::addTestFunction(string testName, function<bool ()> test){
-    if(getInstanz().ignores.count(patch::to_string(getInstanz().counter))){
-        ignore(testName);
-    }
+void LTest::addTestFunction(testname testName, function<bool ()> test){
+	uint current_count = getInstanz().counter;
+    getInstanz().test_inserted_order[current_count] = testName;
+    getInstanz().testCases.emplace(move(testName), move(test));
     getInstanz().counter++;
-    getInstanz().testCases.emplace(testName, test);
-    getInstanz().test_inserted_order.push_back(move(testName));
 }
 
-string LTest::ignore(string testName){
-    getInstanz().ignores[testName] = true;
+string LTest::ignore(testname testName){
+    getInstanz().ignores.insert(testName);
     return getIgnoreLable();
 }
 
 string LTest::ignoreNext(unsigned int nextNTests){
     unsigned int start = getInstanz().counter;
     unsigned int stop = start + nextNTests;
-    for(unsigned int i = start; i<stop; i++){
-        getInstanz().ignore(patch::to_string(i));
+    for(unsigned int i = start; i < stop; i++){
+        getInstanz().ignored_indexes.insert(i);
     }
     return getIgnoreLable();
 }
