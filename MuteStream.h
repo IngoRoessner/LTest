@@ -27,13 +27,13 @@ class MuteStream{
             muteMode = mode;
         }
 
-        void muteOut(){
+        void mute(){
             mutedStreamBuffer.str("");
             mutedStreamRdbuf = mutedStream.rdbuf();
             mutedStream.rdbuf(mutedStreamBuffer.rdbuf());
         }
 
-        string flushOut(string testName, bool testFailed){
+        string flush(string testName, bool testFailed){
         	string output = "";
             mutedStream.rdbuf(mutedStreamRdbuf);
             if(muteMode == MuteMode::EVERYTHING || (testFailed && muteMode == MuteMode::FAIL)){
@@ -58,16 +58,16 @@ public:
         that[&os] = unique_ptr<MuteStream>(new MuteStream(os, mode));
     }
 
-    void muteOut(){
+    void mute(){
         for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-            it->second->muteOut();
+            it->second->mute();
         }
     }
 
-    map<ostream*, string> flushOut(string testName, bool testFailed){
+    map<ostream*, string> flush(string testName, bool testFailed){
     	map<ostream*, string> returnable;
         for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-            string&& flushed_output = it->second->flushOut(testName, testFailed);
+            string&& flushed_output = it->second->flush(testName, testFailed);
             returnable.emplace(it->first, move(flushed_output));
         }
         return returnable;

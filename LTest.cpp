@@ -18,7 +18,7 @@ double measure_time_taken(const clock_t& before){
 
 TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction){
     bool testFailed = true;
-    getInstanz().mutedStreams.muteOut();
+    getInstanz().mutedStreams.mute();
     double time_taken_sec;
     TestResult::TestState state;
     try{
@@ -46,7 +46,7 @@ TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction)
     catch(int e){getInstanz().error.push_back(make_pair(tname, "int exception: "+e));}
     catch(char e){getInstanz().error.push_back(make_pair(tname, "char exception: "+e));}
     catch(...){getInstanz().error.push_back(make_pair(tname, "Unknown Exception"));}
-    map<ostream*, string>&& output_mapping = getInstanz().mutedStreams.flushOut(tname, testFailed);
+    map<ostream*, string>&& output_mapping = getInstanz().mutedStreams.flush(tname, testFailed);
     return TestResult(state, time_taken_sec, move(output_mapping), tname);
 }
 
