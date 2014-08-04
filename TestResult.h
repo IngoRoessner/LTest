@@ -1,6 +1,8 @@
 #ifndef TESTRESULT_H_INCLUDED
 #define TESTRESULT_H_INCLUDED
 
+#include "MuteStream.h"
+
 typedef string testname;
 
 class TestResult
@@ -11,7 +13,6 @@ public:
     };
 
 private:
-
     TestState _state;
     double _time_taken;
     map<ostream*, string> _output_mapping;
@@ -21,8 +22,8 @@ public :
 
     TestResult(testname tname = "no_testname_given") : _state(TestState::IGNORED), _time_taken(0), _tname(tname) {}
 
-    TestResult(TestState state, double time_taken, map<ostream*, string> output_mapping, testname tname)
-        : _state(state), _time_taken(time_taken), _output_mapping(output_mapping), _tname(tname) {}
+    TestResult(TestState state, double time_taken, MuteStreamMap& muteStream, testname tname)
+        : _state(state), _time_taken(time_taken), _output_mapping(muteStream.flush(tname, state != TestState::OK)), _tname(tname) {}
 
     TestState get_state() const
     {
@@ -44,6 +45,9 @@ public :
     }
 
 };
+
+
+
 
 
 
