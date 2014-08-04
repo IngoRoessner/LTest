@@ -5,8 +5,11 @@
 #include <functional>
 #include <list>
 #include <map>
+#include <set>
 #include <string>
 #include <utility>
+#include <algorithm>
+#include <iterator>
 #include "LTestAssert.h"
 #include "toStringPatch.h"
 #include "function_traits.h"
@@ -18,6 +21,7 @@ using namespace std;
 
 using TestSuite = list<string>;
 typedef string testname;
+typedef unsigned int uint;
 
 enum TestState
 {
@@ -61,22 +65,24 @@ public :
 
 class LTest
 {
-    typedef map<string, function<bool ()>> testname_to_function_mapping;
+    typedef map<testname, function<bool ()>> testname_to_function_mapping;
     testname_to_function_mapping testCases;
-    list<testname> test_inserted_order;
-    list<string> ok;
-    list<string> fail;
-    map<string, bool> ignores;
-    list<string> actualIgnore;
-    list<pair<string, string> > error;
-    list<pair<string, string> > assert;
+    map<uint, testname> test_inserted_order;
+    set<testname> ignores;
+    set<uint> ignored_indexes;
+    list<testname> actualIgnore;
+    list<testname> ok;
+    list<testname> fail;
+    list<pair<testname, string> > error;
+    list<pair<testname, string> > assert;
     LTest();
     static LTest& getInstanz();
-    unsigned int counter;
+    uint counter;
     MuteStreamMap mutedStreams;
     DataFunctionBase* dataFunction;
 
     static bool isIgnored(string testName);
+    static bool isIgnored(uint testIndex);
 
     static TestResult runTest(const string& testName, function<bool ()> testFunction);
 
