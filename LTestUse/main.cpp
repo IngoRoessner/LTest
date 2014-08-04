@@ -36,13 +36,13 @@ void tests_1(){
     LTest::addTest("test ignored 10", [](){return true;});
 }
 
-void printResults(const std::list<TestResult>& results) {
+void printResults(const TestResultSet& results) {
 	for (auto& result : results) {
 		cout << "*******************************" << endl;
-		cout << "programmatic access to: " << result.get_testname() << endl;
-		cout << "state: " << result.get_state() << endl;
+		cout << "programmatic access to: " << result->get_testname() << endl;
+		cout << "state: " << result->get_state() << endl;
 		try {
-			cout << "content of cout, if any: " << result.get_output_mapping().at(&cout)<<endl;;
+			cout << "content of cout, if any: " << result->get_output_mapping().at(&cout)<<endl;;
 		} catch (...) {
 
 		}
@@ -62,29 +62,18 @@ int main()
     tests_1();
 
     //you can run all
-    std::list<TestResult> results = LTest::run();
-    printResults(results);
+    LTest::run();
     cout<<endl<<endl;
 
     //you can run one TestSuite (TestSuite == list<string>)
     LTest::run(ExternTestSuiteExample);
     cout<<endl<<endl;
-	results = LTest::runTests(ExternTestSuiteExample, true);
+
+	TestResultSet results = LTest::runTests(ExternTestSuiteExample, true);
 	printResults(results);
-    //you can run without output and do the output later
-    LTest::output();
+    results.out();
     cout<<endl<<endl;
 
-    /*
-    //you can chose where the results where streamed
-    LTest::run(cout);
-
-    LTest::runTest();
-    LTest::output(cout);
-
-    //you can stream result fragments
-    LTest::errorOut(cout)
-    */
 
     //you can ignore TestSuites
     LTest::ignore(ExternTestSuiteExample);

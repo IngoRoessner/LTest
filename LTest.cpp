@@ -16,11 +16,11 @@ double measure_time_taken(const clock_t& before){
     return static_cast<double>(after - before) / CLOCKS_PER_SEC_AS_DOUBLE;
 }
 
-TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction){
-    bool testFailed = true;
+
+TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFunction){
     getInstanz().mutedStreams.mute();
     double time_taken_sec;
-    TestResult::TestState state;
+    TestResult* result;
     try{
         clock_t before;
         before = clock();
@@ -28,32 +28,29 @@ TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction)
             bool&& test_successful = testFunction();
             time_taken_sec = measure_time_taken(before);
             if(test_successful){
-                getInstanz().ok.push_back(tname);
-                testFailed = false;
-                state = TestResult::TestState::OK;
+                result = new TestResultOK(tname, getInstanz().mutedStreams, time_taken_sec);
             }else{
-                getInstanz().fail.push_back(tname);
-                state = TestResult::TestState::FAILED;
+                result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, "return not true");
             }
         } catch(...){
             time_taken_sec = measure_time_taken(before);
-            state = TestResult::TestState::ABORTED;
             throw;
         }
     }
-    catch(LTAssert::FalseAssert a){getInstanz().assert.push_back(make_pair(tname, a.what()));}
-    catch(exception e){getInstanz().error.push_back(make_pair(tname, e.what()));}
-    catch(int e){getInstanz().error.push_back(make_pair(tname, "int exception: "+e));}
-    catch(char e){getInstanz().error.push_back(make_pair(tname, "char exception: "+e));}
-    catch(...){getInstanz().error.push_back(make_pair(tname, "Unknown Exception"));}
-    return TestResult(state, time_taken_sec, getInstanz().mutedStreams, tname);
+    catch(LTAssert::FalseAssert a){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, a.what());}
+    catch(exception e){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
+    catch(int e){stringstream es; es<<e; result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "int exception: "+es.str());}
+    catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "char exception: "+e);}
+    catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "Unknown Exception");}
+    getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
+    return getInstanz().resultset;
 }
+
 
 bool LTest::isIgnored(testname testName){
     bool ignored = false;
     if(getInstanz().ignores.count(testName)){
         ignored = true;
-        getInstanz().actualIgnore.push_back(testName);
     }
     return ignored;
 }
@@ -62,107 +59,56 @@ bool LTest::isIgnored(uint testIndex){
     bool ignored = false;
     if(getInstanz().ignored_indexes.count(testIndex)){
         ignored = true;
-        getInstanz().actualIgnore.push_back(getInstanz().test_inserted_order.at(testIndex));
     }
     return ignored;
 }
 
-list<TestResult> LTest::runTests(){
+TestResultSet LTest::runTests(){
 	map<uint, testname> inserted_map = getInstanz().test_inserted_order;
 	list<testname> test_names_sorted_by_insertion_order;
 	transform(inserted_map.begin(), inserted_map.end(), back_inserter(test_names_sorted_by_insertion_order), [](map<uint, testname>::value_type& val){return val.second;});
 	return runTests(test_names_sorted_by_insertion_order);
 }
 
-TestResult LTest::runTest(const testname& test){
+TestResultSet LTest::runTest(const testname& test){
 	function<bool ()> testFunction = getInstanz().testCases.at(test);
 	return runTest(test, testFunction);
 }
 
-list<TestResult> LTest::runTests(const TestSuite& testsuite, bool force){
-	list<TestResult> results;
+ TestResultSet LTest::runTests(const TestSuite& testsuite, bool force){
 	uint current_index = 0;
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLable()){
 			if(force || !(isIgnored(testName) || isIgnored(current_index))){
-				results.push_back(move(LTest::runTest(testName)));
+				LTest::runTest(testName);
 			} else {
-				TestResult ignored_result(testName);
-				results.push_back(forward<TestResult>(ignored_result));
+				TestResult* result = new TestResultIgnored(testName);
+                getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
 			}
 			current_index++;
     	}
     }
-    return results;
+    return getInstanz().resultset;;
 }
 
-void LTest::errorOut(ostream& os){
-    for(auto &element : getInstanz().error){
-        os << element.first + ": " + element.second << endl;
-    }
-}
-
-void LTest::assertOut(ostream& os){
-    for(auto &element : getInstanz().assert){
-        os << element.first + ": " + element.second << endl;
-    }
-}
-
-void LTest::failOut(ostream& os){
-    for(auto &element : getInstanz().fail){
-        os << element << ": Fail" << endl;
-    }
-}
-
-void LTest::okOut(ostream& os){
-    for(auto &element : getInstanz().ok){
-        os << element << ": OK" << endl;
-    }
-}
-
-void LTest::ignoreOut(ostream& os){
-    for(auto element : getInstanz().actualIgnore){
-        os << element + ": Ignore" << endl;
-    }
-}
-
-void LTest::countOut(ostream& os){
-    os<<"Ignored("<<getInstanz().actualIgnore.size()<<"), OK("<<getInstanz().ok.size()<<"), Fail("<<getInstanz().fail.size()<<"), Assert("<<getInstanz().assert.size()<<")"<<"), Exception("<<getInstanz().error.size()<<")"<<endl;
-}
-
-void LTest::output(ostream& os){
-    okOut(os);
-    failOut(os);
-    assertOut(os);
-    errorOut(os);
-    ignoreOut(os);
-    countOut(os);
-    clearOutput();
-}
-
-void LTest::clearOutput(){
-    getInstanz().ok.clear();
-    getInstanz().fail.clear();
-    getInstanz().assert.clear();
-    getInstanz().error.clear();
-    getInstanz().actualIgnore.clear();
-}
-
-list<TestResult> LTest::run(ostream& os){
+TestResultSet LTest::run(ostream& os, Format format){
 	auto&& returnable = runTests();
-    output(os);
+    os<<getInstanz().resultset.out(format);
+    clearResultSet();
     return returnable;
 }
 
-TestResult LTest::run(testname test, ostream& os){
+TestResultSet LTest::run(testname test, ostream& os, Format format){
     auto&& returnable = runTest(test);
-    output(os);
+    os<<getInstanz().resultset.out(format);
+    clearResultSet();
     return returnable;
 }
 
-list<TestResult> LTest::run(TestSuite& testsuite, bool force, ostream& os){
+TestResultSet LTest::run(TestSuite& testsuite, bool force, ostream& os, Format format){
 	auto&& returnable = runTests(testsuite, force);
-    output(os);
+    os<<getInstanz().resultset.out(format);
+    clearResultSet();
     return returnable;
 }
 
@@ -198,4 +144,12 @@ string LTest::ignore(TestSuite& testsuite){
 
 string LTest::getIgnoreLable(){
     return "___LTEST::IGNORE___";
+}
+
+TestResultSet LTest::getResultSet(){
+    return getInstanz().resultset;
+}
+
+void LTest::clearResultSet(){
+    getInstanz().resultset.clear();
 }

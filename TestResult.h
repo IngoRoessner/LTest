@@ -1,7 +1,9 @@
 #ifndef TESTRESULT_H_INCLUDED
 #define TESTRESULT_H_INCLUDED
 
+#include <memory>
 #include "MuteStream.h"
+#include "OutputFormat/OutputFormat.h"
 
 typedef string testname;
 
@@ -43,12 +45,53 @@ public :
     string get_testname() const {
     	return _tname;
     }
+};
 
+class TestResultOK: public TestResult{
+public :
+
+    TestResultOK(testname tname = "no_testname_given") : TestResult(tname) {}
+
+    TestResultOK(testname tname, MuteStreamMap muteStream, double time_taken):TestResult(TestResult::OK, time_taken, muteStream, tname){}
+};
+
+class TestResultIgnored: public TestResult{
+public :
+    TestResultIgnored(testname tname = "no_testname_given") : TestResult(tname) {}
+};
+
+class TestResultFailed: public TestResult{
+    string message;
+public :
+    TestResultFailed(testname tname = "no_testname_given") : TestResult(tname) {}
+
+    TestResultFailed(testname tname, MuteStreamMap muteStream, double time_taken, string msg = ""):TestResult(TestResult::FAILED, time_taken, muteStream, tname), message(msg){}
+
+    string getMessage(){
+        return message;
+    }
+};
+
+class TestResultAborted: public TestResult{
+    string message;
+public :
+    TestResultAborted(testname tname = "no_testname_given") : TestResult(tname) {}
+
+    TestResultAborted(testname tname, MuteStreamMap muteStream, double time_taken, string msg=""):TestResult(TestResult::ABORTED, time_taken, muteStream, tname), message(msg){}
+
+    string getMessage(){
+        return message;
+    }
 };
 
 
-
-
+class TestResultSet:public list<shared_ptr<TestResult>>{
+public:
+    string out(Format format = Format::Text){
+        GetOutputFormat<TestResultSet> output(format);
+        return output.run(*this);
+    }
+};
 
 
 #endif // TESTRESULT_H_INCLUDED

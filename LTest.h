@@ -16,6 +16,7 @@
 #include "MuteStream.h"
 #include "DataFunction.h"
 #include "TestResult.h"
+#include "OutputFormat/OutputFormat.h"
 #include <time.h>
 
 using namespace std;
@@ -30,11 +31,7 @@ class LTest
     map<uint, testname> test_inserted_order;
     set<testname> ignores;
     set<uint> ignored_indexes;
-    list<testname> actualIgnore;
-    list<testname> ok;
-    list<testname> fail;
-    list<pair<testname, string> > error;
-    list<pair<testname, string> > assert;
+    TestResultSet resultset;
     LTest();
     static LTest& getInstanz();
     uint counter;
@@ -44,7 +41,7 @@ class LTest
     static bool isIgnored(string testName);
     static bool isIgnored(uint testIndex);
 
-    static TestResult runTest(const string& testName, function<bool ()> testFunction);
+    static TestResultSet runTest(const string& testName, function<bool ()> testFunction);
 
 public:
     static void setMuteMode(ostream& os, MuteMode mode)
@@ -123,20 +120,20 @@ public:
     }
 
     //runTests() & output()
-    static list<TestResult>run(ostream& os = cout);
+    static TestResultSet run(ostream& os = cout, Format format = Format::Text);
 
     //runTest() & output()
-    static TestResult run(string test, ostream& os = cout);
+    static TestResultSet run(string test, ostream& os = cout, Format format = Format::Text);
 
-    static list<TestResult> run(TestSuite& testsuite, bool force = false, ostream& os = cout);
+    static TestResultSet run(TestSuite& testsuite, bool force = false, ostream& os = cout, Format format = Format::Text);
 
     //loop all tests, execute only not ignored tests (you can get the result output via output())
-    static list<TestResult> runTests();
+    static TestResultSet runTests();
 
     //execute all tests with the given name by force (no ignores). (result output via output())
-    static TestResult runTest(const string& test);
+    static TestResultSet runTest(const string& test);
 
-    static list<TestResult> runTests(const TestSuite& testsuite, bool force = false);
+    static TestResultSet runTests(const TestSuite& testsuite, bool force = false);
 
     static string getIgnoreLable();
 
@@ -148,22 +145,9 @@ public:
 
     static string ignore(TestSuite& testsuite);
 
-    static void clearOutput();
+    static TestResultSet getResultSet();
 
-    //run errorOut(), assertOut(), failOut(), okOut(), ignoreOut() and countOut()
-    static void output(ostream& os = cout);
-
-    static void errorOut(ostream& os = cout);
-
-    static void assertOut(ostream& os = cout);
-
-    static void failOut(ostream& os = cout);
-
-    static void okOut(ostream& os = cout);
-
-    static void ignoreOut(ostream& os = cout);
-
-    static void countOut(ostream& os = cout);
+    static void clearResultSet();
 
 };
 

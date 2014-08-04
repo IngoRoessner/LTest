@@ -50,12 +50,12 @@ class MuteStream{
 
 };
 
-class MuteStreamMap: public map<ostream*, unique_ptr<MuteStream>>{
+class MuteStreamMap: public map<ostream*, shared_ptr<MuteStream>>{
 public:
 
     void setMuteMode(ostream& os, MuteMode mode){
         MuteStreamMap& that = *this;
-        that[&os] = unique_ptr<MuteStream>(new MuteStream(os, mode));
+        that[&os] = shared_ptr<MuteStream>(new MuteStream(os, mode));
     }
 
     void mute(){
