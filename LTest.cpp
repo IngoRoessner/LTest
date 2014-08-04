@@ -20,7 +20,7 @@ TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction)
     bool testFailed = true;
     getInstanz().mutedStreams.muteOut();
     double time_taken_sec;
-    TestState state;
+    TestResult::TestState state;
     try{
         clock_t before;
         before = clock();
@@ -30,14 +30,14 @@ TestResult LTest::runTest(const testname& tname, function<bool ()> testFunction)
             if(test_successful){
                 getInstanz().ok.push_back(tname);
                 testFailed = false;
-                state = TestState::OK;
+                state = TestResult::TestState::OK;
             }else{
                 getInstanz().fail.push_back(tname);
-                state = TestState::FAILED;
+                state = TestResult::TestState::FAILED;
             }
         } catch(...){
             time_taken_sec = measure_time_taken(before);
-            state = TestState::ABORTED;
+            state = TestResult::TestState::ABORTED;
             throw;
         }
     }

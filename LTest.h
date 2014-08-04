@@ -12,52 +12,12 @@
 #include "function_traits.h"
 #include "MuteStream.h"
 #include "DataFunction.h"
+#include "TestResult.h"
 #include <time.h>
 
 using namespace std;
 
 using TestSuite = list<string>;
-typedef string testname;
-
-enum TestState
-{
-    OK, FAILED, ABORTED, IGNORED
-};
-
-class TestResult
-{
-    TestState _state;
-    double _time_taken;
-    map<ostream*, string> _output_mapping;
-    testname _tname;
-
-public :
-
-    TestResult(testname tname = "no_testname_given") : _state(TestState::IGNORED), _time_taken(0), _tname(tname) {}
-
-    TestResult(TestState state, double time_taken, map<ostream*, string> output_mapping, testname tname)
-        : _state(state), _time_taken(time_taken), _output_mapping(output_mapping), _tname(tname) {}
-
-    TestState get_state() const
-    {
-        return _state;
-    }
-
-    double get_time_taken() const
-    {
-        return _time_taken;
-    }
-
-    map<ostream*, string> get_output_mapping() const
-    {
-        return _output_mapping;
-    }
-
-    string get_testname() const {
-    	return _tname;
-    }
-
-};
 
 class LTest
 {

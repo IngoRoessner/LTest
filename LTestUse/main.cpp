@@ -42,7 +42,7 @@ void printResults(const std::list<TestResult>& results) {
 		cout << "programmatic access to: " << result.get_testname() << endl;
 		cout << "state: " << result.get_state() << endl;
 		try {
-			cout << "content of cout, if any: " << result.get_output_mapping().at(&cout);
+			cout << "content of cout, if any: " << result.get_output_mapping().at(&cout)<<endl;;
 		} catch (...) {
 
 		}
