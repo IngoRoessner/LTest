@@ -50,18 +50,21 @@ private:
         "Ignored("+util_toString(resultset.getIgnores().size())+")\n";
     }
 
+    void addOutIfNotEmpty(string& out, string name, string str){
+        string line = "=============";
+        if(str.size()){
+            out += line+name+line+"\n";
+            out += str;
+        }
+    }
+
     string getOut(ResultType resultset){
         string result = "";
-        result+="============= OK =============\n";
-        result+=getOKStr(resultset);
-        result+="============= Fail =============\n";
-        result+=getFailStr(resultset);
-        result+="============= Aborted =============\n";
-        result+=getAbordStr(resultset);
-        result+="============= Ignored =============\n";
-        result+=getIgnoreStr(resultset);
-        result+="============= Count =============\n";
-        result+=getCountStr(resultset);
+        addOutIfNotEmpty(result, "OK", getOKStr(resultset));
+        addOutIfNotEmpty(result, "Fail", getFailStr(resultset));
+        addOutIfNotEmpty(result, "Aborted", getAbordStr(resultset));
+        addOutIfNotEmpty(result, "Ignored", getIgnoreStr(resultset));
+        addOutIfNotEmpty(result, "Count", getCountStr(resultset));
         return result;
     }
 

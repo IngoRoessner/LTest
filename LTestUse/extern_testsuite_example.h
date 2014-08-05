@@ -23,6 +23,8 @@ TestSuite ExternTestSuiteExample = {
     LTest::addTest("Suite ignored 4", [](){cout<<"Suite ignored 4"<<endl;return false;}),
 
     LTest::addTest("Suite after ignores", [](){cout<<"Suite after ignores"<<endl;return false;}),
+
+    LTest::addTest("throw ", [](){throw string("nope");}),
 };
 
 
