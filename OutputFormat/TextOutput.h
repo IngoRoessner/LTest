@@ -42,7 +42,8 @@ private:
     }
 
     string getTotalStr(ResultType resultset){
-        return "OK("+util_toString(resultset.getOK().size())+"), "+
+        return "Total(" + util_toString(resultset.size()) + ") | " +
+        "OK("+util_toString(resultset.getOK().size())+"), "+
         "Fail("+util_toString(resultset.getFails().size())+"), "+
         "Aborted("+util_toString(resultset.getAbords().size())+"), "+
         "Ignored("+util_toString(resultset.getIgnores().size())+")\n" +
