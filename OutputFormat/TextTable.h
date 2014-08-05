@@ -22,8 +22,12 @@ class TextTable{
     string getLine(char c){
         if(!lineLength){
             string result = "";
-            for(auto column : columns){
-                result += getStrWithSpace(column.first, "") + seperator;
+            unsigned int i = 0;
+            for(auto column : columnNames){
+                result += getStrWithSpace(column, "");
+                if(++i < columnNames.size()){
+                    result += seperator;
+                }
             }
             lineLength = result.size();
         }
@@ -81,8 +85,12 @@ public:
 
     string head(){
         string result = "";
+        unsigned int i = 0;
         for(auto column : columnNames){
-            result += getStrWithSpace(column, column) + seperator;
+            result += getStrWithSpace(column, column);
+            if(++i < columnNames.size()){
+                result += seperator;
+            }
         }
         result += "\n"+getLine('=')+"\n";
         return result;
@@ -94,8 +102,12 @@ public:
             if(i!=0){
                 result += "\n"+getLine('-')+"\n";
             }
+            unsigned int j = 0;
             for(auto column : columnNames){
-                result += getStrWithSpace(column, getFild(column, i)) + seperator;
+                result += getStrWithSpace(column, getFild(column, i));
+                if(++j < columnNames.size()){
+                    result += seperator;
+                }
             }
         }
         return result;
