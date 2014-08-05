@@ -1,6 +1,14 @@
 #ifndef OUTPUTFORMATBASE_H_INCLUDED
 #define OUTPUTFORMATBASE_H_INCLUDED
 
+#include <sstream>
+
+template<typename T>
+string util_toString(T element){
+    stringstream toStr;
+    toStr<<element;
+    return toStr.str();
+}
 
 template<typename ResultType>
 class OutputFormatBase{

@@ -45,6 +45,9 @@ public :
     string get_testname() const {
     	return _tname;
     }
+
+    virtual ~TestResult(){};
+
 };
 
 class TestResultOK: public TestResult{
@@ -94,8 +97,11 @@ public:
 
     TestResultSet getSubSet(function<bool(shared_ptr<TestResult>)> pred){
         TestResultSet subset;
-        auto it = std::partition_point(this->begin(), this->end(), pred);
-        subset.assign (this->begin(),it);
+        for(auto element : *this){
+            if(pred(element)){
+                subset.push_back(element);
+            }
+        }
         return subset;
     }
 
@@ -116,6 +122,14 @@ public:
     }
     TestResultSet getAbords(){
         return getSubSetByState(TestResult::ABORTED);
+    }
+
+    static shared_ptr<TestResultAborted> castToAborted(shared_ptr<TestResult> old){
+        return dynamic_pointer_cast<TestResultAborted>(old);
+    }
+
+    static shared_ptr<TestResultFailed> castToFailed(shared_ptr<TestResult> old){
+        return dynamic_pointer_cast<TestResultFailed>(old);
     }
 };
 
