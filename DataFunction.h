@@ -64,7 +64,7 @@ public:
         try{
             foo(args...);
         }catch(...){
-            string msg = "Exception at fixture ";
+            string msg = "unknown exception at fixture ";
             stringstream sstm;
             sstm << msg << count;
             throw LTAssert::FalseAssert(sstm.str());

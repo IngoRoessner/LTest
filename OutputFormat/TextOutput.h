@@ -25,18 +25,16 @@ private:
 
     string getFailStr(ResultType resultset){
         string result = "";
-        for(auto elementPtr : resultset.getFails()){
-            auto ptr = ResultType::castToFailed(elementPtr);
+        for(auto ptr : resultset.getFails()){
             string time= util_toString(ptr->get_time_taken());
-            result += elementPtr->get_testname()+": Fail ["+ptr->getMessage()+"] ("+time+" sec)\n";
+            result += ptr->get_testname()+": Fail ["+ptr->getMessage()+"] ("+time+" sec)\n";
         }
         return result;
     }
 
     string getAbordStr(ResultType resultset){
         string result = "";
-        for(auto elementPtr : resultset.getAbords()){
-            auto ptr = ResultType::castToAborted(elementPtr);
+        for(auto ptr : resultset.getAbords()){
             string time= util_toString(ptr->get_time_taken());
             result += ptr->get_testname()+": Aborted ["+ptr->getMessage()+"] ("+time+" sec)\n";
         }

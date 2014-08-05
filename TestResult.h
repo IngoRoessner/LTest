@@ -88,6 +88,21 @@ public :
 };
 
 
+template<typename ElementType>
+class TestResultTypedSubSet:public list<shared_ptr<ElementType>>{
+public:
+    TestResultTypedSubSet<ElementType> getSubSet(function<bool(shared_ptr<ElementType>)> pred){
+        TestResultTypedSubSet<ElementType> subset;
+        for(auto element : *this){
+            if(pred(element)){
+                subset.push_back(element);
+            }
+        }
+        return subset;
+    }
+};
+
+
 class TestResultSet:public list<shared_ptr<TestResult>>{
 public:
     string out(Format format = Format::Text){
@@ -117,11 +132,20 @@ public:
         return getSubSetByState(TestResult::OK);
     }
 
-    TestResultSet getFails(){
-        return getSubSetByState(TestResult::FAILED);
+    TestResultTypedSubSet<TestResultFailed> getFails(){
+        TestResultTypedSubSet<TestResultFailed> result;
+        for(auto element : getSubSetByState(TestResult::FAILED)){
+            result.push_back(castToFailed(element));
+        }
+        return result;
     }
-    TestResultSet getAbords(){
-        return getSubSetByState(TestResult::ABORTED);
+
+    TestResultTypedSubSet<TestResultAborted> getAbords(){
+        TestResultTypedSubSet<TestResultAborted> result;
+        for(auto element : getSubSetByState(TestResult::ABORTED)){
+            result.push_back(castToAborted(element));
+        }
+        return result;
     }
 
     static shared_ptr<TestResultAborted> castToAborted(shared_ptr<TestResult> old){
@@ -132,6 +156,7 @@ public:
         return dynamic_pointer_cast<TestResultFailed>(old);
     }
 };
+
 
 
 #endif // TESTRESULT_H_INCLUDED
