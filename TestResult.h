@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <iterator>
 #include "MuteStream.h"
 #include "OutputFormat/OutputFormat.h"
 
@@ -113,11 +114,7 @@ public:
 
     TestResultSet getSubSet(function<bool(shared_ptr<TestResult>)> pred){
         TestResultSet subset;
-        for(auto element : *this){
-            if(pred(element)){
-                subset.push_back(element);
-            }
-        }
+        copy_if(this->begin(), this->end(), back_inserter(subset), pred); // this performs a filtered copy
         return subset;
     }
 
