@@ -2,6 +2,7 @@
 #define TESTRESULT_H_INCLUDED
 
 #include <memory>
+#include <algorithm>
 #include "MuteStream.h"
 #include "OutputFormat/OutputFormat.h"
 
@@ -25,7 +26,7 @@ public :
     TestResult(testname tname = "no_testname_given") : _state(TestState::IGNORED), _time_taken(0), _tname(tname) {}
 
     TestResult(TestState state, double time_taken, MuteStreamMap& muteStream, testname tname)
-        : _state(state), _time_taken(time_taken), _output_mapping(muteStream.flush(tname, state != TestState::OK)), _tname(tname) {}
+        : _state(state), _time_taken(time_taken), _output_mapping(move(muteStream.flush(tname, state != TestState::OK))), _tname(tname) {}
 
     TestState get_state() const
     {
@@ -106,7 +107,7 @@ public:
     }
 
     TestResultSet getSubSetByState(TestResult::TestState state){
-        return getSubSet([=](shared_ptr<TestResult> ptr){return ptr->get_state() == state;});
+        return getSubSet([&](shared_ptr<TestResult> ptr){return ptr->get_state() == state;});
     }
 
     TestResultSet getIgnores(){
@@ -122,6 +123,12 @@ public:
     }
     TestResultSet getAbords(){
         return getSubSetByState(TestResult::ABORTED);
+    }
+
+    double getTotalExecutionTimeInSeconds(){
+    	double total = 0.0d;
+    	for_each(this->begin(), this->end(), [&total](shared_ptr<TestResult> element){total += element->get_time_taken();});
+    	return total;
     }
 
     static shared_ptr<TestResultAborted> castToAborted(shared_ptr<TestResult> old){

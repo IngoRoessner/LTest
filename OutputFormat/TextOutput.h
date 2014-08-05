@@ -43,11 +43,12 @@ private:
         return result;
     }
 
-    string getCountStr(ResultType resultset){
+    string getTotalStr(ResultType resultset){
         return "OK("+util_toString(resultset.getOK().size())+"), "+
         "Fail("+util_toString(resultset.getFails().size())+"), "+
         "Aborted("+util_toString(resultset.getAbords().size())+"), "+
-        "Ignored("+util_toString(resultset.getIgnores().size())+")\n";
+        "Ignored("+util_toString(resultset.getIgnores().size())+")\n" +
+        "Execution time : " + util_toString(resultset.getTotalExecutionTimeInSeconds()) + "\n";
     }
 
     void addOutIfNotEmpty(string& out, string name, string str){
@@ -64,7 +65,7 @@ private:
         addOutIfNotEmpty(result, "Fail", getFailStr(resultset));
         addOutIfNotEmpty(result, "Aborted", getAbordStr(resultset));
         addOutIfNotEmpty(result, "Ignored", getIgnoreStr(resultset));
-        addOutIfNotEmpty(result, "Count", getCountStr(resultset));
+        addOutIfNotEmpty(result, "Total", getTotalStr(resultset));
         return result;
     }
 
