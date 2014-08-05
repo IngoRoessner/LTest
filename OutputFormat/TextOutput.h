@@ -2,70 +2,63 @@
 #define TEXTOUTPUT_H_INCLUDED
 
 #include "OutputFormatBase.h"
+#include "TextTable.h"
 
 template<typename ResultType>
 class TextOutput: public OutputFormatBase<ResultType>{
 private:
-    string getOKStr(ResultType resultset){
-        string result = "";
+    TextTable table;
+
+    void addOKToTable(ResultType resultset){
         for(auto elementPtr : resultset.getOK()){
             string time= util_toString(elementPtr->get_time_taken());
-            result += elementPtr->get_testname()+": OK ("+time+" sec)\n";
+            table.addLine({elementPtr->get_testname(), "OK", "", time+" sec"});
         }
-        return result;
     }
 
-    string getIgnoreStr(ResultType resultset){
-        string result = "";
+    void addIgnoreToTable(ResultType resultset){
         for(auto elementPtr : resultset.getIgnores()){
-            result += elementPtr->get_testname()+": Ignored\n";
+            table.addLine({elementPtr->get_testname(), "Ignored", "", ""});
         }
-        return result;
     }
 
-    string getFailStr(ResultType resultset){
-        string result = "";
+    void addFailToTable(ResultType resultset){
         for(auto ptr : resultset.getFails()){
             string time= util_toString(ptr->get_time_taken());
-            result += ptr->get_testname()+": Fail ["+ptr->getMessage()+"] ("+time+" sec)\n";
+            table.addLine({ptr->get_testname(), "Fail", ptr->getMessage(), time+" sec"});
         }
-        return result;
     }
 
-    string getAbordStr(ResultType resultset){
-        string result = "";
+    void addAbortToTable(ResultType resultset){
         for(auto ptr : resultset.getAbords()){
             string time= util_toString(ptr->get_time_taken());
-            result += ptr->get_testname()+": Aborted ["+ptr->getMessage()+"] ("+time+" sec)\n";
-        }
-        return result;
-    }
-
-    string getTotalStr(ResultType resultset){
-        return "Total(" + util_toString(resultset.size()) + ") | " +
-        "OK("+util_toString(resultset.getOK().size())+"), "+
-        "Fail("+util_toString(resultset.getFails().size())+"), "+
-        "Aborted("+util_toString(resultset.getAbords().size())+"), "+
-        "Ignored("+util_toString(resultset.getIgnores().size())+")\n" +
-        "Execution time : " + util_toString(resultset.getTotalExecutionTimeInSeconds()) + "\n";
-    }
-
-    void addOutIfNotEmpty(string& out, string name, string str){
-        string line = "=============";
-        if(str.size()){
-            out += line+name+line+"\n";
-            out += str;
+            table.addLine({ptr->get_testname(), "Aborted", ptr->getMessage(), time+" sec"});
         }
     }
+
+    string getTotal(ResultType resultset){
+        TextTable table;
+        table.setColumns({"Total", "OK", "Fail", "Aborted", "Ignored", "Execution time"});
+        table.addLine({
+                        util_toString(resultset.size()),
+                        util_toString(resultset.getOK().size()),
+                        util_toString(resultset.getFails().size()),
+                        util_toString(resultset.getAbords().size()),
+                        util_toString(resultset.getIgnores().size()),
+                        util_toString(resultset.getTotalExecutionTimeInSeconds())
+                      });
+       return table.out();
+    }
+
 
     string getOut(ResultType resultset){
-        string result = "";
-        addOutIfNotEmpty(result, "OK", getOKStr(resultset));
-        addOutIfNotEmpty(result, "Fail", getFailStr(resultset));
-        addOutIfNotEmpty(result, "Aborted", getAbordStr(resultset));
-        addOutIfNotEmpty(result, "Ignored", getIgnoreStr(resultset));
-        addOutIfNotEmpty(result, "Total", getTotalStr(resultset));
-        return result;
+        table.setColumns({"TestName", "Status", "Message", "Time"});
+        addOKToTable(resultset);
+        addFailToTable(resultset);
+        addAbortToTable(resultset);
+        addIgnoreToTable(resultset);
+
+        return table.out()+"\n\n"+getTotal(resultset)+"\n\n";
     }
 
 public:

@@ -34,6 +34,7 @@
 		<Unit filename="../OutputFormat/OutputFormat.h" />
 		<Unit filename="../OutputFormat/OutputFormatBase.h" />
 		<Unit filename="../OutputFormat/TextOutput.h" />
+		<Unit filename="../OutputFormat/TextTable.h" />
 		<Unit filename="../TestResult.h" />
 		<Unit filename="../function_traits.h" />
 		<Unit filename="../toStringPatch.h" />
