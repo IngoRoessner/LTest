@@ -91,6 +91,32 @@ public:
         GetOutputFormat<TestResultSet> output(format);
         return output.run(*this);
     }
+
+    TestResultSet getSubSet(function<bool(shared_ptr<TestResult>)> pred){
+        TestResultSet subset;
+        auto it = std::partition_point(this->begin(), this->end(), pred);
+        subset.assign (this->begin(),it);
+        return subset;
+    }
+
+    TestResultSet getSubSetByState(TestResult::TestState state){
+        return getSubSet([=](shared_ptr<TestResult> ptr){return ptr->get_state() == state;});
+    }
+
+    TestResultSet getIgnores(){
+        return getSubSetByState(TestResult::IGNORED);
+    }
+
+    TestResultSet getOK(){
+        return getSubSetByState(TestResult::OK);
+    }
+
+    TestResultSet getFails(){
+        return getSubSetByState(TestResult::FAILED);
+    }
+    TestResultSet getAbords(){
+        return getSubSetByState(TestResult::ABORTED);
+    }
 };
 
 
