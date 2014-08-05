@@ -112,7 +112,6 @@ TestSuite DataTests = {
     ),
 
     //add to expected output
-    /*
     LTest::addTest("ir2", ir, [](){
         int i1=1, i2=2, i3=3;
         LTest::fixture<int&>(i1);
@@ -128,7 +127,6 @@ TestSuite DataTests = {
             LTest::fixture<char, char*, int>('a',"abcde",1);
         }
     )
-    //*/
 };
 
 #endif // DATATEST_H_INCLUDED
