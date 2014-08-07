@@ -2,7 +2,7 @@
 #include "MuteStream.h"
 #include "extern_testsuite_example.h"
 #include "datatest.h"
-
+#include <fstream>
 using namespace std;
 
 void foo1(){}
@@ -40,7 +40,7 @@ void printResults(const TestResultSet& results) {
 	for (auto& result : results) {
 		cout << "*******************************" << endl;
 		cout << "programmatic access to: " << result->get_testname() << endl;
-		cout << "state: " << result->get_state() << endl;
+		//cout << "state: " << result->get_state() << endl;
 		try {
 			cout << "content of cout, if any: " << result->get_output_mapping().at(&cout)<<endl;;
 		} catch (...) {
@@ -73,8 +73,11 @@ int main()
 	printResults(results);
     results.out();
     cout<<endl<<endl;
-
-
+    LTest::clearResultSet();
+    ofstream test_file;
+    test_file.open("bin/TEST-ExternTestSuiteExample.xml");
+    LTest::run(ExternTestSuiteExample, false, test_file, Format::Xml);
+    test_file.close();
     //you can ignore TestSuites
     LTest::ignore(ExternTestSuiteExample);
     LTest::run();

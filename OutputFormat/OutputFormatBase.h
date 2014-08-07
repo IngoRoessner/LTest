@@ -2,10 +2,11 @@
 #define OUTPUTFORMATBASE_H_INCLUDED
 
 #include <sstream>
+#include <string>
 
 template<typename T>
-string util_toString(T element){
-    stringstream toStr;
+std::string util_toString(const T& element){
+    std::stringstream toStr;
     toStr<<element;
     return toStr.str();
 }

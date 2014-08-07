@@ -4,18 +4,18 @@
 #include <memory>
 #include <algorithm>
 #include <iterator>
+#include <list>
 #include "MuteStream.h"
 #include "OutputFormat/OutputFormat.h"
-
+#include "OutputFormat/Format.h"
 typedef string testname;
+
+enum class TestState{
+	OK, FAILED, ABORTED, IGNORED
+};
 
 class TestResult
 {
-public:
-    enum TestState{
-        OK, FAILED, ABORTED, IGNORED
-    };
-
 private:
     TestState _state;
     double _time_taken;
@@ -57,7 +57,7 @@ public :
 
     TestResultOK(testname tname = "no_testname_given") : TestResult(tname) {}
 
-    TestResultOK(testname tname, MuteStreamMap muteStream, double time_taken):TestResult(TestResult::OK, time_taken, muteStream, tname){}
+    TestResultOK(testname tname, MuteStreamMap muteStream, double time_taken):TestResult(TestState::OK, time_taken, muteStream, tname){}
 };
 
 class TestResultIgnored: public TestResult{
@@ -70,7 +70,7 @@ class TestResultFailed: public TestResult{
 public :
     TestResultFailed(testname tname = "no_testname_given") : TestResult(tname) {}
 
-    TestResultFailed(testname tname, MuteStreamMap muteStream, double time_taken, string msg = ""):TestResult(TestResult::FAILED, time_taken, muteStream, tname), message(msg){}
+    TestResultFailed(testname tname, MuteStreamMap muteStream, double time_taken, string msg = ""):TestResult(TestState::FAILED, time_taken, muteStream, tname), message(msg){}
 
     string getMessage(){
         return message;
@@ -82,7 +82,7 @@ class TestResultAborted: public TestResult{
 public :
     TestResultAborted(testname tname = "no_testname_given") : TestResult(tname) {}
 
-    TestResultAborted(testname tname, MuteStreamMap muteStream, double time_taken, string msg=""):TestResult(TestResult::ABORTED, time_taken, muteStream, tname), message(msg){}
+    TestResultAborted(testname tname, MuteStreamMap muteStream, double time_taken, string msg=""):TestResult(TestState::ABORTED, time_taken, muteStream, tname), message(msg){}
 
     string getMessage(){
         return message;
@@ -91,11 +91,11 @@ public :
 
 
 template<typename ElementType>
-class TestResultTypedSubSet:public list<shared_ptr<ElementType>>{
+class TestResultTypedSubSet:public list<shared_ptr<ElementType>>{ // why does this exist?
 public:
     TestResultTypedSubSet<ElementType> getSubSet(function<bool(shared_ptr<ElementType>)> pred){
         TestResultTypedSubSet<ElementType> subset;
-        for(auto element : *this){
+        for(auto& element : *this){
             if(pred(element)){
                 subset.push_back(element);
             }
@@ -103,7 +103,6 @@ public:
         return subset;
     }
 };
-
 
 class TestResultSet:public list<shared_ptr<TestResult>>{
 public:
@@ -118,29 +117,29 @@ public:
         return subset;
     }
 
-    TestResultSet getSubSetByState(TestResult::TestState state){
+    TestResultSet getSubSetByState(TestState state){
         return getSubSet([&](shared_ptr<TestResult> ptr){return ptr->get_state() == state;});
     }
 
     TestResultSet getIgnores(){
-        return getSubSetByState(TestResult::IGNORED);
+        return getSubSetByState(TestState::IGNORED);
     }
 
     TestResultSet getOK(){
-        return getSubSetByState(TestResult::OK);
+        return getSubSetByState(TestState::OK);
     }
 
     TestResultTypedSubSet<TestResultFailed> getFails(){
         TestResultTypedSubSet<TestResultFailed> result;
-        for(auto element : getSubSetByState(TestResult::FAILED)){
+        for(auto& element : getSubSetByState(TestState::FAILED)){
             result.push_back(castToFailed(element));
         }
         return result;
     }
 
-    TestResultTypedSubSet<TestResultAborted> getAbords(){
+    TestResultTypedSubSet<TestResultAborted> getAborts(){
         TestResultTypedSubSet<TestResultAborted> result;
-        for(auto element : getSubSetByState(TestResult::ABORTED)){
+        for(auto& element : getSubSetByState(TestState::ABORTED)){
             result.push_back(castToAborted(element));
         }
         return result;

@@ -2,6 +2,15 @@
 #define TEXTTABLE_H_INCLUDED
 
 #include <exception>
+#include <map>
+#include <list>
+#include<string>
+
+using std::list;
+using std::map;
+using std::string;
+using std::initializer_list;
+using std::runtime_error;
 
 class TextTable{
     list<string> columnNames;

@@ -30,7 +30,7 @@ private:
     }
 
     void addAbortToTable(ResultType resultset){
-        for(auto ptr : resultset.getAbords()){
+        for(auto ptr : resultset.getAborts()){
             string time= util_toString(ptr->get_time_taken());
             table.addLine({ptr->get_testname(), "Aborted", ptr->getMessage(), time+" sec"});
         }
@@ -43,7 +43,7 @@ private:
                         util_toString(resultset.size()),
                         util_toString(resultset.getOK().size()),
                         util_toString(resultset.getFails().size()),
-                        util_toString(resultset.getAbords().size()),
+                        util_toString(resultset.getAborts().size()),
                         util_toString(resultset.getIgnores().size()),
                         util_toString(resultset.getTotalExecutionTimeInSeconds())
                       });

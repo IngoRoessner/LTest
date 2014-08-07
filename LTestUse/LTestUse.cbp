@@ -31,10 +31,14 @@
 		<Unit filename="../LTest.h" />
 		<Unit filename="../LTestAssert.h" />
 		<Unit filename="../MuteStream.h" />
+		<Unit filename="../OutputFormat/Format.h" />
 		<Unit filename="../OutputFormat/OutputFormat.h" />
 		<Unit filename="../OutputFormat/OutputFormatBase.h" />
 		<Unit filename="../OutputFormat/TextOutput.h" />
 		<Unit filename="../OutputFormat/TextTable.h" />
+		<Unit filename="../OutputFormat/XmlOutput.h" />
+		<Unit filename="../OutputFormat/rapidxml-1.13/rapidxml.hpp" />
+		<Unit filename="../OutputFormat/rapidxml-1.13/rapidxml_print.hpp" />
 		<Unit filename="../TestResult.h" />
 		<Unit filename="../function_traits.h" />
 		<Unit filename="../toStringPatch.h" />
