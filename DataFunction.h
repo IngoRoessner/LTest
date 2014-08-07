@@ -4,9 +4,12 @@
 #include "LTestAssert.h"
 #include "sstream"
 #include <type_traits>
+#include <exception>
+#include <string>
 
 using namespace std;
 
+const string EXCEPTION_MESSAGE = "Exception at fixture ";
 
 class DataFunctionBase{
 public:
@@ -33,16 +36,13 @@ public:
         ++count;
         typename conditional<is_reference<ReturnType>::value, typename remove_reference<ReturnType>::type, ReturnType>::type result;
         stringstream sstm;
-        string msg;
         try{
             result = foo(args...);
         }catch(...){
-            msg = "Exception at fixture ";
-            sstm << msg << count;
-            throw LTAssert::FalseAssert(sstm.str());
+            sstm << EXCEPTION_MESSAGE << count;
+            throw runtime_error(sstm.str());
         }
-        msg = "Fail at fixture ";
-        sstm << msg << count;
+        sstm << "Failure at fixture "<< count;
         LTAssert::Equal(result, ret, sstm.str());
     }
 };
@@ -64,10 +64,9 @@ public:
         try{
             foo(args...);
         }catch(...){
-            string msg = "unknown exception at fixture ";
             stringstream sstm;
-            sstm << msg << count;
-            throw LTAssert::FalseAssert(sstm.str());
+            sstm << EXCEPTION_MESSAGE << count;
+            throw runtime_error(sstm.str());
         }
     }
 

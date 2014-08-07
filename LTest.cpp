@@ -39,7 +39,8 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
         }
     }
     catch(LTAssert::FalseAssert a){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, a.what());}
-    catch(exception e){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
+    catch(runtime_error e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
+    catch(exception e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
     catch(int e){stringstream es; es<<e; result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "int exception: "+es.str());}
     catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "char exception: "+e);}
     catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "string exception: "+e);}
