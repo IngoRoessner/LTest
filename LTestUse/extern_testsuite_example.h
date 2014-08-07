@@ -24,6 +24,8 @@ TestSuite ExternTestSuiteExample = {
 
     LTest::addTest("Suite after ignores", [](){cout<<"Suite after ignores"<<endl;return false;}),
 
+    LTest::addTest("Suite with cout and cerr", [](){cout<<"This goes to std out and will be available programmatically"<<endl; cerr << "and this to cerr!"; return true;}),
+
     LTest::addTest("throw ", [](){throw string("nope");}),
 };
 

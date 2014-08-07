@@ -33,6 +33,18 @@ class XmlOutput: public OutputFormatBase<ResultSetType>
         return doc.allocate_string(cstring);
     }
 
+    void append_sysstream_node_when_available(xml_node<> * current_node, const string& node_name, const string& stream_content){
+    	if(!stream_content.empty()){
+    		current_node->append_node(doc.allocate_node(node_type::node_element, allocate_for_doc(node_name.c_str()), allocate_for_doc(stream_content.c_str())));
+    	}
+    }
+
+    template <typename ResultType>
+	void create_sysout_and_syserr_nodes(const ResultType& result, xml_node<>* current_test_case_node) {
+		append_sysstream_node_when_available(current_test_case_node, "system-out", result->get_system_out());
+		append_sysstream_node_when_available(current_test_case_node, "system-err", result->get_system_err());
+	}
+
     template<typename ResultType>
     xml_node<> * create_testcase_node(const shared_ptr<ResultType>& result){
         xml_node<> * current_test_case_node = doc.allocate_node(node_type::node_element, "testcase");
@@ -52,7 +64,6 @@ public :
         node->append_attribute(doc.allocate_attribute("time", allocate_for_doc(to_string(resultset.getTotalExecutionTimeInSeconds()).c_str())));
         node->append_attribute(doc.allocate_attribute("errors", allocate_for_doc(to_string(resultset.getAborts().size()).c_str())));
         node->append_attribute(doc.allocate_attribute("skipped", allocate_for_doc(to_string(resultset.getIgnores().size()).c_str())));
-        //node->append_attribute(doc.allocate_attribute("ok", allocate_for_doc(to_string(resultset.getOK().size()).c_str())));
         node->append_attribute(doc.allocate_attribute("tests", allocate_for_doc(to_string(resultset.size()).c_str())));
         node->append_attribute(doc.allocate_attribute("name", "C++ LTest Testsuite")); // TODO request from user or infer testsuite name
         for(const auto& result : resultset.getIgnores()){
@@ -63,18 +74,21 @@ public :
         for(const auto& result : resultset.getOK()){
             xml_node<> * current_test_case_node = create_testcase_node(result);
             node->append_node(current_test_case_node);
+            create_sysout_and_syserr_nodes(result, current_test_case_node);
         }
         for(const auto& result : resultset.getFails()){
             xml_node<> * current_test_case_node = create_testcase_node(result);
             xml_node<> * failure_node = doc.allocate_node(node_type::node_element, "failure", allocate_for_doc(result->getMessage().c_str()));
             current_test_case_node->append_node(failure_node);
             node->append_node(current_test_case_node);
+            create_sysout_and_syserr_nodes(result, current_test_case_node);
         }
         for(const auto& result : resultset.getAborts()){
             xml_node<> * current_test_case_node = create_testcase_node(result);
             xml_node<> * error_node = doc.allocate_node(node_type::node_element, "error", allocate_for_doc(result->getMessage().c_str()));
             current_test_case_node->append_node(error_node);
             node->append_node(current_test_case_node);
+			create_sysout_and_syserr_nodes(result, current_test_case_node);
         }
         std::stringstream output_stream;
         output_stream << doc;

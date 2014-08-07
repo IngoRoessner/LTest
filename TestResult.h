@@ -10,7 +10,7 @@
 #include "OutputFormat/Format.h"
 typedef string testname;
 
-enum class TestState{
+enum TestState {
 	OK, FAILED, ABORTED, IGNORED
 };
 
@@ -21,6 +21,17 @@ private:
     double _time_taken;
     map<ostream*, string> _output_mapping;
     testname _tname;
+
+    template <typename K, typename V>
+    V get_from_map_with_default(const  std::map <K,V> & m, const K & key, const V & _default ) const {
+       typename std::map<K,V>::const_iterator it = m.find( key );
+       if ( it == m.end() ) {
+          return _default;
+       }
+       else {
+          return it->second;
+       }
+    }
 
 public :
 
@@ -42,6 +53,14 @@ public :
     map<ostream*, string> get_output_mapping() const
     {
         return _output_mapping;
+    }
+
+    string get_system_out() const {
+    	return get_from_map_with_default(_output_mapping, &cout, string(""));
+    }
+
+    string get_system_err() const {
+        return get_from_map_with_default(_output_mapping, &cerr, string(""));
     }
 
     string get_testname() const {

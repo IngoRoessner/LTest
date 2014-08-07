@@ -4,6 +4,7 @@ double CLOCKS_PER_SEC_AS_DOUBLE = static_cast<double>(CLOCKS_PER_SEC);
 
 LTest::LTest():counter(0){
     mutedStreams.setMuteMode(cout, MuteMode::FAIL);
+    mutedStreams.setMuteMode(cerr, MuteMode::FAIL);
 }
 
 LTest& LTest::getInstanz(){

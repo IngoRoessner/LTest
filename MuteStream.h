@@ -36,8 +36,8 @@ class MuteStream{
         string flush(string testName, bool testFailed){
         	string output = "";
             mutedStream.rdbuf(mutedStreamRdbuf);
+            output = mutedStreamBuffer.str();
             if(muteMode == MuteMode::EVERYTHING || (testFailed && muteMode == MuteMode::FAIL)){
-                output = mutedStreamBuffer.str();
                 if(output.size()){
                     mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
                     mutedStream<<output<<endl;
