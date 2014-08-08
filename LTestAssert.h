@@ -30,32 +30,32 @@ namespace LTAssert{
         }
     }
 
-    template<typename T>
-    void True(T b){
-        if(!b){
-            throw FalseAssert("bool = false, should be true");
-        }
-    }
 
     template<typename T>
-    void True(T b, string message){
+    void True(T b, string message = "bool = false, should be true"){
         if(!b){
             throw FalseAssert(message);
         }
     }
 
-    template<typename T>
-    void False(T b){
-        if(b){
-            throw FalseAssert("bool = true, should be false");
-        }
-    }
 
     template<typename T>
-    void False(T b, string message){
+    void False(T b, string message = "bool = true, should be false"){
         if(b){
             throw FalseAssert(message);
         }
+    }
+
+
+    template<typename ExceptionType>
+    void ExpectException(function<void()> funct, string message = "expected exception was not thrown"){
+        bool exceptionIsCatched = false;
+        try{
+            funct();
+        }catch(ExceptionType){
+            exceptionIsCatched = true;
+        }
+        True(exceptionIsCatched, message);
     }
 
 }
