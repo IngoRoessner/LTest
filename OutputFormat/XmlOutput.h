@@ -12,7 +12,7 @@
 #include "rapidxml-1.13/rapidxml.hpp"
 #include "rapidxml-1.13/rapidxml_print.hpp"
 #include "OutputFormatBase.h"
-
+#include "../toStringPatch.h"
 #include <sstream>
 #include "XmlOutput.h"
 
@@ -20,6 +20,7 @@ using rapidxml::xml_node;
 using rapidxml::xml_attribute;
 using rapidxml::node_type;
 using rapidxml::xml_document;
+using patch::to_string; //for mingw-32
 
 template<typename ResultSetType>
 class XmlOutput: public OutputFormatBase<ResultSetType>
