@@ -12,6 +12,19 @@ bool foo2(){return true;}
 void tests_1(){
     LTest::addTest("void funkt pointer", foo1);
     LTest::addTest("bool funkt pointer", foo2);
+
+    LTest::addTest("not unique exception", [](){
+        LTAssert::ExpectException<logic_error>([](){
+            LTest::addTest("bool funkt pointer", foo2);
+        });
+    });
+
+    LTest::addTest("not unique exception2", [](){
+        LTAssert::ExpectException<logic_error>("testname 'bool funkt pointer' is not unique", [](){
+            LTest::addTest("bool funkt pointer", foo2);
+        });
+    });
+
     LTest::ignore("test 1");
     LTest::addTest("test 1", [](){return true;});
     LTest::ignoreNext();
