@@ -58,6 +58,19 @@ namespace LTAssert{
         True(exceptionIsCatched, message);
     }
 
+    template<typename ExceptionType>
+    void ExpectException(string expectetWhat, function<void()> funct, string message = "expected exception was not thrown"){
+        bool exceptionIsCatched = false;
+        try{
+            funct();
+        }catch(ExceptionType e){
+            if(e.what() == expectetWhat){
+                exceptionIsCatched = true;
+            }
+        }
+        True(exceptionIsCatched, message);
+    }
+
 }
 
 #endif // LTESTASSERT_H_INCLUDED
