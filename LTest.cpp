@@ -116,6 +116,10 @@ TestResultSet LTest::run(TestSuite& testsuite, bool force, ostream& os, Format f
 }
 
 void LTest::addTestFunction(testname testName, function<bool ()> test){
+    if(getInstanz().testCases.count(testName) > 0){
+        throw logic_error("testname '"+testName+"' is not unique");
+    }
+
 	uint current_count = getInstanz().counter;
     getInstanz().test_inserted_order[current_count] = testName;
     getInstanz().testCases.emplace(move(testName), move(test));
