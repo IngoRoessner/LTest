@@ -47,25 +47,25 @@ TestSuite DataTests = {
         LTest::fixture(2,2,3);
         LTest::fixture(3,2,3);
     }),
-/*
+
     LTest::addTest("iii", iii, [](){
-        LTest::fixture(1,2,3);
-        LTest::fixture(2,4,3);
-        LTest::fixture(3,2,3);
+        LTest::fixture(2,3).expect(1);
+        LTest::fixture(4,3).expect(2);
+        LTest::fixture(2,3).expect(3);
     }),
 
     LTest::addTest("iiie", iiie, [](){
-        LTest::fixture(1,2,3);
-        LTest::fixture(2,4,3);
-        LTest::fixture(3,2,3);
+        LTest::fixture(2,3).expect(1);
+        LTest::fixture(4,3).expect(2);
+        LTest::fixture(2,3).expect(3);
     }),
 
     LTest::addTest("ili", ili, [](){
-        LTest::fixture(1,list<int>{1,2,3,1},3);
-        LTest::fixture(2,list<int>{1,2,3,2},3);
-        LTest::fixture(3,list<int>{1,2,3,1},3);
+        LTest::fixture(list<int>{1,2,3,1},3).expect(1);
+        LTest::fixture(list<int>{1,2,3,2},3).expect(2);
+        LTest::fixture(list<int>{1,2,3,1},3).expect(3);
     }),
-*/
+
     LTest::addTest("csi", csi, [](){
         LTest::fixture(string("abcde"),3).expect('d');
         LTest::fixture(string("abcde"),0).expect('a');
@@ -84,7 +84,7 @@ TestSuite DataTests = {
         LTest::fixture(2);
         LTest::fixture(3);
     }),
-/*
+
     LTest::addTest(
         "lambdaiii",
         [](int a, int b)->int{
@@ -92,9 +92,9 @@ TestSuite DataTests = {
             return 1;
         },
         [](){
-            LTest::fixture(1,2,3);
-            LTest::fixture(2,3,3);
-            LTest::fixture(3,2,3);
+            LTest::fixture(2,3).expect(1);
+            LTest::fixture(3,3).expect(2);;
+            LTest::fixture(2,3).expect(3);;
         }
     ),
 
@@ -105,9 +105,9 @@ TestSuite DataTests = {
             return ccsi(cs, i);
         },
         [](){
-            LTest::fixture('d',string("abcde"),3);
-            LTest::fixture('a',string("abcde"),0);
-            LTest::fixture('a',string("abcde"),1);
+            LTest::fixture(string("abcde"),3).expect('d');
+            LTest::fixture(string("abcde"),0).expect('a');
+            LTest::fixture(string("abcde"),1).expect('a');
         }
     ),
 
@@ -122,12 +122,11 @@ TestSuite DataTests = {
     LTest::addTest(
         "ccsi2",ccsi,
         [](){
-            LTest::fixture<char, char*, int>('d',"abcde",3);
-            LTest::fixture<char, char*, int>('a',"abcde",0);
-            LTest::fixture<char, char*, int>('a',"abcde",1);
+            LTest::fixture<char*, int>("abcde",3).expect('d');
+            LTest::fixture<char*, int>("abcde",0).expect('a');
+            LTest::fixture<char*, int>("abcde",1).expect('a');
         }
     )
-    */
 };
 
 #endif // DATATEST_H_INCLUDED
