@@ -31,6 +31,15 @@ struct FunctionTypeIs : enable_if<is_same<typename function_traits<Functor>::ret
 {};
 
 
+template<typename Funct>
+struct GetFunctParamType{
+    typedef typename GetFunctParamType<decltype(&Funct::operator())>::type type;
+};
+
+template <typename ClassType, typename ReturnType, typename ArgType>
+struct GetFunctParamType<ReturnType(ClassType::*)(ArgType)const>{
+    typedef ArgType type;
+};
 
 
 template <std::size_t... I> struct index_sequence {};

@@ -42,8 +42,9 @@ public:
         (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->runWithTuple(expectedValue, storedArgs);
     }
 
-    template<typename Ret>
-    void validate(function<bool(Ret)> validator){
+    template<typename Funct>
+    void validate(Funct validator){
+        typedef typename GetFunctParamType<Funct>::type Ret;
         if(dataFuncReturnsVoid){
             throw ExpectAtVoid("void function cant validate anything");
         }
