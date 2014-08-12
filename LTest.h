@@ -18,6 +18,7 @@
 #include "TestResult.h"
 #include "OutputFormat/OutputFormat.h"
 #include <time.h>
+#include "Arguments.h"
 
 using namespace std;
 
@@ -107,16 +108,10 @@ public:
     }
 
     template <class... Types>
-    static void fixture(Types&&... args)
+    static Arguments<Types...> fixture(Types&&... args)
     {
-        if(getInstanz().dataFunction->isVoidReturn())
-        {
-            (dynamic_cast<DataFunction<void, Types...>*>(getInstanz().dataFunction))->run(args...);
-        }
-        else
-        {
-            (dynamic_cast<DataFunction<Types...>*>(getInstanz().dataFunction))->run(args...);
-        }
+        static_assert(sizeof...(args)>0, "fixture args count = 0");
+        return Arguments<Types...>(getInstanz().dataFunction, args...);
     }
 
     //runTests() & output()

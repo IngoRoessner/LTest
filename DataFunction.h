@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <exception>
 #include <string>
+#include "function_traits.h"
 
 using namespace std;
 
@@ -44,6 +45,11 @@ public:
         }
         sstm << "Failure at fixture "<< count;
         LTAssert::Equal(result, ret, sstm.str());
+    }
+
+    template<typename T>
+    void runWithTuple(T ret, tuple<ParameterTypes...> storedArgs){
+        apply([&](ParameterTypes... args){run(ret, args...);}, storedArgs);
     }
 };
 

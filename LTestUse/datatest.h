@@ -42,7 +42,7 @@ void ir(int& i){
 }
 
 TestSuite DataTests = {
-    LTest::addTest("viii", viii, [](){
+/*    LTest::addTest("viii", viii, [](){
         LTest::fixture(1,2,3);
         LTest::fixture(2,2,3);
         LTest::fixture(3,2,3);
@@ -65,13 +65,13 @@ TestSuite DataTests = {
         LTest::fixture(2,list<int>{1,2,3,2},3);
         LTest::fixture(3,list<int>{1,2,3,1},3);
     }),
-
+*/
     LTest::addTest("csi", csi, [](){
-        LTest::fixture('d',string("abcde"),3);
-        LTest::fixture('a',string("abcde"),0);
-        LTest::fixture('a',string("abcde"),1);
+        LTest::fixture(string("abcde"),3).expect('d');
+        LTest::fixture(string("abcde"),0).expect('a');
+        LTest::fixture(string("abcde"),1).expect('a');
     }),
-
+/*
     LTest::addTest("vi", vi, [](){
         LTest::fixture(1);
         LTest::fixture(2);
@@ -127,6 +127,7 @@ TestSuite DataTests = {
             LTest::fixture<char, char*, int>('a',"abcde",1);
         }
     )
+    */
 };
 
 #endif // DATATEST_H_INCLUDED
