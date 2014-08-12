@@ -44,7 +44,14 @@ public:
             throw runtime_error(sstm.str());
         }
         sstm << "Failure at fixture "<< count;
-        LTAssert::True(validator(result), sstm.str());
+        bool valid = false;
+        try{
+            valid = validator(result);
+        }catch(LTAssert::FalseAssert a){
+            string msg = "Fixture "+patch::to_string(count)+": "+a.what();
+            throw LTAssert::FalseAssert(msg);
+        }
+        LTAssert::True(valid, sstm.str());
     }
 
     template<typename T>

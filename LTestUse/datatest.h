@@ -61,9 +61,9 @@ TestSuite DataTests = {
     }),
 
     LTest::addTest("validate Assert iii", iii, [](){
-        LTest::fixture(2,3).validate([](int i){LTAssert::True(true); return i>0;});
-        LTest::fixture(4,3).validate([](int i){LTAssert::True(false); return i>0;});
-        LTest::fixture(2,3).validate([](int i){LTAssert::True(true); return i>0;});
+        LTest::fixture(2,3).validate([](int i){LTAssert::True(true, "not true"); return i>0;});
+        LTest::fixture(4,3).validate([](int i){LTAssert::True(false, "not true"); return i>0;});
+        LTest::fixture(2,3).validate([](int i){LTAssert::True(true, "not true"); return i>0;});
     }),
 
     LTest::addTest("iiie", iiie, [](){
