@@ -19,14 +19,11 @@ class TextTable{
     unsigned int lineLength;
     unsigned int count;
     string seperator;
-    static constexpr unsigned int max = 35;
 
     void setColumnWhide(string column, string str){
         unsigned int whide = str.size();
         unsigned int old = columnWhide[column];
-        if(whide > max){
-            whide = max;
-        }
+
         if(whide > old){
             columnWhide[column] = whide;
         }
