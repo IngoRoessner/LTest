@@ -32,8 +32,8 @@ public:
         count = 0;
     }
 
-    template <typename T, class... Types>
-    void run(T ret, Types&&... args){
+    template <class... Types>
+    void run(function<bool(ReturnType)> validator, Types&&... args){
         ++count;
         typename conditional<is_reference<ReturnType>::value, typename remove_reference<ReturnType>::type, ReturnType>::type result;
         stringstream sstm;
@@ -44,12 +44,17 @@ public:
             throw runtime_error(sstm.str());
         }
         sstm << "Failure at fixture "<< count;
-        LTAssert::Equal(result, ret, sstm.str());
+        LTAssert::True(validator(result), sstm.str());
     }
 
     template<typename T>
     void runWithTuple(T ret, tuple<ParameterTypes...> storedArgs){
-        apply([&](ParameterTypes... args){run(ret, args...);}, storedArgs);
+        apply([&](ParameterTypes... args){run([&](T r){return ret==r;}, args...);}, storedArgs);
+    }
+
+
+    void validate(function<bool(ReturnType)> validator, tuple<ParameterTypes...> storedArgs){
+        apply([&](ParameterTypes... args){run(validator, args...);}, storedArgs);
     }
 };
 

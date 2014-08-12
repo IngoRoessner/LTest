@@ -26,10 +26,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="../Arguments.h" />
 		<Unit filename="../DataFunction.h" />
 		<Unit filename="../LTest.cpp" />
 		<Unit filename="../LTest.h" />
 		<Unit filename="../LTestAssert.h" />
+		<Unit filename="../LTestMisuseException.h" />
 		<Unit filename="../MuteStream.h" />
 		<Unit filename="../OutputFormat/Format.h" />
 		<Unit filename="../OutputFormat/OutputFormat.h" />

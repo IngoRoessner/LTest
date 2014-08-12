@@ -41,6 +41,15 @@ public:
         executed = true;
         (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->runWithTuple(expectedValue, storedArgs);
     }
+
+    template<typename Ret>
+    void validate(function<bool(Ret)> validator){
+        if(dataFuncReturnsVoid){
+            throw ExpectAtVoid("void function cant validate anything");
+        }
+        executed = true;
+        (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->validate(validator, storedArgs);
+    }
 };
 
 #endif // ARGUMENTS_H_INCLUDED
