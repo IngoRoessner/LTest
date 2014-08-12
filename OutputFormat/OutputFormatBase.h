@@ -4,13 +4,6 @@
 #include <sstream>
 #include <string>
 
-template<typename T>
-std::string util_toString(const T& element){
-    std::stringstream toStr;
-    toStr<<element;
-    return toStr.str();
-}
-
 template<typename ResultType>
 class OutputFormatBase{
 public:

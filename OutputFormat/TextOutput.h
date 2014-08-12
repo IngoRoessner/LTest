@@ -3,6 +3,7 @@
 
 #include "OutputFormatBase.h"
 #include "TextTable.h"
+#include "../toStringPatch.h"
 
 template<typename ResultType>
 class TextOutput: public OutputFormatBase<ResultType>{
@@ -11,7 +12,7 @@ private:
 
     void addOKToTable(ResultType resultset){
         for(auto elementPtr : resultset.getOK()){
-            string time= util_toString(elementPtr->get_time_taken());
+            string time= patch::to_string(elementPtr->get_time_taken());
             table.addLine({elementPtr->get_testname(), "OK", "", time+" sec"});
         }
     }
@@ -24,14 +25,14 @@ private:
 
     void addFailToTable(ResultType resultset){
         for(auto ptr : resultset.getFails()){
-            string time= util_toString(ptr->get_time_taken());
+            string time= patch::to_string(ptr->get_time_taken());
             table.addLine({ptr->get_testname(), "Fail", ptr->getMessage(), time+" sec"});
         }
     }
 
     void addAbortToTable(ResultType resultset){
         for(auto ptr : resultset.getAborts()){
-            string time= util_toString(ptr->get_time_taken());
+            string time= patch::to_string(ptr->get_time_taken());
             table.addLine({ptr->get_testname(), "Aborted", ptr->getMessage(), time+" sec"});
         }
     }
@@ -40,12 +41,12 @@ private:
         TextTable table;
         table.setColumns({"Total", "OK", "Fail", "Aborted", "Ignored", "Execution time"});
         table.addLine({
-                        util_toString(resultset.size()),
-                        util_toString(resultset.getOK().size()),
-                        util_toString(resultset.getFails().size()),
-                        util_toString(resultset.getAborts().size()),
-                        util_toString(resultset.getIgnores().size()),
-                        util_toString(resultset.getTotalExecutionTimeInSeconds())
+                        patch::to_string(resultset.size()),
+                        patch::to_string(resultset.getOK().size()),
+                        patch::to_string(resultset.getFails().size()),
+                        patch::to_string(resultset.getAborts().size()),
+                        patch::to_string(resultset.getIgnores().size()),
+                        patch::to_string(resultset.getTotalExecutionTimeInSeconds())
                       });
        return table.out();
     }
