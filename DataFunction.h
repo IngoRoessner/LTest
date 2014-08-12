@@ -36,14 +36,12 @@ public:
     void run(function<bool(ReturnType)> validator, Types&&... args){
         ++count;
         typename conditional<is_reference<ReturnType>::value, typename remove_reference<ReturnType>::type, ReturnType>::type result;
-        stringstream sstm;
         try{
             result = foo(args...);
         }catch(...){
-            sstm << EXCEPTION_MESSAGE << count;
-            throw runtime_error(sstm.str());
+            throw runtime_error(EXCEPTION_MESSAGE + patch::to_string(count));
         }
-        sstm << "Failure at fixture "<< count;
+
         bool valid = false;
         try{
             valid = validator(result);
@@ -51,8 +49,9 @@ public:
             string msg = "Fixture "+patch::to_string(count)+": "+a.what();
             throw LTAssert::FalseAssert(msg);
         }
-        LTAssert::True(valid, sstm.str());
+        LTAssert::True(valid, "Failure at fixture "+patch::to_string(count));
     }
+
 
     template<typename T>
     void runWithTuple(T ret, tuple<ParameterTypes...> storedArgs){
@@ -64,6 +63,8 @@ public:
         apply([&](ParameterTypes... args){run(validator, args...);}, storedArgs);
     }
 };
+
+
 
 template<typename... ParameterTypes>
 class DataFunction<void, ParameterTypes...>: public DataFunctionBase{
@@ -82,9 +83,7 @@ public:
         try{
             foo(args...);
         }catch(...){
-            stringstream sstm;
-            sstm << EXCEPTION_MESSAGE << count;
-            throw runtime_error(sstm.str());
+            throw runtime_error(EXCEPTION_MESSAGE+patch::to_string(count));
         }
     }
 
