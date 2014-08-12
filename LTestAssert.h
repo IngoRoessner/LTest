@@ -24,7 +24,7 @@ namespace LTAssert{
     }
 
     template<typename T1, typename T2>
-    void UnEqual(T1 a, T2 b, string message = "Assert::UnEqual -> Equal"){
+    void NotEqual(T1 a, T2 b, string message = "Assert::NotEqual -> Equal"){
         if(a==b){
             throw FalseAssert(message);
         }
