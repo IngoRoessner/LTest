@@ -42,12 +42,12 @@ void ir(int& i){
 }
 
 TestSuite DataTests = {
-/*    LTest::addTest("viii", viii, [](){
+    LTest::addTest("viii", viii, [](){
         LTest::fixture(1,2,3);
         LTest::fixture(2,2,3);
         LTest::fixture(3,2,3);
     }),
-
+/*
     LTest::addTest("iii", iii, [](){
         LTest::fixture(1,2,3);
         LTest::fixture(2,4,3);
@@ -71,7 +71,7 @@ TestSuite DataTests = {
         LTest::fixture(string("abcde"),0).expect('a');
         LTest::fixture(string("abcde"),1).expect('a');
     }),
-/*
+
     LTest::addTest("vi", vi, [](){
         LTest::fixture(1);
         LTest::fixture(2);
@@ -84,7 +84,7 @@ TestSuite DataTests = {
         LTest::fixture(2);
         LTest::fixture(3);
     }),
-
+/*
     LTest::addTest(
         "lambdaiii",
         [](int a, int b)->int{
