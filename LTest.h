@@ -19,6 +19,7 @@
 #include "OutputFormat/OutputFormat.h"
 #include <time.h>
 #include "Arguments.h"
+#include "LTestMisuseException.h"
 
 using namespace std;
 
@@ -110,7 +111,6 @@ public:
     template <class... Types>
     static Arguments<Types...> fixture(Types&&... args)
     {
-        static_assert(sizeof...(args)>0, "fixture args count = 0");
         return Arguments<Types...>(getInstanz().dataFunction, args...);
     }
 
