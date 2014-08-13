@@ -66,6 +66,12 @@ TestSuite DataTests = {
         LTest::fixture(2,3).validate([](int i){LTAssert::True(true, "not true"); return i>0;});
     }),
 
+    LTest::addTest("anything iii", iii, [](){
+        LTest::fixture(2,3).anything<int>();
+        LTest::fixture(4,3).anything<int>();
+        LTest::fixture(2,3).anything<int>();
+    }),
+
     LTest::addTest("iiie", iiie, [](){
         LTest::fixture(2,3).expect(1);
         LTest::fixture(4,3).expect(2);

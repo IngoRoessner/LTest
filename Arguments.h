@@ -51,6 +51,15 @@ public:
         executed = true;
         (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->validate(validator, storedArgs);
     }
+
+    template<typename T>
+    void anything(){
+        if(dataFuncReturnsVoid){
+            throw ExpectAtVoid("void function get nothing not anything");
+        }
+        executed = true;
+        (dynamic_cast<DataFunction<T, Types...>*>(dataFunction))->validate([](T t){return true;}, storedArgs);
+    }
 };
 
 #endif // ARGUMENTS_H_INCLUDED
