@@ -45,7 +45,7 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
     catch(runtime_error e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
     catch(exception e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
     catch(int e){stringstream es; es<<e; result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "int exception: "+es.str());}
-    catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "char exception: "+e);}
+    catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "char exception: "+patch::to_string(e));}
     catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "string exception: "+e);}
     catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "Unknown Exception");}
     getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
