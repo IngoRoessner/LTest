@@ -41,7 +41,21 @@ void ir(int& i){
         throw "dow";
 }
 
+int a = 3;
+auto testInt = GlobalFixture<int>(a)
+    .after([](int& i){
+        cout<<"after: "<<i++<<endl;
+    })
+    .before([](int& i){
+        cout<<"before: "<<i<<endl;
+    });
+
+
 TestSuite DataTests = {
+    LTest::addTest("testInt1", [&]{cout<<"run testInt1: "<<testInt()<<endl;}),
+    LTest::addTest("testInt2", [&]{cout<<"run testInt2: "<<testInt()<<endl;}),
+    LTest::addTest("testInt3", [&]{cout<<"run testInt3: "<<testInt()<<endl;}),
+
     LTest::addTest("viii", viii, [](){
         LTest::fixture(1,2,3);
         LTest::fixture(2,2,3);

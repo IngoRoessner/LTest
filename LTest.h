@@ -20,6 +20,7 @@
 #include <time.h>
 #include "Arguments.h"
 #include "LTestMisuseException.h"
+#include "GlobalFixture.h"
 
 using namespace std;
 

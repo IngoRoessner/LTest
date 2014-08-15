@@ -28,6 +28,7 @@
 		</Compiler>
 		<Unit filename="../Arguments.h" />
 		<Unit filename="../DataFunction.h" />
+		<Unit filename="../GlobalFixture.h" />
 		<Unit filename="../LTest.cpp" />
 		<Unit filename="../LTest.h" />
 		<Unit filename="../LTestAssert.h" />
