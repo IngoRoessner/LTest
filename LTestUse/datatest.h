@@ -41,7 +41,7 @@ void ir(int& i){
         throw "dow";
 }
 
-auto testInt = ManagedFixture<int>(3)
+auto testInt = ManagedRValFixture<int>(3)
     .after([](int& i){
         cout<<"after: "<<i++<<endl;
     })
@@ -49,11 +49,13 @@ auto testInt = ManagedFixture<int>(3)
         cout<<"before: "<<i<<endl;
     });
 
+auto out = ManagedFixture<ostream>(cout).after([](ostream& outStr){outStr<<"test ende"<<endl;});
+
 
 TestSuite DataTests = {
-    LTest::addTest("testInt1", [&]{cout<<"run testInt1: "<<testInt()<<endl;}),
-    LTest::addTest("testInt2", [&]{cout<<"run testInt2: "<<testInt()<<endl; testInt()++;}),
-    LTest::addTest("testInt3", [&]{cout<<"run testInt3: "<<testInt()<<endl;}),
+    LTest::addTest("testInt1", [&]{out()<<"run testInt1: "<<testInt();}),
+    LTest::addTest("testInt2", [&]{out()<<"run testInt2: "<<testInt(); testInt()++;}),
+    LTest::addTest("testInt3", [&]{out()<<"run testInt3: "<<testInt();}),
 
     LTest::addTest("viii", viii, [](){
         LTest::arguments(1,2,3);
