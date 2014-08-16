@@ -6,22 +6,22 @@
 
 using namespace std;
 
-class GlobalFixtureBase{
+class ManagedFixtureBase{
 public:
     virtual void runAfter() = 0;
 };
 
 
-class GlobalFixtureList: public list<GlobalFixtureBase*>{
+class ManagedFixtureList: public list<ManagedFixtureBase*>{
 public:
-    static GlobalFixtureList& getInstance(){
-        static  GlobalFixtureList instance;
+    static ManagedFixtureList& getInstance(){
+        static  ManagedFixtureList instance;
         return instance;
     }
 
     void runAfter(){
-        for(GlobalFixtureBase* globalFixturePtr : *this){
-            globalFixturePtr->runAfter();
+        for(ManagedFixtureBase* fixturePtr : *this){
+            fixturePtr->runAfter();
         }
     }
 
@@ -31,24 +31,24 @@ public:
 };
 
 template<typename T>
-class GlobalFixture: public GlobalFixtureBase{
+class ManagedFixture: public ManagedFixtureBase{
     T& fixture;
     bool changed;
     function<void(T&)> beforeFunction;
     function<void(T&)> afterFunction;
 public:
-    GlobalFixture(T& t): fixture(t), changed(false){
-        GlobalFixtureList::getInstance().push_back(this);
+    ManagedFixture(T& t): fixture(t), changed(false){
+        ManagedFixtureList::getInstance().push_back(this);
     }
 
-    GlobalFixture(const GlobalFixture& other): fixture(other.fixture), changed(other.changed),
+    ManagedFixture(const ManagedFixture& other): fixture(other.fixture), changed(other.changed),
         beforeFunction(other.beforeFunction), afterFunction(other.afterFunction)
     {
-        GlobalFixtureList::getInstance().push_back(this);
+        ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ~GlobalFixture(){
-        GlobalFixtureList::getInstance().remove(this);
+    ~ManagedFixture(){
+        ManagedFixtureList::getInstance().remove(this);
     }
 
     T& operator()(){
@@ -59,12 +59,12 @@ public:
         return fixture;
     }
 
-    GlobalFixture<T>& before(function<void(T&)> funct){
+    ManagedFixture<T>& before(function<void(T&)> funct){
         beforeFunction = funct;
         return *this;
     }
 
-    GlobalFixture<T>& after(function<void(T&)> funct){
+    ManagedFixture<T>& after(function<void(T&)> funct){
         afterFunction = funct;
         return *this;
     }

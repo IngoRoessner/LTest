@@ -20,7 +20,7 @@
 #include <time.h>
 #include "Arguments.h"
 #include "LTestMisuseException.h"
-#include "GlobalFixture.h"
+#include "ManagedFixture.h"
 
 using namespace std;
 
@@ -110,7 +110,7 @@ public:
     }
 
     template <class... Types>
-    static Arguments<Types...> fixture(Types&&... args)
+    static Arguments<Types...> arguments(Types&&... args)
     {
         return Arguments<Types...>(getInstanz().dataFunction, args...);
     }

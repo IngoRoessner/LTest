@@ -49,7 +49,7 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
     catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "string exception: "+e);}
     catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "Unknown Exception");}
     getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
-    GlobalFixtureList::after();
+    ManagedFixtureList::after();
     return getInstanz().resultset;
 }
 
