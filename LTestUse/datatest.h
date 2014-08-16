@@ -41,8 +41,7 @@ void ir(int& i){
         throw "dow";
 }
 
-int a = 3;
-auto testInt = ManagedFixture<int>(a)
+auto testInt = ManagedFixture<int>(3)
     .after([](int& i){
         cout<<"after: "<<i++<<endl;
     })
@@ -53,7 +52,7 @@ auto testInt = ManagedFixture<int>(a)
 
 TestSuite DataTests = {
     LTest::addTest("testInt1", [&]{cout<<"run testInt1: "<<testInt()<<endl;}),
-    LTest::addTest("testInt2", [&]{cout<<"run testInt2: "<<testInt()<<endl;}),
+    LTest::addTest("testInt2", [&]{cout<<"run testInt2: "<<testInt()<<endl; testInt()++;}),
     LTest::addTest("testInt3", [&]{cout<<"run testInt3: "<<testInt()<<endl;}),
 
     LTest::addTest("viii", viii, [](){

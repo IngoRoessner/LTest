@@ -32,17 +32,25 @@ public:
 
 template<typename T>
 class ManagedFixture: public ManagedFixtureBase{
+    T fixture_r_value;
     T& fixture;
+    bool wrapper;
     bool changed;
     function<void(T&)> beforeFunction;
     function<void(T&)> afterFunction;
 public:
-    ManagedFixture(T& t): fixture(t), changed(false){
+    ManagedFixture(T& t): fixture(t), wrapper(false), changed(false){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ManagedFixture(const ManagedFixture& other): fixture(other.fixture), changed(other.changed),
-        beforeFunction(other.beforeFunction), afterFunction(other.afterFunction)
+    ManagedFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), wrapper(true), changed(false){
+        ManagedFixtureList::getInstance().push_back(this);
+    }
+
+    ManagedFixture(const ManagedFixture& other): fixture_r_value(other.fixture_r_value),
+        fixture(other.wrapper? fixture_r_value : other.fixture), wrapper(other.wrapper),
+        changed(other.changed), beforeFunction(other.beforeFunction),
+        afterFunction(other.afterFunction)
     {
         ManagedFixtureList::getInstance().push_back(this);
     }
