@@ -28,12 +28,14 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
         try {
             bool&& test_successful = testFunction();
             time_taken_sec = measure_time_taken(before);
+            ManagedFixtureList::after();
             if(test_successful){
                 result = new TestResultOK(tname, getInstanz().mutedStreams, time_taken_sec);
             }else{
                 result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, "return not true");
             }
         } catch(...){
+            ManagedFixtureList::after();
             time_taken_sec = measure_time_taken(before);
             throw;
         }
@@ -49,7 +51,6 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
     catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "string exception: "+e);}
     catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "Unknown Exception");}
     getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
-    ManagedFixtureList::after();
     return getInstanz().resultset;
 }
 
