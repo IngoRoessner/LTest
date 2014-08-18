@@ -24,20 +24,23 @@ public:
 template<typename ReturnType, typename... ParameterTypes>
 class DataFunction: public DataFunctionBase{
 public:
-    typedef function<ReturnType(ParameterTypes...)> FooType;
-    FooType foo;
+    typedef function<ReturnType(ParameterTypes...)> FunctionWithReturnAndParameterType;
+    FunctionWithReturnAndParameterType function_under_test;
 
-    DataFunction(FooType f){
-        foo = f;
+    DataFunction(FunctionWithReturnAndParameterType f){
+        function_under_test = f;
         count = 0;
     }
 
     template <class... Types>
     void run(function<bool(ReturnType)> validator, Types&&... args){
         ++count;
-        typename conditional<is_reference<ReturnType>::value, typename remove_reference<ReturnType>::type, ReturnType>::type result;
+        typedef typename conditional<is_reference<ReturnType>::value,
+        					 typename remove_reference<ReturnType>::type,
+        					 ReturnType>::type ResultType;
+        ResultType result;
         try{
-            result = foo(args...);
+            result = function_under_test(args...);
         }catch(...){
             throw runtime_error(EXCEPTION_MESSAGE + patch::to_string(count));
         }

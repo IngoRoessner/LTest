@@ -41,7 +41,7 @@ void ir(int& i){
         throw "dow";
 }
 
-auto testInt = ManagedRValFixture<int>(3)
+auto testInt = create_managed_fixture(3)
     .after([](int& i){
         cout<<"after: "<<i++<<endl;
     })
@@ -49,7 +49,7 @@ auto testInt = ManagedRValFixture<int>(3)
         cout<<"before: "<<i<<endl;
     });
 
-auto out = ManagedFixture<ostream>(cout).after([](ostream& outStr){outStr<<"test ende"<<endl;});
+auto out = create_managed_fixture<ostream&>(cout).after([](ostream& outStr){outStr<<"test ende"<<endl;});
 
 
 TestSuite DataTests = {

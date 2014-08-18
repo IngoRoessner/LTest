@@ -15,6 +15,13 @@ class Arguments{
     tuple<Types...> storedArgs;
     bool dataFuncReturnsVoid;
     bool executed;
+
+    void checkAndThrowWhenVoidFunction(string&& errorMessage){
+    	if(dataFuncReturnsVoid){
+    		throw ExpectAtVoid(errorMessage);
+    	}
+    }
+
 public:
 
     Arguments(DataFunctionBase* datafunc, Types... args):dataFunction(datafunc), storedArgs(args...) {
@@ -35,9 +42,7 @@ public:
 
     template<typename Ret>
     void expect(Ret expectedValue){
-        if(dataFuncReturnsVoid){
-            throw ExpectAtVoid("void function cant expect anything");
-        }
+    	checkAndThrowWhenVoidFunction("void function can't expect anything");
         executed = true;
         (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->runWithTuple(expectedValue, storedArgs);
     }
@@ -45,18 +50,14 @@ public:
     template<typename Funct>
     void validate(Funct validator){
         typedef typename GetFunctParamType<Funct>::type Ret;
-        if(dataFuncReturnsVoid){
-            throw ExpectAtVoid("void function cant validate anything");
-        }
+        checkAndThrowWhenVoidFunction("void function can't validate anything");
         executed = true;
         (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->validate(validator, storedArgs);
     }
 
     template<typename T>
     void anything(){
-        if(dataFuncReturnsVoid){
-            throw ExpectAtVoid("void function get nothing not anything");
-        }
+    	checkAndThrowWhenVoidFunction("void function get nothing not anything");
         executed = true;
         (dynamic_cast<DataFunction<T, Types...>*>(dataFunction))->validate([](T t){return true;}, storedArgs);
     }

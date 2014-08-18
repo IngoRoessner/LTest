@@ -3,6 +3,7 @@
 
 #include <list>
 #include <functional>
+#include <type_traits>
 
 using namespace std;
 
@@ -82,21 +83,20 @@ template<typename T>
 class ManagedRValFixture: public ManagedFixtureBase{
     T fixture_r_value;
     T& fixture;
-    bool wrapper;
     bool changed;
     function<void(T&)> beforeFunction;
     function<void(T&)> afterFunction;
 public:
-    ManagedRValFixture(T& t): fixture(t), wrapper(false), changed(false){
+    ManagedRValFixture(T& t): fixture(t), changed(false){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ManagedRValFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), wrapper(true), changed(false){
+    ManagedRValFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), changed(false){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
     ManagedRValFixture(const ManagedRValFixture& other): fixture_r_value(other.fixture_r_value),
-        fixture(other.wrapper? fixture_r_value : other.fixture), wrapper(other.wrapper),
+        fixture(fixture_r_value),
         changed(other.changed), beforeFunction(other.beforeFunction),
         afterFunction(other.afterFunction)
     {
@@ -132,5 +132,17 @@ public:
         changed = false;
     }
 };
+
+
+
+template <typename T>
+using ManagedFixtureReturn = typename conditional< is_rvalue_reference<T>::value,
+												 ManagedRValFixture<typename remove_reference<T>::type>,
+												 ManagedFixture<typename remove_reference<T>::type>
+												>::type;
+template <typename T>
+ManagedFixtureReturn<T> create_managed_fixture(T instance){
+	return ManagedFixtureReturn<T>(instance);
+}
 
 #endif // GLOBALFIXTURE_H_INCLUDED
