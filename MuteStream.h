@@ -16,7 +16,7 @@ enum VerboseMode{
 
 class MuteStream{
     private:
-        VerboseMode muteMode;
+        VerboseMode _mode;
         ostringstream mutedStreamBuffer;
         streambuf* mutedStreamRdbuf;
         ostream& mutedStream;
@@ -24,7 +24,7 @@ class MuteStream{
     public:
 
         MuteStream(ostream& os = cout, VerboseMode mode = VerboseMode::FAIL):mutedStream(os){
-            muteMode = mode;
+            _mode = mode;
         }
 
         void mute(){
@@ -37,7 +37,7 @@ class MuteStream{
         	string output = "";
             mutedStream.rdbuf(mutedStreamRdbuf);
             output = mutedStreamBuffer.str();
-            if(muteMode == VerboseMode::EVERYTHING || (testFailed && muteMode == VerboseMode::FAIL)){
+            if(_mode == VerboseMode::EVERYTHING || (testFailed && _mode == VerboseMode::FAIL)){
                 if(output.size()){
                     mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
                     mutedStream<<output<<endl;
