@@ -31,7 +31,7 @@ void tests_1(){
     LTest::addTest("test 2", [](){return true;});
     LTest::addTest("test 3", [](){return true;});
     LTest::addTest("test 4", [](){return true;});
-    LTest::addTest("test 5", [](){LTAssert::True(false, "my message");});
+    LTest::addTest("test 5", [](){LTAssert::True(false, "my german message: Überirdisch!");});
     LTest::addTest("test 6", [](){LTAssert::True(false); return true;});
     LTest::addTest("test 7", [](){return true;});
     LTest::addTest("test 8", [](){return true;});
@@ -65,9 +65,9 @@ void printResults(const TestResultSet& results) {
 int main()
 {
     //you can mute test streams (cout on fail as default mute)
-    //LTest::setMuteMode(cout, MuteMode::NONE);
-    //LTest::setMuteMode(cout, MuteMode::EVERYTHING);
-    //LTest::setMuteMode(cout, MuteMode::FAIL);
+    //LTest::setVerboseMode(cout, MuteMode::NONE);
+    //LTest::setVerboseMode(cout, MuteMode::EVERYTHING);
+    //LTest::setVerboseMode(cout, MuteMode::FAIL);
     //default LTest::setMuteMode(cout, MuteMode::FAIL);
 
     //you can define your tests in a function (tests_1())
@@ -94,6 +94,6 @@ int main()
     //you can ignore TestSuites
     LTest::ignore(ExternTestSuiteExample);
     LTest::run();
-
+    cout << a << endl;
     return 0;
 }

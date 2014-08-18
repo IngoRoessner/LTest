@@ -8,7 +8,7 @@
 
 using namespace std;
 
-enum MuteMode{
+enum VerboseMode{
     EVERYTHING,
     FAIL,
     NONE
@@ -16,14 +16,14 @@ enum MuteMode{
 
 class MuteStream{
     private:
-        MuteMode muteMode;
+        VerboseMode muteMode;
         ostringstream mutedStreamBuffer;
         streambuf* mutedStreamRdbuf;
         ostream& mutedStream;
 
     public:
 
-        MuteStream(ostream& os = cout, MuteMode mode = MuteMode::FAIL):mutedStream(os){
+        MuteStream(ostream& os = cout, VerboseMode mode = VerboseMode::FAIL):mutedStream(os){
             muteMode = mode;
         }
 
@@ -37,7 +37,7 @@ class MuteStream{
         	string output = "";
             mutedStream.rdbuf(mutedStreamRdbuf);
             output = mutedStreamBuffer.str();
-            if(muteMode == MuteMode::EVERYTHING || (testFailed && muteMode == MuteMode::FAIL)){
+            if(muteMode == VerboseMode::EVERYTHING || (testFailed && muteMode == VerboseMode::FAIL)){
                 if(output.size()){
                     mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
                     mutedStream<<output<<endl;
@@ -53,7 +53,7 @@ class MuteStream{
 class MuteStreamMap: public map<ostream*, shared_ptr<MuteStream>>{
 public:
 
-    void setMuteMode(ostream& os, MuteMode mode){
+    void setVerboseMode(ostream& os, VerboseMode mode){
         MuteStreamMap& that = *this;
         that[&os] = shared_ptr<MuteStream>(new MuteStream(os, mode));
     }

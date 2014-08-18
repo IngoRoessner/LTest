@@ -5,8 +5,10 @@
 #include <string>
 #include <list>
 
+#define EXTERNTESTSUITE ExternTestSuiteExample
+
 string str = "do your tests";
-TestSuite ExternTestSuiteExample = {
+TestSuite EXTERNTESTSUITE = {
     LTest::addTest("Suite testCase", [&](){cout<<"Suite testCase"<<str<<endl;}),
     LTest::addTest("Suite testCase2", [](){cout<<"Suite testCase2"<<endl;}),
 

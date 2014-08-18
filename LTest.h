@@ -47,9 +47,9 @@ class LTest
     static TestResultSet runTest(const string& testName, function<bool ()> testFunction);
 
 public:
-    static void setMuteMode(ostream& os, MuteMode mode)
+    static void setMuteMode(ostream& os, VerboseMode mode)
     {
-        getInstanz().mutedStreams.setMuteMode(os, mode);
+        getInstanz().mutedStreams.setVerboseMode(os, mode);
     }
 
     //adds a test function to the test list, execution via run(), runTests() or runTest()
