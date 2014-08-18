@@ -165,7 +165,7 @@ public:
     }
 
     double getTotalExecutionTimeInSeconds(){
-    	double total = 0.0d;
+    	double total = 0.0;
     	for_each(this->begin(), this->end(), [&total](shared_ptr<TestResult> element){total += element->get_time_taken();});
     	return total;
     }
