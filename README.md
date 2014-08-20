@@ -46,8 +46,9 @@ Happy testing!
 ## Developer info
 
 LTest Compiles with:
-    - GNU GCC on Linux (g++ 4.8.2)
-    - [MinGW](http://www.mingw.org/) 32 and 64 bit
+
+* GNU GCC on Linux (g++ 4.8.2)
+* [MinGW](http://www.mingw.org/) 32 and 64 bit
 
 We develop this project using the [CodeBlocks IDE](http://www.codeblocks.org/). 
 There is a buildscript called build.sh to also build LTest headless.
@@ -81,3 +82,7 @@ This project in published in terms of the [MIT license](http://opensource.org/li
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 </code>
+
+### Included libraries
+
+* To export the test results, the creation of XML-XUnit datafile was implemented using the [RapidXml](http://rapidxml.sourceforge.net/) C++ library. Thanks to Marcin Kalicinski for his great work!
