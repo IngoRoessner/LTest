@@ -48,13 +48,23 @@ class Arguments{
     	}
     }
 
+    template<typename... Tx>
+    DataFunction<Tx...>* tryCast(DataFunctionBase* dataFunction){
+        typedef DataFunction<Tx...>* DFPtrT;
+        if(DFPtrT runner = dynamic_cast<DFPtrT>(dataFunction)){
+            return runner;
+        }else{
+            throw WrongArgumentsOrExpectType("given types to arguments(), validate(), anything or expect() do not match to test function");
+        }
+    }
+
 public:
 
     Arguments(DataFunctionBase* datafunc, Types... args):dataFunction(datafunc), storedArgs(args...) {
         dataFuncReturnsVoid = datafunc->isVoidReturn();
         if(dataFuncReturnsVoid){
             executed = true;
-            (dynamic_cast<DataFunction<void, Types...>*>(dataFunction))->run(args...);
+            (tryCast<void, Types...>(dataFunction))->run(args...);
         }else{
             executed = false;
         }
@@ -70,7 +80,7 @@ public:
     void expect(Ret expectedValue){
     	checkAndThrowWhenVoidFunction("void function can't expect anything");
         executed = true;
-        (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->runWithTuple(expectedValue, storedArgs);
+        (tryCast<Ret, Types...>(dataFunction))->runWithTuple(expectedValue, storedArgs);
     }
 
     template<typename Funct>
@@ -78,14 +88,14 @@ public:
         typedef typename GetFunctParamType<Funct>::type Ret;
         checkAndThrowWhenVoidFunction("void function can't validate anything");
         executed = true;
-        (dynamic_cast<DataFunction<Ret, Types...>*>(dataFunction))->validate(validator, storedArgs);
+        (tryCast<Ret, Types...>(dataFunction))->validate(validator, storedArgs);
     }
 
     template<typename T>
     void anything(){
     	checkAndThrowWhenVoidFunction("void function get nothing not anything");
         executed = true;
-        (dynamic_cast<DataFunction<T, Types...>*>(dataFunction))->validate([](T t){return true;}, storedArgs);
+        (tryCast<T, Types...>(dataFunction))->validate([](T t){return true;}, storedArgs);
     }
 };
 

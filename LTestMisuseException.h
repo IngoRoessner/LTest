@@ -31,20 +31,24 @@
 
 using namespace std;
 
-class LTestMisuse: logic_error{
+class LTestMisuse: public logic_error{
 public:
     LTestMisuse(string msg):logic_error(msg){}
 };
 
-class MissingExpect: LTestMisuse{
+class MissingExpect: public LTestMisuse{
 public:
-    MissingExpect(string msg):LTestMisuse(msg){}
+    MissingExpect(string msg): LTestMisuse(msg){}
 };
 
-class ExpectAtVoid: LTestMisuse{
+class ExpectAtVoid: public LTestMisuse{
 public:
     ExpectAtVoid(string msg):LTestMisuse(msg){}
 };
 
+class WrongArgumentsOrExpectType: public LTestMisuse{
+public:
+    WrongArgumentsOrExpectType(string msg):LTestMisuse(msg){}
+};
 
 #endif // LTESTMISUSEEXCEPTION_H_INCLUDED

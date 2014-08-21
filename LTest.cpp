@@ -67,8 +67,6 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
         }
     }
     catch(LTestMisuse e){throw e;}
-    catch(MissingExpect e){throw e;}
-    catch(ExpectAtVoid e){throw e;}
     catch(LTAssert::FalseAssert a){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, a.what());}
     catch(runtime_error e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
     catch(exception e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
