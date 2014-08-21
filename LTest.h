@@ -136,7 +136,7 @@ public:
     }
 
     template <class... Types>
-    static Arguments<Types...> arguments(Types&&... args)
+    static Arguments<Types...> arguments(Types... args)
     {
         return Arguments<Types...>(getInstanz().dataFunction, args...);
     }
