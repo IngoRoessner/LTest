@@ -94,6 +94,6 @@ int main()
     //you can ignore TestSuites
     LTest::ignore(ExternTestSuiteExample);
     LTest::run();
-    cout << a << endl;
+
     return 0;
 }

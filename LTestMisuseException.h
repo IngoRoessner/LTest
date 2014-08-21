@@ -51,4 +51,9 @@ public:
     WrongArgumentsOrExpectType(string msg):LTestMisuse(msg){}
 };
 
+class WrongTestName: public LTestMisuse{
+public:
+    WrongTestName(string msg):LTestMisuse(msg){}
+};
+
 #endif // LTESTMISUSEEXCEPTION_H_INCLUDED

@@ -103,7 +103,12 @@ TestResultSet LTest::runTests(){
 }
 
 TestResultSet LTest::runTest(const testname& test){
-	function<bool ()> testFunction = getInstanz().testCases.at(test);
+    function<bool ()> testFunction;
+    try{
+        testFunction = getInstanz().testCases.at(test);
+    }catch(...){
+        throw WrongTestName("try to run test \""+test+"\" which not exists");
+    }
 	return runTest(test, testFunction);
 }
 
