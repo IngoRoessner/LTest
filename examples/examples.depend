@@ -1,0 +1,121 @@
+# depslib dependency file v1.0
+1408540813 source:/home/dhaeb/dvl/cpp/CppLambdaTest/examples/main.cpp
+	"LTest.h"
+	<limits>
+	"LTestAssert.h"
+
+1408537665 /home/dhaeb/dvl/cpp/CppLambdaTest/LTest.h
+	<iostream>
+	<functional>
+	<list>
+	<map>
+	<set>
+	<string>
+	<utility>
+	<algorithm>
+	<iterator>
+	"LTestAssert.h"
+	"toStringPatch.h"
+	"function_traits.h"
+	"MuteStream.h"
+	"DataFunction.h"
+	"TestResult.h"
+	"OutputFormat/OutputFormat.h"
+	<time.h>
+	"Arguments.h"
+	"LTestMisuseException.h"
+	"ManagedFixture.h"
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/LTestAssert.h
+	<string>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/toStringPatch.h
+	<string>
+	<sstream>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/function_traits.h
+	<type_traits>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/MuteStream.h
+	<iostream>
+	<sstream>
+	<map>
+	<memory>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/DataFunction.h
+	"LTestAssert.h"
+	"sstream"
+	<type_traits>
+	<exception>
+	<string>
+	"function_traits.h"
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/TestResult.h
+	<memory>
+	<algorithm>
+	<iterator>
+	<list>
+	"MuteStream.h"
+	"OutputFormat/OutputFormat.h"
+	"OutputFormat/Format.h"
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/OutputFormat.h
+	"OutputFormatBase.h"
+	"TextOutput.h"
+	"Format.h"
+	"XmlOutput.h"
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/OutputFormatBase.h
+	<sstream>
+	<string>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/TextOutput.h
+	"OutputFormatBase.h"
+	"TextTable.h"
+	"../toStringPatch.h"
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/TextTable.h
+	<exception>
+	<map>
+	<list>
+	<string>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/Format.h
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/XmlOutput.h
+	<string>
+	"rapidxml-1.13/rapidxml.hpp"
+	"rapidxml-1.13/rapidxml_print.hpp"
+	"OutputFormatBase.h"
+	"../toStringPatch.h"
+	<sstream>
+	"XmlOutput.h"
+
+1407416084 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/rapidxml-1.13/rapidxml.hpp
+	<cstdlib>
+	<cassert>
+	<new>
+	<exception>
+
+1407416084 /home/dhaeb/dvl/cpp/CppLambdaTest/OutputFormat/rapidxml-1.13/rapidxml_print.hpp
+	"rapidxml.hpp"
+	<ostream>
+	<iterator>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/Arguments.h
+	"DataFunction.h"
+	"function_traits.h"
+	<tuple>
+	"LTestMisuseException.h"
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/LTestMisuseException.h
+	<exception>
+
+1408531147 /home/dhaeb/dvl/cpp/CppLambdaTest/ManagedFixture.h
+	<list>
+	<functional>
+	<type_traits>
+
+1408531147 source:/home/dhaeb/dvl/cpp/CppLambdaTest/LTest.cpp
+	"LTest.h"
+
