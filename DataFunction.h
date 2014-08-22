@@ -67,7 +67,12 @@ public:
         ResultType result;
         try{
             result = function_under_test(args...);
-        }catch(...){
+        }
+        catch(LTAssert::FalseAssert e){
+            string msg = "Fixture "+patch::to_string(count)+": "+e.what();
+            throw LTAssert::FalseAssert(msg);
+        }
+        catch(...){
             throw runtime_error(EXCEPTION_MESSAGE + patch::to_string(count));
         }
 
@@ -111,7 +116,12 @@ public:
         ++count;
         try{
             foo(args...);
-        }catch(...){
+        }
+        catch(LTAssert::FalseAssert e){
+            string msg = "Fixture "+patch::to_string(count)+": "+e.what();
+            throw LTAssert::FalseAssert(msg);
+        }
+        catch(...){
             throw runtime_error(EXCEPTION_MESSAGE+patch::to_string(count));
         }
     }
