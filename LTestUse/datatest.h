@@ -108,9 +108,9 @@ TestSuite DataTests = {
     }),
 
     LTest::addTest("anything iii", iii, [](){
-        LTest::arguments(2,3).anything<int>();
-        LTest::arguments(4,3).anything<int>();
-        LTest::arguments(2,3).anything<int>();
+        LTest::arguments(2,3).expect<int>();
+        LTest::arguments(4,3).expect<int>();
+        LTest::arguments(2,3).expect<int>();
     }),
 
     LTest::addTest("iiie", iiie, [](){

@@ -92,7 +92,7 @@ public:
     }
 
     template<typename T>
-    void anything(){
+    void expect(){
     	checkAndThrowWhenVoidFunction("void function get nothing not anything");
         executed = true;
         (tryCast<T, Types...>(dataFunction))->validate([](T t){return true;}, storedArgs);
