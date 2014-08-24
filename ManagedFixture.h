@@ -58,24 +58,24 @@ public:
 };
 
 template<typename T>
-class ManagedFixture: public ManagedFixtureBase{
+class ManagedRefFixture: public ManagedFixtureBase{
     T& fixture;
     bool changed;
     function<void(T&)> beforeFunction;
     function<void(T&)> afterFunction;
 public:
-    ManagedFixture(T& t): fixture(t), changed(false){
+    ManagedRefFixture(T& t): fixture(t), changed(false){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ManagedFixture(const ManagedFixture& other):
+    ManagedRefFixture(const ManagedRefFixture& other):
         fixture(other.fixture), changed(other.changed), beforeFunction(other.beforeFunction),
         afterFunction(other.afterFunction)
     {
         ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ~ManagedFixture(){
+    ~ManagedRefFixture(){
         ManagedFixtureList::getInstance().remove(this);
     }
 
@@ -87,12 +87,12 @@ public:
         return fixture;
     }
 
-    ManagedFixture<T>& before(function<void(T&)> funct){
+    ManagedRefFixture<T>& before(function<void(T&)> funct){
         beforeFunction = funct;
         return *this;
     }
 
-    ManagedFixture<T>& after(function<void(T&)> funct){
+    ManagedRefFixture<T>& after(function<void(T&)> funct){
         afterFunction = funct;
         return *this;
     }
@@ -113,11 +113,16 @@ class ManagedRValFixture: public ManagedFixtureBase{
     function<void(T&)> beforeFunction;
     function<void(T&)> afterFunction;
 public:
-    ManagedRValFixture(T& t): fixture(t), changed(false){
+
+    ManagedRValFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), changed(false){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ManagedRValFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), changed(false){
+    ManagedRValFixture(T t): fixture_r_value(t), fixture(fixture_r_value), changed(false){
+        ManagedFixtureList::getInstance().push_back(this);
+    }
+
+    ManagedRValFixture(): fixture_r_value(), fixture(fixture_r_value), changed(false){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
@@ -162,13 +167,20 @@ public:
 
 
 template <typename T>
-using ManagedFixtureReturn = typename conditional< is_rvalue_reference<T>::value,
-												 ManagedRValFixture<typename remove_reference<T>::type>,
-												 ManagedFixture<typename remove_reference<T>::type>
+using ManagedFixture = typename conditional< is_reference<T>::value,
+                                                 ManagedRefFixture<typename remove_reference<T>::type>,
+												 ManagedRValFixture<typename remove_reference<T>::type>
 												>::type;
-template <typename T>
-ManagedFixtureReturn<T> create_managed_fixture(T instance){
-	return ManagedFixtureReturn<T>(instance);
+
+
+template<typename T>
+ManagedFixture<T> manageFixture(T instance){
+    return ManagedFixture<T>(instance);
+}
+
+template<typename T>
+ManagedFixture<T> manageFixture(){
+    return ManagedFixture<T>();
 }
 
 #endif // GLOBALFIXTURE_H_INCLUDED

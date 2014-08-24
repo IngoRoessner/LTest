@@ -67,7 +67,7 @@ void ir(int& i){
         throw "dow";
 }
 
-auto testInt = create_managed_fixture(3)
+auto testInt = manageFixture(3)
     .after([](int& i){
         cout<<"after: "<<i++<<endl;
     })
@@ -75,10 +75,43 @@ auto testInt = create_managed_fixture(3)
         cout<<"before: "<<i<<endl;
     });
 
-auto out = create_managed_fixture<ostream&>(cout).after([](ostream& outStr){outStr<<"test ende"<<endl;});
+auto out = manageFixture<ostream&>(cout)
+    .after([](ostream& outStr){outStr<<"test ende"<<endl;});
 
+auto ints = manageFixture<vector<int>>()
+            .before([](vector<int>& vi){vi = {1,2,3,4,5,6};});
 
 TestSuite DataTests = {
+    LTest::addTest("manageFixture vi1", [](int index){
+        return ints().at(index);
+    }, [](){
+        LTest::arguments(0).expect(1);
+        LTest::arguments(1).expect(2);
+        LTest::arguments(2).expect(3);
+        LTest::arguments(3).expect(4);
+        LTest::arguments(4).expect(5);
+        LTest::arguments(5).expect(6);
+        ints() = {9,8,7};
+        LTest::arguments(0).expect(9);
+        LTest::arguments(1).expect(8);
+        LTest::arguments(2).expect(7);
+    }),
+
+    LTest::addTest("manageFixture vi2", [](int index){
+        return ints().at(index);
+    }, [](){
+        LTest::arguments(0).expect(1);
+        LTest::arguments(1).expect(2);
+        LTest::arguments(2).expect(3);
+        LTest::arguments(3).expect(4);
+        LTest::arguments(4).expect(5);
+        LTest::arguments(5).expect(6);
+        ints() = {9,8,7};
+        LTest::arguments(0).expect(9);
+        LTest::arguments(1).expect(8);
+        LTest::arguments(2).expect(7);
+    }),
+
     LTest::addTest("testInt1", [&]{out()<<"run testInt1: "<<testInt();}),
     LTest::addTest("testInt2", [&]{out()<<"run testInt2: "<<testInt(); testInt()++;}),
     LTest::addTest("testInt3", [&]{out()<<"run testInt3: "<<testInt();}),
