@@ -40,7 +40,7 @@
 #include "toStringPatch.h"
 #include "function_traits.h"
 #include "MuteStream.h"
-#include "DataFunction.h"
+#include "ParameterTest.h"
 #include "TestResult.h"
 #include "OutputFormat/OutputFormat.h"
 #include <time.h>
@@ -65,7 +65,7 @@ class LTest
     static LTest& getInstanz();
     uint counter;
     MuteStreamMap mutedStreams;
-    DataFunctionBase* dataFunction;
+    ParameterTestBase* parameterTest;
 
     static bool isIgnored(string testName);
     static bool isIgnored(uint testIndex);
@@ -121,14 +121,14 @@ public:
 
 
     template<typename Funct>
-    static string addTest(string testName, Funct testFunction, function<void()> testDataFoo)
+    static string addTest(string testName, Funct testFunction, function<void()> parameterFunction)
     {
         function<bool()> foo = [=]()
         {
-            typedef typename DataFunctionTypeWrapper<Funct>::type DataFunctionType;
-            auto datafunct = DataFunctionType(testFunction);
-            getInstanz().dataFunction = &datafunct;
-            testDataFoo();
+            typedef typename ParameterTestType<Funct>::type TestType;
+            auto tempParamTest = TestType(testFunction);
+            getInstanz().parameterTest = &tempParamTest;
+            parameterFunction();
             return true;
         };
         addTestFunction(testName, foo);
@@ -138,7 +138,7 @@ public:
     template <class... Types>
     static Arguments<Types...> arguments(Types... args)
     {
-        return Arguments<Types...>(getInstanz().dataFunction, args...);
+        return Arguments<Types...>(getInstanz().parameterTest, args...);
     }
 
     //runTests() & output()

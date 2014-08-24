@@ -27,7 +27,7 @@
 #ifndef ARGUMENTS_H_INCLUDED
 #define ARGUMENTS_H_INCLUDED
 
-#include "DataFunction.h"
+#include "ParameterTest.h"
 #include "function_traits.h"
 #include <tuple>
 #include "LTestMisuseException.h"
@@ -37,21 +37,21 @@ using namespace std;
 
 template<typename... Types>
 class Arguments{
-    DataFunctionBase* dataFunction;
+    ParameterTestBase* parameterTest;
     tuple<Types...> storedArgs;
-    bool dataFuncReturnsVoid;
+    bool parameterFunctionReturnsVoid;
     bool executed;
 
     void checkAndThrowWhenVoidFunction(string&& errorMessage){
-    	if(dataFuncReturnsVoid){
+    	if(parameterFunctionReturnsVoid){
     		throw ExpectAtVoid(errorMessage);
     	}
     }
 
     template<typename... Tx>
-    DataFunction<Tx...>* tryCast(DataFunctionBase* dataFunction){
-        typedef DataFunction<Tx...>* DFPtrT;
-        if(DFPtrT runner = dynamic_cast<DFPtrT>(dataFunction)){
+    ParameterTest<Tx...>* tryCast(ParameterTestBase* parameterTest){
+        typedef ParameterTest<Tx...>* DFPtrT;
+        if(DFPtrT runner = dynamic_cast<DFPtrT>(parameterTest)){
             return runner;
         }else{
             throw WrongArgumentsOrExpectType("given types to arguments(), validate(), anything or expect() do not match to test function");
@@ -60,11 +60,11 @@ class Arguments{
 
 public:
 
-    Arguments(DataFunctionBase* datafunc, Types... args):dataFunction(datafunc), storedArgs(args...) {
-        dataFuncReturnsVoid = datafunc->isVoidReturn();
-        if(dataFuncReturnsVoid){
+    Arguments(ParameterTestBase* paramfunc, Types... args):parameterTest(paramfunc), storedArgs(args...) {
+        parameterFunctionReturnsVoid = paramfunc->isVoidReturn();
+        if(parameterFunctionReturnsVoid){
             executed = true;
-            (tryCast<void, Types...>(dataFunction))->run(args...);
+            (tryCast<void, Types...>(parameterTest))->run(args...);
         }else{
             executed = false;
         }
@@ -80,7 +80,7 @@ public:
     void expect(Ret expectedValue){
     	checkAndThrowWhenVoidFunction("void function can't expect anything");
         executed = true;
-        (tryCast<Ret, Types...>(dataFunction))->runWithTuple(expectedValue, storedArgs);
+        (tryCast<Ret, Types...>(parameterTest))->runWithTuple(expectedValue, storedArgs);
     }
 
     template<typename Funct>
@@ -88,14 +88,14 @@ public:
         typedef typename GetFunctParamType<Funct>::type Ret;
         checkAndThrowWhenVoidFunction("void function can't validate anything");
         executed = true;
-        (tryCast<Ret, Types...>(dataFunction))->validate(validator, storedArgs);
+        (tryCast<Ret, Types...>(parameterTest))->validate(validator, storedArgs);
     }
 
     template<typename T>
     void expect(){
     	checkAndThrowWhenVoidFunction("void function get nothing not anything");
         executed = true;
-        (tryCast<T, Types...>(dataFunction))->validate([](T t){return true;}, storedArgs);
+        (tryCast<T, Types...>(parameterTest))->validate([](T t){return true;}, storedArgs);
     }
 };
 

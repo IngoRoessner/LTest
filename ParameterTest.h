@@ -24,8 +24,8 @@
  */
 
 
-#ifndef DATAFUNCTION_H_INCLUDED
-#define DATAFUNCTION_H_INCLUDED
+#ifndef PARAMETERTEST_H_INCLUDED
+#define PARAMETERTEST_H_INCLUDED
 
 #include "LTestAssert.h"
 #include "sstream"
@@ -38,7 +38,7 @@ using namespace std;
 
 const string EXCEPTION_MESSAGE = "Exception at fixture ";
 
-class DataFunctionBase{
+class ParameterTestBase{
 public:
     unsigned int count;
     virtual bool isVoidReturn(){
@@ -48,12 +48,12 @@ public:
 };
 
 template<typename ReturnType, typename... ParameterTypes>
-class DataFunction: public DataFunctionBase{
+class ParameterTest: public ParameterTestBase{
 public:
     typedef function<ReturnType(ParameterTypes...)> FunctionWithReturnAndParameterType;
     FunctionWithReturnAndParameterType function_under_test;
 
-    DataFunction(FunctionWithReturnAndParameterType f){
+    ParameterTest(FunctionWithReturnAndParameterType f){
         function_under_test = f;
         count = 0;
     }
@@ -101,12 +101,12 @@ public:
 
 
 template<typename... ParameterTypes>
-class DataFunction<void, ParameterTypes...>: public DataFunctionBase{
+class ParameterTest<void, ParameterTypes...>: public ParameterTestBase{
 public:
     typedef function<void(ParameterTypes...)> FooType;
     FooType foo;
 
-    DataFunction(FooType f){
+    ParameterTest(FooType f){
         foo = f;
         count = 0;
     }
@@ -132,22 +132,22 @@ public:
 };
 
 template<typename Functor>
-struct DataFunctionTypeWrapper{
-    typedef typename DataFunctionTypeWrapper<decltype(&Functor::operator())>::type type;
+struct ParameterTestType{
+    typedef typename ParameterTestType<decltype(&Functor::operator())>::type type;
 };
 
 
 template <typename ClassType, typename ReturnType, typename... ParameterTypes>
-struct DataFunctionTypeWrapper<ReturnType(ClassType::*)(ParameterTypes...) const>
+struct ParameterTestType<ReturnType(ClassType::*)(ParameterTypes...) const>
 {
-    typedef DataFunction<ReturnType, ParameterTypes...> type;
+    typedef ParameterTest<ReturnType, ParameterTypes...> type;
 };
 
 template <typename ReturnType, typename... ParameterTypes>
-struct DataFunctionTypeWrapper<ReturnType(*)(ParameterTypes...)>
+struct ParameterTestType<ReturnType(*)(ParameterTypes...)>
 {
-    typedef DataFunction<ReturnType, ParameterTypes...> type;
+    typedef ParameterTest<ReturnType, ParameterTypes...> type;
 };
 
 
-#endif // DATAFUNCTION_H_INCLUDED
+#endif // PARAMETERTEST_H_INCLUDED

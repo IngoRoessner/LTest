@@ -27,7 +27,6 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="../Arguments.h" />
-		<Unit filename="../DataFunction.h" />
 		<Unit filename="../LTest.cpp" />
 		<Unit filename="../LTest.h" />
 		<Unit filename="../LTestAssert.h" />
@@ -42,6 +41,7 @@
 		<Unit filename="../OutputFormat/XmlOutput.h" />
 		<Unit filename="../OutputFormat/rapidxml-1.13/rapidxml.hpp" />
 		<Unit filename="../OutputFormat/rapidxml-1.13/rapidxml_print.hpp" />
+		<Unit filename="../ParameterTest.h" />
 		<Unit filename="../TestResult.h" />
 		<Unit filename="../function_traits.h" />
 		<Unit filename="../toStringPatch.h" />
