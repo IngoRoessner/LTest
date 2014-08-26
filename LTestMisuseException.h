@@ -36,21 +36,6 @@ public:
     LTestMisuse(string msg):logic_error(msg){}
 };
 
-class MissingExpect: public LTestMisuse{
-public:
-    MissingExpect(string msg): LTestMisuse(msg){}
-};
-
-class ExpectAtVoid: public LTestMisuse{
-public:
-    ExpectAtVoid(string msg):LTestMisuse(msg){}
-};
-
-class WrongArgumentsOrExpectType: public LTestMisuse{
-public:
-    WrongArgumentsOrExpectType(string msg):LTestMisuse(msg){}
-};
-
 class WrongTestName: public LTestMisuse{
 public:
     WrongTestName(string msg):LTestMisuse(msg){}
