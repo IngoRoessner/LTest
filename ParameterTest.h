@@ -38,13 +38,31 @@ using namespace std;
 
 const string EXCEPTION_MESSAGE = "Exception at fixture ";
 
+template<typename T>
+class ResultWrapper{
+    T result;
+    unsigned int count;
+
+public:
+
+    ResultWrapper(T t, unsigned int c): result(t), count(c){}
+
+    void expect(T expectedValue, string massage = "dont get expected value"){
+    	LTAssert::Equal(expectedValue, result, "Fixture "+patch::to_string(count)+": "+massage);
+    }
+
+    void expect(function<bool(T)> validator, string massage = "validation fails"){
+    	LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+massage);
+    }
+
+    T getResult(){
+        return result;
+    }
+};
+
 class ParameterTestBase{
 public:
     unsigned int count;
-    virtual bool isVoidReturn(){
-        return false;
-    }
-
 };
 
 template<typename ReturnType, typename... ParameterTypes>
@@ -59,14 +77,10 @@ public:
     }
 
     template <class... Types>
-    void run(function<bool(ReturnType)> validator, Types&&... args){
+    ReturnType run(Types&&... args){
         ++count;
-        typedef typename conditional<is_reference<ReturnType>::value,
-        					 typename remove_reference<ReturnType>::type,
-        					 ReturnType>::type ResultType;
-        ResultType result;
         try{
-            result = function_under_test(args...);
+            return function_under_test(args...);
         }
         catch(LTAssert::FalseAssert e){
             string msg = "Fixture "+patch::to_string(count)+": "+e.what();
@@ -75,29 +89,12 @@ public:
         catch(...){
             throw runtime_error(EXCEPTION_MESSAGE + patch::to_string(count));
         }
-
-        bool valid = false;
-        try{
-            valid = validator(result);
-        }catch(LTAssert::FalseAssert a){
-            string msg = "Fixture "+patch::to_string(count)+": "+a.what();
-            throw LTAssert::FalseAssert(msg);
-        }
-        LTAssert::True(valid, "Failure at fixture "+patch::to_string(count));
     }
 
-
-    template<typename T>
-    void runWithTuple(T ret, tuple<ParameterTypes...> storedArgs){
-        apply([&](ParameterTypes... args){run([&](T r){return ret==r;}, args...);}, storedArgs);
-    }
-
-
-    void validate(function<bool(ReturnType)> validator, tuple<ParameterTypes...> storedArgs){
-        apply([&](ParameterTypes... args){run(validator, args...);}, storedArgs);
+    ResultWrapper<ReturnType> with(ParameterTypes... args){
+        return ResultWrapper<ReturnType>(run(args...), count);
     }
 };
-
 
 
 template<typename... ParameterTypes>
@@ -126,8 +123,8 @@ public:
         }
     }
 
-    bool isVoidReturn(){
-        return true;
+    void with(ParameterTypes... args){
+        run(args...);
     }
 };
 

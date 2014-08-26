@@ -44,7 +44,6 @@
 #include "TestResult.h"
 #include "OutputFormat/OutputFormat.h"
 #include <time.h>
-#include "Arguments.h"
 #include "LTestMisuseException.h"
 #include "ManagedFixture.h"
 
@@ -65,7 +64,6 @@ class LTest
     static LTest& getInstanz();
     uint counter;
     MuteStreamMap mutedStreams;
-    ParameterTestBase* parameterTest;
 
     static bool isIgnored(string testName);
     static bool isIgnored(uint testIndex);
@@ -120,25 +118,18 @@ public:
     }
 
 
-    template<typename Funct>
-    static string addTest(string testName, Funct testFunction, function<void()> parameterFunction)
+    template<typename TestFuncType, typename ParamFuncType>
+    static string addTest(string testName, TestFuncType testFunction, ParamFuncType parameterFunction)
     {
         function<bool()> foo = [=]()
         {
-            typedef typename ParameterTestType<Funct>::type TestType;
+            typedef typename ParameterTestType<TestFuncType>::type TestType;
             auto tempParamTest = TestType(testFunction);
-            getInstanz().parameterTest = &tempParamTest;
-            parameterFunction();
+            parameterFunction(tempParamTest);
             return true;
         };
         addTestFunction(testName, foo);
         return testName;
-    }
-
-    template <class... Types>
-    static Arguments<Types...> arguments(Types... args)
-    {
-        return Arguments<Types...>(getInstanz().parameterTest, args...);
     }
 
     //runTests() & output()
