@@ -47,12 +47,12 @@ public:
 
     ResultWrapper(T t, unsigned int c): result(t), count(c){}
 
-    void expect(T expectedValue, string massage = "dont get expected value"){
-    	LTAssert::Equal(expectedValue, result, "Fixture "+patch::to_string(count)+": "+massage);
+    void expect(T expectedValue, string message = "dont get expected value"){
+    	LTAssert::Equal(expectedValue, result, "Fixture "+patch::to_string(count)+": "+message);
     }
 
-    void expect(function<bool(T)> validator, string massage = "validation fails"){
-    	LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+massage);
+    void expect(function<bool(T)> validator, string message = "validation fails"){
+    	LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+message);
     }
 
     T getResult(){
@@ -67,18 +67,12 @@ public:
 
 template<typename ReturnType, typename... ParameterTypes>
 class ParameterTest: public ParameterTestBase{
-public:
-    typedef function<ReturnType(ParameterTypes...)> FunctionWithReturnAndParameterType;
-    FunctionWithReturnAndParameterType function_under_test;
 
-    ParameterTest(FunctionWithReturnAndParameterType f){
-        function_under_test = f;
-        count = 0;
-    }
+    typedef function<ReturnType(ParameterTypes...)> FunctionType;
+    FunctionType function_under_test;
 
     template <class... Types>
     ReturnType run(Types&&... args){
-        ++count;
         try{
             return function_under_test(args...);
         }
@@ -91,7 +85,15 @@ public:
         }
     }
 
+public:
+
+    ParameterTest(FunctionType f){
+        function_under_test = f;
+        count = 0;
+    }
+
     ResultWrapper<ReturnType> with(ParameterTypes... args){
+        ++count;
         return ResultWrapper<ReturnType>(run(args...), count);
     }
 };
@@ -99,20 +101,14 @@ public:
 
 template<typename... ParameterTypes>
 class ParameterTest<void, ParameterTypes...>: public ParameterTestBase{
-public:
-    typedef function<void(ParameterTypes...)> FooType;
-    FooType foo;
 
-    ParameterTest(FooType f){
-        foo = f;
-        count = 0;
-    }
+    typedef function<void(ParameterTypes...)> FunctionType;
+    FunctionType function_under_test;
 
     template <class... Types>
     void run(Types&&... args){
-        ++count;
         try{
-            foo(args...);
+            function_under_test(args...);
         }
         catch(LTAssert::FalseAssert e){
             string msg = "Fixture "+patch::to_string(count)+": "+e.what();
@@ -123,7 +119,14 @@ public:
         }
     }
 
+public:
+    ParameterTest(FunctionType f){
+        function_under_test = f;
+        count = 0;
+    }
+
     void with(ParameterTypes... args){
+        ++count;
         run(args...);
     }
 };
