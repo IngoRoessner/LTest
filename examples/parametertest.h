@@ -27,6 +27,10 @@
 #ifndef DATATEST_H_INCLUDED
 #define DATATEST_H_INCLUDED
 
+#include "../src/LTest.h"
+
+namespace parametertest{
+
 void viii(int a, int b, int c){
     cout<<"viii"<<a<<b<<c<<endl;
 }
@@ -116,7 +120,8 @@ TestSuite DataTests = {
     LTest::addTest("testInt2", [&]{out()<<"run testInt2: "<<testInt(); testInt()++;}),
     LTest::addTest("testInt3", [&]{out()<<"run testInt3: "<<testInt();}),
 
-    LTest::addTest("viii", viii, [](auto test){
+    //if you cant use c++14 generic lambdas (auto test)
+    LTest::addTest("viii", viii, [](ParameterTest<void, int, int, int> test){
         test.with(1,2,3);
         test.with(2,2,3);
         test.with(3,2,3);
@@ -219,6 +224,13 @@ TestSuite DataTests = {
             test.with("abcde",1).expect('a');
         }
     )
+};
+
+int main() {
+    LTest::run();
+    return 0;
+}
+
 };
 
 #endif // DATATEST_H_INCLUDED
