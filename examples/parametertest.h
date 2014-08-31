@@ -167,9 +167,9 @@ TestSuite DataTests = {
     }),
 
     LTest::addTest("validate2", [](bool b){return b;}, [](auto test){
-        test.with(true).expect(validate2);
-        test.with(true).expect(validate2);
         test.with(false).expect(validate2);
+        test.with(false).expect(validate2);
+        test.with(true).expect(validate2);
     }),
 
     LTest::addTest("anything iii", iii, [](auto test){

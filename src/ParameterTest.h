@@ -43,11 +43,39 @@ class ResultWrapper{
     T result;
     unsigned int count;
 
+    void validateBool(function<bool(T)> validator, string message)
+    {
+        bool b = false;
+        try{
+            b = validator(result);
+        }catch(LTAssert::FalseAssert a){
+            message = a.what();
+        }catch(...){
+            message = "exception in validation";
+        }
+        LTAssert::True(b, "Fixture "+patch::to_string(count)+": "+message);
+    }
+
+    void validateVoid(function<void(T)> validator)
+    {
+        string message;
+        bool b = false;
+        try{
+            validator(result);
+            b = true;
+        }catch(LTAssert::FalseAssert a){
+            message = a.what();
+        }catch(...){
+            message = "exception in validation";
+        }
+        LTAssert::True(b, "Fixture "+patch::to_string(count)+": "+message);
+    }
+
 public:
 
     ResultWrapper(T t, unsigned int c): result(t), count(c){}
 
-    void expect(T expectedValue, string message = "dont get expected value"){
+    void expect(T expectedValue, string message = "not expected value"){
     	LTAssert::Equal(expectedValue, result, "Fixture "+patch::to_string(count)+": "+message);
     }
 
@@ -55,28 +83,28 @@ public:
     typename ExpectType<FunctType, bool, T>::type
     expect(FunctType validator, string message = "validation fails")
     {
-        LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+message);
+        validateBool(validator, message);
     }
 
     template<typename FunctType>
     typename ExpectType<FunctType, void, T>::type
     expect(FunctType validator)
     {
-        validator(result);
+        validateVoid(validator);
     }
 
     template<typename FunctType>
     typename ExpectType<FunctType, bool(*)(T), T>::type
     expect(FunctType validator, string message = "validation fails")
     {
-        LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+message);
+        validateBool(validator, message);
     }
 
     template<typename FunctType>
     typename ExpectType<FunctType, void(*)(T), T>::type
     expect(FunctType validator)
     {
-        validator(result);
+        validateVoid(validator);
     }
 
 
