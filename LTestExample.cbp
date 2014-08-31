@@ -11,9 +11,10 @@
 				<Option output="bin/Debug/LTestExample" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="gcc" />
+				<Option compiler="mingw64_nuwen" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-std=c++1y" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -33,7 +34,31 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="main.cpp" />
+		<Unit filename="examples/ignores.h" />
+		<Unit filename="examples/leap_year.h" />
+		<Unit filename="examples/main.cpp" />
+		<Unit filename="examples/minimal.h" />
+		<Unit filename="examples/parametertest.h" />
+		<Unit filename="src/LTest.cpp" />
+		<Unit filename="src/LTest.h" />
+		<Unit filename="src/LTestAssert.h" />
+		<Unit filename="src/LTestMisuseException.h" />
+		<Unit filename="src/ManagedFixture.h" />
+		<Unit filename="src/MuteStream.h" />
+		<Unit filename="src/OutputFormat/Format.h" />
+		<Unit filename="src/OutputFormat/OutputFormat.h" />
+		<Unit filename="src/OutputFormat/OutputFormatBase.h" />
+		<Unit filename="src/OutputFormat/TextOutput.h" />
+		<Unit filename="src/OutputFormat/TextTable.h" />
+		<Unit filename="src/OutputFormat/XmlOutput.h" />
+		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml.hpp" />
+		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_iterators.hpp" />
+		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_print.hpp" />
+		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_utils.hpp" />
+		<Unit filename="src/ParameterTest.h" />
+		<Unit filename="src/TestResult.h" />
+		<Unit filename="src/function_traits.h" />
+		<Unit filename="src/toStringPatch.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

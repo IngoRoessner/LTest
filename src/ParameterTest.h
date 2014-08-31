@@ -51,9 +51,35 @@ public:
     	LTAssert::Equal(expectedValue, result, "Fixture "+patch::to_string(count)+": "+message);
     }
 
-    void expect(function<bool(T)> validator, string message = "validation fails"){
-    	LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+message);
+    template<typename FunctType>
+    typename ExpectType<FunctType, bool, T>::type
+    expect(FunctType validator, string message = "validation fails")
+    {
+        LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+message);
     }
+
+    template<typename FunctType>
+    typename ExpectType<FunctType, void, T>::type
+    expect(FunctType validator)
+    {
+        validator(result);
+    }
+
+    template<typename FunctType>
+    typename ExpectType<FunctType, bool(*)(T), T>::type
+    expect(FunctType validator, string message = "validation fails")
+    {
+        LTAssert::True(validator(result), "Fixture "+patch::to_string(count)+": "+message);
+    }
+
+    template<typename FunctType>
+    typename ExpectType<FunctType, void(*)(T), T>::type
+    expect(FunctType validator)
+    {
+        validator(result);
+    }
+
+
 
     T getResult(){
         return result;

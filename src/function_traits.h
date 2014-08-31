@@ -57,5 +57,39 @@ struct FunctionTypeIs : enable_if<is_same<typename function_traits<Functor>::ret
 {};
 
 
+template <typename T1, typename T2>
+struct function_traits_for_ExpectType : public function_traits_for_ExpectType<T1, decltype(&T2::operator())>
+{};
+
+template <typename T, typename ClassType, typename ReturnType, typename... Args>
+struct function_traits_for_ExpectType<T, ReturnType(ClassType::*)(Args...) const>
+{
+    typedef ReturnType ret;
+};
+
+template <typename T>
+struct function_traits_for_ExpectType<T, void(*)(T)>
+{
+    typedef void(*ret)(T);
+};
+
+template <typename T>
+struct function_traits_for_ExpectType<T, bool(*)(T)>
+{
+    typedef bool(*ret)(T);
+};
+
+
+template<typename T, typename Functor, typename ret, bool b>
+struct ExpectType_ : enable_if<is_same<typename function_traits_for_ExpectType<T,Functor>::ret, ret>::value, void>
+{};
+
+template<typename T, typename Functor, typename ret>
+struct ExpectType_<T, Functor, ret, false> : enable_if<false, void>
+{};
+
+template<typename Functor, typename ret, typename T>
+struct ExpectType : ExpectType_<T, Functor,ret,!is_same<Functor, T>::value>
+{};
 
 #endif // FUNCTION_TRAITS_H_INCLUDED

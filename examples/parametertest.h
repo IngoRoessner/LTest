@@ -71,6 +71,15 @@ void ir(int& i){
         throw "dow";
 }
 
+bool validate1(bool b){
+    return b;
+}
+
+void validate2(bool b){
+    if(b)
+        throw "dow";
+}
+
 auto testInt = manageFixture(3)
     .after([](int& i){
         cout<<"after: "<<i++<<endl;
@@ -143,6 +152,24 @@ TestSuite DataTests = {
         test.with(2,3).expect([](int i){LTAssert::True(true, "not true"); return i>0;});
         test.with(4,3).expect([](int i){LTAssert::True(false, "not true"); return i>0;});
         test.with(2,3).expect([](int i){LTAssert::True(true, "not true"); return i>0;});
+    }),
+
+    LTest::addTest("validate void iii", iii, [](auto test){
+        test.with(2,3).expect([](int i){LTAssert::True(true, "not true");});
+        test.with(4,3).expect([](int i){LTAssert::True(false, "not true");});
+        test.with(2,3).expect([](int i){LTAssert::True(true, "not true");});
+    }),
+
+    LTest::addTest("validate1", [](bool b){return b;}, [](auto test){
+        test.with(true).expect(validate1);
+        test.with(true).expect(validate1);
+        test.with(false).expect(validate1);
+    }),
+
+    LTest::addTest("validate2", [](bool b){return b;}, [](auto test){
+        test.with(true).expect(validate2);
+        test.with(true).expect(validate2);
+        test.with(false).expect(validate2);
     }),
 
     LTest::addTest("anything iii", iii, [](auto test){
