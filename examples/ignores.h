@@ -67,7 +67,7 @@ int main()
 {
     LTest::ignore(suite);
     LTest::ignore("throw1");
-    LTest::ignore(TestSuite{"throw2", "throw3"});
+    LTest::ignore({"throw2", "throw3"});
     LTest::run();
     return 0;
 }

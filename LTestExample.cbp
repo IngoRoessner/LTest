@@ -11,7 +11,7 @@
 				<Option output="bin/Debug/LTestExample" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="mingw64_nuwen" />
+				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-std=c++1y" />

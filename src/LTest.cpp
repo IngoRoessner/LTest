@@ -183,6 +183,10 @@ string LTest::ignore(TestSuite testsuite){
     return getIgnoreLable();
 }
 
+string LTest::ignore(initializer_list<string> testsuite){
+    return LTest::ignore(TestSuite(testsuite));
+}
+
 string LTest::getIgnoreLable(){
     return "___LTEST::IGNORE___";
 }

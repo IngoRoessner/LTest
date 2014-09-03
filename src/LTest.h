@@ -158,6 +158,8 @@ public:
 
     static string ignore(TestSuite testsuite);
 
+    static string ignore(initializer_list<string> testsuite);
+
     static TestResultSet getResultSet();
 
     static void clearResultSet();
