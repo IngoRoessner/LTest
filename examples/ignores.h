@@ -53,15 +53,21 @@ TestSuite suite = {
     LTest::addTest("Suite after ignores", [](){cout<<"Suite after ignores"<<endl;}),
 
     LTest::addTest("Suite with cout and cerr", [](){cout<<"This goes to std out and will be available programmatically"<<endl; cerr << "and this to cerr!"; return true;}),
+};
 
-    LTest::addTest("throw ", [](){throw string("nope");}),
+TestSuite ignoreSuite2 = {
+    LTest::addTest("throw1", [](){throw string("nope");}),
+
+    LTest::addTest("throw2", [](){throw string("nope");}),
+    LTest::addTest("throw3", [](){throw string("nope");}),
 };
 
 
 int main()
 {
     LTest::ignore(suite);
-    LTest::ignore("throw");
+    LTest::ignore("throw1");
+    LTest::ignore(TestSuite{"throw2", "throw3"});
     LTest::run();
     return 0;
 }

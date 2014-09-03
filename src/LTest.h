@@ -156,7 +156,7 @@ public:
     //ignores the next #number tests
     static string ignoreNext(unsigned int number = 1);
 
-    static string ignore(TestSuite& testsuite);
+    static string ignore(TestSuite testsuite);
 
     static TestResultSet getResultSet();
 

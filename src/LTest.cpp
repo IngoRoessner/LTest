@@ -174,7 +174,7 @@ string LTest::ignoreNext(unsigned int nextNTests){
     return getIgnoreLable();
 }
 
-string LTest::ignore(TestSuite& testsuite){
+string LTest::ignore(TestSuite testsuite){
     for (auto testName : testsuite){
         if(testName != getIgnoreLable()){
             LTest::ignore(testName);
