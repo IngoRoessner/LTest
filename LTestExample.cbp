@@ -39,6 +39,7 @@
 		<Unit filename="examples/main.cpp" />
 		<Unit filename="examples/minimal.h" />
 		<Unit filename="examples/parametertest.h" />
+		<Unit filename="examples/resultset.h" />
 		<Unit filename="src/LTest.cpp" />
 		<Unit filename="src/LTest.h" />
 		<Unit filename="src/LTestAssert.h" />

@@ -14,18 +14,23 @@
 #elif defined(PARAMTEST)
     #define EXAMPLE parametertest
     #include "parametertest.h"
+#elif defined(RESULTSET)
+    #define EXAMPLE resultset
+    #include "resultset.h"
 #elif defined(ALL)
     #define EXAMPLE all
     #include "leap_year.h"
     #include "minimal.h"
     #include "ignores.h"
     #include "parametertest.h"
+    #include "resultset.h"
 
     namespace all{
         int main() {
             minimal::main();
             ignores::main();
             parametertest::main();
+            resultset::main();
             leap_year::main();
             return 0;
         }

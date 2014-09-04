@@ -40,8 +40,7 @@ enum TestState {
 	OK, FAILED, ABORTED, IGNORED
 };
 
-class TestResult
-{
+class TestResult{
 private:
     TestState _state;
     double _time_taken;
@@ -99,15 +98,17 @@ public :
 
 class TestResultOK: public TestResult{
 public :
-
     TestResultOK(testname tname = "no_testname_given") : TestResult(tname) {}
 
     TestResultOK(testname tname, MuteStreamMap muteStream, double time_taken):TestResult(TestState::OK, time_taken, muteStream, tname){}
+
+    static constexpr TestState expectedState = TestState::OK;
 };
 
 class TestResultIgnored: public TestResult{
 public :
     TestResultIgnored(testname tname = "no_testname_given") : TestResult(tname) {}
+    static constexpr TestState expectedState = TestState::IGNORED;
 };
 
 class TestResultFailed: public TestResult{
@@ -116,6 +117,8 @@ public :
     TestResultFailed(testname tname = "no_testname_given") : TestResult(tname) {}
 
     TestResultFailed(testname tname, MuteStreamMap muteStream, double time_taken, string msg = ""):TestResult(TestState::FAILED, time_taken, muteStream, tname), message(msg){}
+
+    static constexpr TestState expectedState = TestState::FAILED;
 
     string getMessage(){
         return message;
@@ -129,82 +132,81 @@ public :
 
     TestResultAborted(testname tname, MuteStreamMap muteStream, double time_taken, string msg=""):TestResult(TestState::ABORTED, time_taken, muteStream, tname), message(msg){}
 
+    static constexpr TestState expectedState = TestState::ABORTED;
+
     string getMessage(){
         return message;
     }
 };
 
-
-template<typename ElementType>
-class TestResultTypedSubSet:public list<shared_ptr<ElementType>>{ // why does this exist?
-public:
-    TestResultTypedSubSet<ElementType> getSubSet(function<bool(shared_ptr<ElementType>)> pred){
-        TestResultTypedSubSet<ElementType> subset;
-        for(auto& element : *this){
-            if(pred(element)){
-                subset.push_back(element);
-            }
-        }
-        return subset;
-    }
-};
-
-class TestResultSet:public list<shared_ptr<TestResult>>{
+template<template<typename> class ResultSetTemplate, typename ResultType>
+class ResultSetMixin:public list<shared_ptr<ResultType>>{
 public:
     string out(Format format = Format::Text){
-        GetOutputFormat<TestResultSet> output(format);
+        GetOutputFormat<ResultSetMixin<ResultSetTemplate,ResultType>> output(format);
         return output.run(*this);
     }
 
-    TestResultSet getSubSet(function<bool(shared_ptr<TestResult>)> pred){
-        TestResultSet subset;
-        copy_if(this->begin(), this->end(), back_inserter(subset), pred); // this performs a filtered copy
+    ResultSetTemplate<ResultType> getSubSet(function<bool(shared_ptr<ResultType>)> pred){
+        ResultSetTemplate<ResultType> subset;
+        copy_if(this->begin(), this->end(), back_inserter(subset), pred);
         return subset;
     }
 
-    TestResultSet getSubSetByState(TestState state){
-        return getSubSet([&](shared_ptr<TestResult> ptr){return ptr->get_state() == state;});
+    ResultSetTemplate<ResultType> getSubSetByState(TestState state){
+        return getSubSet([&](shared_ptr<ResultType> ptr){return ptr->get_state() == state;});
     }
 
-    TestResultSet getIgnores(){
-        return getSubSetByState(TestState::IGNORED);
+    ResultSetTemplate<TestResultIgnored> getIgnores(){
+        return *this;
     }
 
-    TestResultSet getOK(){
-        return getSubSetByState(TestState::OK);
+    ResultSetTemplate<TestResultOK> getOK(){
+        return *this;
     }
 
-    TestResultTypedSubSet<TestResultFailed> getFails(){
-        TestResultTypedSubSet<TestResultFailed> result;
-        for(auto& element : getSubSetByState(TestState::FAILED)){
-            result.push_back(castToFailed(element));
-        }
-        return result;
+    ResultSetTemplate<TestResultFailed> getFails(){
+        return *this;
     }
 
-    TestResultTypedSubSet<TestResultAborted> getAborts(){
-        TestResultTypedSubSet<TestResultAborted> result;
-        for(auto& element : getSubSetByState(TestState::ABORTED)){
-            result.push_back(castToAborted(element));
-        }
-        return result;
+    ResultSetTemplate<TestResultAborted> getAborts(){
+        return *this;
     }
 
     double getTotalExecutionTimeInSeconds(){
     	double total = 0.0;
-    	for_each(this->begin(), this->end(), [&total](shared_ptr<TestResult> element){total += element->get_time_taken();});
+    	for_each(this->begin(), this->end(), [&total](shared_ptr<ResultType> element){total += element->get_time_taken();});
     	return total;
-    }
-
-    static shared_ptr<TestResultAborted> castToAborted(shared_ptr<TestResult> old){
-        return dynamic_pointer_cast<TestResultAborted>(old);
-    }
-
-    static shared_ptr<TestResultFailed> castToFailed(shared_ptr<TestResult> old){
-        return dynamic_pointer_cast<TestResultFailed>(old);
     }
 };
 
+template<typename ResultType>
+class ResultSet:public ResultSetMixin<ResultSet, ResultType>{
+public:
+    template<typename OtherResultSetType>
+    ResultSet(OtherResultSetType other){
+        for(auto& element : other.getSubSetByState(ResultType::expectedState)){
+            this->push_back(dynamic_pointer_cast<ResultType>(element));
+        }
+    }
+
+    ResultSet(){}
+};
+
+template<>
+class ResultSet<TestResult>:public ResultSetMixin<ResultSet, TestResult>{
+public:
+    template<typename OtherResultSetType>
+    ResultSet(OtherResultSetType other){
+        for(auto& element : other){
+            this->push_back(element);
+        }
+    }
+
+    ResultSet(){}
+};
+
+using TestResultSet = ResultSet<TestResult>;
 
 
 #endif // TESTRESULT_H_INCLUDED
