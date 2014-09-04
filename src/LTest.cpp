@@ -102,7 +102,7 @@ TestResultSet LTest::runTests(){
 	return runTests(test_names_sorted_by_insertion_order);
 }
 
-TestResultSet LTest::runTest(const testname& test){
+TestResultSet LTest::runTest(const testname test){
     function<bool ()> testFunction;
     try{
         testFunction = getInstanz().testCases.at(test);
@@ -112,7 +112,7 @@ TestResultSet LTest::runTest(const testname& test){
 	return runTest(test, testFunction);
 }
 
- TestResultSet LTest::runTests(const TestSuite& testsuite, bool force){
+ TestResultSet LTest::runTests(const TestSuite testsuite, bool force){
 	uint current_index = 0;
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLable()){
@@ -126,6 +126,10 @@ TestResultSet LTest::runTest(const testname& test){
     	}
     }
     return getInstanz().resultset;;
+}
+
+TestResultSet LTest::runTests(const initializer_list<string> testsuite, bool force){
+    return LTest::runTests(TestSuite(testsuite), force);
 }
 
 TestResultSet LTest::run(ostream& os, Format format){
@@ -142,11 +146,15 @@ TestResultSet LTest::run(testname test, ostream& os, Format format){
     return returnable;
 }
 
-TestResultSet LTest::run(TestSuite& testsuite, bool force, ostream& os, Format format){
+TestResultSet LTest::run(TestSuite testsuite, bool force, ostream& os, Format format){
 	auto&& returnable = runTests(testsuite, force);
     os<<getInstanz().resultset.out(format);
     clearResultSet();
     return returnable;
+}
+
+TestResultSet LTest::run(initializer_list<string> testsuite, bool force, ostream& os, Format format){
+    return LTest::run(TestSuite(testsuite), force, os, format);
 }
 
 void LTest::addTestFunction(testname testName, function<bool ()> test){

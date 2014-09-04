@@ -138,15 +138,19 @@ public:
     //runTest() & output()
     static TestResultSet run(string test, ostream& os = cout, Format format = Format::Text);
 
-    static TestResultSet run(TestSuite& testsuite, bool force = false, ostream& os = cout, Format format = Format::Text);
+    static TestResultSet run(TestSuite testsuite, bool force = false, ostream& os = cout, Format format = Format::Text);
+
+    static TestResultSet run(initializer_list<string> testsuite, bool force = false, ostream& os = cout, Format format = Format::Text);
 
     //loop all tests, execute only not ignored tests (you can get the result output via output())
     static TestResultSet runTests();
 
     //execute all tests with the given name by force (no ignores). (result output via output())
-    static TestResultSet runTest(const string& test);
+    static TestResultSet runTest(const string test);
 
-    static TestResultSet runTests(const TestSuite& testsuite, bool force = false);
+    static TestResultSet runTests(const TestSuite testsuite, bool force = false);
+
+    static TestResultSet runTests(const initializer_list<string> testsuite, bool force = false);
 
     static string getIgnoreLable();
 
