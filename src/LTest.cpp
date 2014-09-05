@@ -46,19 +46,24 @@ double measure_time_taken(const clock_t& before){
 
 TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFunction){
     getInstanz().mutedStreams.mute();
-    double time_taken_sec;
+    double time_taken_sec = -1.0;
+    double user_time_taken_sec = -1.0;
     TestResult* result;
     try{
+        chrono::time_point<std::chrono::system_clock> start = chrono::system_clock::now(),
+                                                      end;
         clock_t before;
         before = clock();
         try {
             bool&& test_successful = testFunction();
-            time_taken_sec = measure_time_taken(before);
+            user_time_taken_sec = measure_time_taken(before);
+            end = chrono::system_clock::now();
+            time_taken_sec = chrono::duration_cast<chrono::nanoseconds>(end - start).count() / 1e9;
             ManagedFixtureList::after();
             if(test_successful){
-                result = new TestResultOK(tname, getInstanz().mutedStreams, time_taken_sec);
+                result = new TestResultOK(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec);
             }else{
-                result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, "return not true");
+                result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "return not true");
             }
         } catch(...){
             ManagedFixtureList::after();
@@ -66,14 +71,14 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
             throw;
         }
     }
-    catch(LTestMisuse e){throw e;}
-    catch(LTAssert::FalseAssert a){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, a.what());}
-    catch(runtime_error e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
-    catch(exception e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, e.what());}
-    catch(int e){stringstream es; es<<e; result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "int exception: "+es.str());}
-    catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "char exception: "+patch::to_string(e));}
-    catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "string exception: "+e);}
-    catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, "Unknown Exception");}
+    catch(LTestMisuse e){throw e;} // TODO well this code smells a bit, i needed to changes to much to add a field, DRY?
+    catch(LTAssert::FalseAssert a){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, a.what());}
+    catch(runtime_error e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, e.what());}
+    catch(exception e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, e.what());}
+    catch(int e){stringstream es; es<<e; result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "int exception: "+es.str());}
+    catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "char exception: "+patch::to_string(e));}
+    catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec,"string exception: "+e);}
+    catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "Unknown Exception");}
     getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
     return getInstanz().resultset;
 }
