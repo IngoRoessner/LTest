@@ -23,8 +23,8 @@
  *     THE SOFTWARE.
  */
 
-//ALL || LEAP_YEAR || MINIMAL || IGNORES || PARAMTEST
 #define ALL
+//ALL || LEAP_YEAR || MINIMAL || IGNORES || PARAMTEST || RESULTSET
 
 
 #if defined(LEAP_YEAR)
