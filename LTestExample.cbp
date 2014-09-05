@@ -14,12 +14,11 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-std=c++1y" />
 				</Compiler>
 			</Target>
-			<Target title="Release">
-				<Option output="bin/Release/LTestExample" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
+			<Target title="test-ltest-with-ltest">
+				<Option output="bin/tests/run-ltest-tests" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/tests/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -33,13 +32,26 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-std=c++1y" />
 		</Compiler>
-		<Unit filename="examples/ignores.h" />
-		<Unit filename="examples/leap_year.h" />
-		<Unit filename="examples/main.cpp" />
-		<Unit filename="examples/minimal.h" />
-		<Unit filename="examples/parametertest.h" />
-		<Unit filename="examples/resultset.h" />
+		<Unit filename="examples/ignores.h">
+			<Option target="Debug" />
+		</Unit>
+		<Unit filename="examples/leap_year.h">
+			<Option target="Debug" />
+		</Unit>
+		<Unit filename="examples/main.cpp">
+			<Option target="Debug" />
+		</Unit>
+		<Unit filename="examples/minimal.h">
+			<Option target="Debug" />
+		</Unit>
+		<Unit filename="examples/parametertest.h">
+			<Option target="Debug" />
+		</Unit>
+		<Unit filename="examples/resultset.h">
+			<Option target="Debug" />
+		</Unit>
 		<Unit filename="src/LTest.cpp" />
 		<Unit filename="src/LTest.h" />
 		<Unit filename="src/LTestAssert.h" />
@@ -60,6 +72,12 @@
 		<Unit filename="src/TestResult.h" />
 		<Unit filename="src/function_traits.h" />
 		<Unit filename="src/toStringPatch.h" />
+		<Unit filename="test-src/chrono_lib_test.h">
+			<Option target="test-ltest-with-ltest" />
+		</Unit>
+		<Unit filename="test-src/run-ltest-tests.cpp">
+			<Option target="test-ltest-with-ltest" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />
