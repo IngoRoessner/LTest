@@ -1,12 +1,12 @@
 #!/bin/bash
 
 set -e
-rm -rf LTestUse/bin
-rm -rf LTestUse/obj
 rm -rf obj
 rm -rf bin/
 CUR_OUTPUT_FILE=current-output.txt
-make > $CUR_OUTPUT_FILE && cd LTestUse && make >> "../$CUR_OUTPUT_FILE" && bin/Debug/LTestUse >> "../$CUR_OUTPUT_FILE"
-cd ..
-./exec-validator-on-testxml.sh LTestUse/bin/TEST-ExternTestSuiteExample.xml resources/xunit.xsd
-#diff ../$CUR_OUTPUT_FILE ../expected-output.txt
+make
+echo RUNNING NOW LTEST-TESTS
+bin/tests/run-ltest-tests 
+echo RUNNING NOW LTEST-EXAMPLE
+bin/Debug/LTestExample
+for f in $(find ./bin -name *.xml); do ./exec-validator-on-testxml.sh $f resources/xunit.xsd; done

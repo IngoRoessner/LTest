@@ -48,6 +48,7 @@
     #include "ignores.h"
     #include "parametertest.h"
     #include "resultset.h"
+    #include <fstream>
 
     namespace all{
         int main() {
@@ -56,6 +57,9 @@
             parametertest::main();
             resultset::main();
             leap_year::main();
+            ofstream xmlfile;
+            xmlfile.open("bin/TEST-ExampleTestsResults.xml");
+            LTest::run(xmlfile, Format::Xml);
             return 0;
         }
     }
