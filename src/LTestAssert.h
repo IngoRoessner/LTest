@@ -28,10 +28,14 @@
 #define LTESTASSERT_H_INCLUDED
 
 #include <string>
+#include <math.h>
+#include <sstream>
 
 using namespace std;
 
 namespace LTAssert{
+    static const string MESSAGE_DEFAULT = "Assert::Equal -> not Equal"; // old school type compile time constant
+
     class FalseAssert{
     private:
         string text;
@@ -43,14 +47,27 @@ namespace LTAssert{
     };
 
     template<typename T1, typename T2>
-    void Equal(T1 a, T2 b, string message = "Assert::Equal -> not Equal"){
+    void Equal(T1 a, T2 b, string message = MESSAGE_DEFAULT){
         if(!(a==b)){
             throw FalseAssert(message);
         }
     }
 
+    template<typename floating>
+    void Equal(floating a, floating b, floating delta, string message = MESSAGE_DEFAULT){
+        bool isNearlyEqual = abs(a - b) < delta;
+        if(not isNearlyEqual){
+            if(message == MESSAGE_DEFAULT){
+                ostringstream messageBuilder;
+                messageBuilder << "abs(" << a << " - " << b << ") should be smaller than delta = " << delta << endl;
+                throw FalseAssert(messageBuilder.str());
+            }
+            throw FalseAssert(message);
+        }
+    }
+
     template<typename T1, typename T2>
-    void NotEqual(T1 a, T2 b, string message = "Assert::NotEqual -> Equal"){
+    void NotEqual(T1 a, T2 b, string message = MESSAGE_DEFAULT){
         if(a==b){
             throw FalseAssert(message);
         }
