@@ -34,7 +34,7 @@
 using namespace std;
 
 namespace LTAssert{
-    static const string MESSAGE_DEFAULT = "Assert::Equal -> not Equal"; // old school type compile time constant
+    static const string MESSAGE_DEFAULT = "Assert::Equal -> Equal"; // old school type compile time constant
 
     class FalseAssert{
     private:
@@ -67,7 +67,7 @@ namespace LTAssert{
     }
 
     template<typename T1, typename T2>
-    void NotEqual(T1 a, T2 b, string message = MESSAGE_DEFAULT){
+    void NotEqual(T1 a, T2 b, string message = "Assert::Equal -> not Equal"){
         if(a==b){
             throw FalseAssert(message);
         }
