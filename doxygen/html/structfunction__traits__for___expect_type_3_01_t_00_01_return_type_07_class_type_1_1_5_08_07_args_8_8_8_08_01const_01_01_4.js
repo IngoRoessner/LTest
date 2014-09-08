@@ -1,0 +1,4 @@
+var structfunction__traits__for___expect_type_3_01_t_00_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4 =
+[
+    [ "ret", "structfunction__traits__for___expect_type_3_01_t_00_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4.html#aa1c2acb6e7a5bb32ad59e8e3e3ac1c45", null ]
+];
