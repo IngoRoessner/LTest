@@ -1,4 +1,4 @@
-# LTest - C++ 11 Lambda Test
+# ![Alt text](https://ingoroessner.github.io/LTest/doxygen/LTestLogo.png "LTest Logo")          LTest - C++ 11 Lambda Test    
 LTest (short for LambdaTest) is a C++ 11 test library based on [lambdas](http://en.cppreference.com/w/cpp/language/lambda). 
 
 Because the usage of lambdas, the library was **designed for** compilers supporting the **C++ 11** standard or higher. 
