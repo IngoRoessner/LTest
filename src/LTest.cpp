@@ -120,7 +120,7 @@ TestResultSet LTest::runTest(const testname test){
  TestResultSet LTest::runTests(const TestSuite testsuite, bool force){
 	uint current_index = 0;
     for (auto &testName : testsuite){
-    	if(testName != getIgnoreLable()){
+    	if(testName != getIgnoreLabel()){
 			if(force || !(isIgnored(testName) || isIgnored(current_index))){
 				LTest::runTest(testName);
 			} else {
@@ -175,7 +175,7 @@ void LTest::addTestFunction(testname testName, function<bool ()> test){
 
 string LTest::ignore(testname testName){
     getInstanz().ignores.insert(testName);
-    return getIgnoreLable();
+    return getIgnoreLabel();
 }
 
 string LTest::ignoreNext(unsigned int nextNTests){
@@ -184,23 +184,23 @@ string LTest::ignoreNext(unsigned int nextNTests){
     for(unsigned int i = start; i < stop; i++){
         getInstanz().ignored_indexes.insert(i);
     }
-    return getIgnoreLable();
+    return getIgnoreLabel();
 }
 
 string LTest::ignore(TestSuite testsuite){
     for (auto testName : testsuite){
-        if(testName != getIgnoreLable()){
+        if(testName != getIgnoreLabel()){
             LTest::ignore(testName);
         }
     }
-    return getIgnoreLable();
+    return getIgnoreLabel();
 }
 
 string LTest::ignore(initializer_list<string> testsuite){
     return LTest::ignore(TestSuite(testsuite));
 }
 
-string LTest::getIgnoreLable(){
+string LTest::getIgnoreLabel(){
     return "___LTEST::IGNORE___";
 }
 
