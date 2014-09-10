@@ -31,15 +31,36 @@ struct GetFunctionType<ReturnType(ClassType::*)(Parameter...) const>
 
 
 template<typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
-struct FunctionPattern_ : enable_if<is_same<typename GetFunctionType<Functor>::type, FunctionType<ReturnType, Parameters...>>::value, EnabledRet>
+struct FunctionPattern_
+    : enable_if<
+                is_same<
+                        typename GetFunctionType<Functor>::type,
+                        FunctionType<ReturnType, Parameters...>
+                        >::value,
+                EnabledRet
+                >
 {};
 
 template<typename EnabledRet, typename Functor, typename... Parameters>
-struct FunctionPattern_<EnabledRet, Functor, functionpattern::AnyType, Parameters...> :enable_if<is_same<typename GetFunctionType<Functor>::type::parameterType, tuple<Parameters...>>::value,EnabledRet>
+struct FunctionPattern_<EnabledRet, Functor, functionpattern::AnyType, Parameters...>
+    : enable_if<
+                is_same<
+                        typename GetFunctionType<Functor>::type::parameterType,
+                        tuple<Parameters...>
+                        >::value,
+                EnabledRet
+                >
 {};
 
 template<typename EnabledRet, typename Functor, typename ReturnType>
-struct FunctionPattern_<EnabledRet, Functor, ReturnType, functionpattern::AnyType> :enable_if<is_same<typename GetFunctionType<Functor>::type::returnType, ReturnType>::value,EnabledRet>
+struct FunctionPattern_<EnabledRet, Functor, ReturnType, functionpattern::AnyType>
+    : enable_if<
+                is_same<
+                        typename GetFunctionType<Functor>::type::returnType,
+                        ReturnType
+                        >::value,
+                EnabledRet
+                >
 {};
 
 template<typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
@@ -54,11 +75,16 @@ struct FunctorNot{
 
     template<typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
     struct NotFunctionPattern<false, EnabledRet, Functor, ReturnType, Parameters...>
-            :FunctionPattern_<EnabledRet, Functor, ReturnType, Parameters...>
+            :   FunctionPattern_<EnabledRet, Functor, ReturnType, Parameters...>
     {};
 
     template<typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
-    using FunctionPattern = typename NotFunctionPattern<is_same<Functor, NotThis>::value, EnabledRet, Functor, ReturnType, Parameters...>::type;
+    using FunctionPattern = typename NotFunctionPattern<
+                                                        is_same<Functor, NotThis>::value,
+                                                        EnabledRet,
+                                                        Functor,
+                                                        ReturnType,
+                                                        Parameters...>::type;
 };
 
 #endif // FUNCTIONPATTERN_H_INCLUDED
