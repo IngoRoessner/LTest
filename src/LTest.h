@@ -38,7 +38,6 @@
 #include <iterator>
 #include "LTestAssert.h"
 #include "toStringPatch.h"
-#include "function_traits.h"
 #include "MuteStream.h"
 #include "ParameterTest.h"
 #include "TestResult.h"
@@ -46,6 +45,7 @@
 #include <time.h>
 #include "LTestMisuseException.h"
 #include "ManagedFixture.h"
+#include "FunctionPattern.h"
 
 using namespace std;
 
@@ -80,33 +80,16 @@ public:
     static void addTestFunction(string testName, function<bool ()> test);
 
     template<typename FunctType>
-    static typename FunctionTypeIs<FunctType, bool>::type addTest(string testName, FunctType test)
+    static FunctionPattern<string, FunctType, bool, functionpattern::AnyType>
+    addTest(string testName, FunctType test)
     {
         addTestFunction(testName, test);
         return testName;
     }
 
     template<typename FunctType>
-    static typename FunctionTypeIs<FunctType, void>::type addTest(string testName, FunctType test)
-    {
-        function<bool()> foo = [&]()
-        {
-            test();
-            return true;
-        };
-        addTestFunction(testName, foo);
-        return testName;
-    }
-
-    template<typename FunctType>
-    static typename FunctionTypeIs<FunctType, bool(*)()>::type addTest(string testName, FunctType test)
-    {
-        addTestFunction(testName, test);
-        return testName;
-    }
-
-    template<typename FunctType>
-    static typename FunctionTypeIs<FunctType, void(*)()>::type addTest(string testName, FunctType test)
+    static FunctionPattern<string, FunctType, void, functionpattern::AnyType>
+    addTest(string testName, FunctType test)
     {
         function<bool()> foo = [=]()
         {

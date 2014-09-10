@@ -52,6 +52,7 @@
 		<Unit filename="examples/resultset.h">
 			<Option target="Debug" />
 		</Unit>
+		<Unit filename="src/FunctionPattern.h" />
 		<Unit filename="src/LTest.cpp" />
 		<Unit filename="src/LTest.h" />
 		<Unit filename="src/LTestAssert.h" />

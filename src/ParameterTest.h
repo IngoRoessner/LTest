@@ -32,7 +32,7 @@
 #include <type_traits>
 #include <exception>
 #include <string>
-#include "function_traits.h"
+#include "FunctionPattern.h"
 
 using namespace std;
 
@@ -80,34 +80,18 @@ public:
     }
 
     template<typename FunctType>
-    typename ExpectType<FunctType, bool, T>::type
+    FunctorNot<T>::FunctionPattern<void, FunctType, bool, T>
     expect(FunctType validator, string message = "validation fails")
     {
         validateBool(validator, message);
     }
 
     template<typename FunctType>
-    typename ExpectType<FunctType, void, T>::type
+    FunctorNot<T>::FunctionPattern<void, FunctType, void, T>
     expect(FunctType validator)
     {
         validateVoid(validator);
     }
-
-    template<typename FunctType>
-    typename ExpectType<FunctType, bool(*)(T), T>::type
-    expect(FunctType validator, string message = "validation fails")
-    {
-        validateBool(validator, message);
-    }
-
-    template<typename FunctType>
-    typename ExpectType<FunctType, void(*)(T), T>::type
-    expect(FunctType validator)
-    {
-        validateVoid(validator);
-    }
-
-
 
     T getResult(){
         return result;
