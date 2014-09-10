@@ -1,11 +1,5 @@
 var searchData=
 [
-  ['testresult',['TestResult',['../class_test_result.html',1,'']]],
-  ['testresultaborted',['TestResultAborted',['../class_test_result_aborted.html',1,'']]],
-  ['testresultfailed',['TestResultFailed',['../class_test_result_failed.html',1,'']]],
-  ['testresultignored',['TestResultIgnored',['../class_test_result_ignored.html',1,'']]],
-  ['testresultok',['TestResultOK',['../class_test_result_o_k.html',1,'']]],
-  ['textoutput',['TextOutput',['../class_text_output.html',1,'']]],
-  ['texttable',['TextTable',['../class_text_table.html',1,'']]],
-  ['type',['type',['../classrapidxml_1_1xml__node.html#a2c6a4315b98bcfa2e04fed3fa1b22c36',1,'rapidxml::xml_node::type() const '],['../classrapidxml_1_1xml__node.html#a499bbc9300c1b06821d5c08b24164c68',1,'rapidxml::xml_node::type(node_type type)']]]
+  ['value',['value',['../classrapidxml_1_1xml__base.html#adcdaccff61c665f039d9344e447b7445',1,'rapidxml::xml_base::value() const '],['../classrapidxml_1_1xml__base.html#a3b183c2db7022a6d30494dd2f0ac11e9',1,'rapidxml::xml_base::value(const Ch *value, std::size_t size)'],['../classrapidxml_1_1xml__base.html#a81e63ec4bfd2d7ef0a6c2ed49be6e623',1,'rapidxml::xml_base::value(const Ch *value)']]],
+  ['value_5fsize',['value_size',['../classrapidxml_1_1xml__base.html#a9fcf201ed0915ac18dd43b0b5dcfaf32',1,'rapidxml::xml_base']]]
 ];

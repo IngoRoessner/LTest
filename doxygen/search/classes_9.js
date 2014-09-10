@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['resultset',['ResultSet',['../class_result_set.html',1,'']]],
-  ['resultset_3c_20testresult_20_3e',['ResultSet&lt; TestResult &gt;',['../class_result_set_3_01_test_result_01_4.html',1,'']]],
-  ['resultsetmixin',['ResultSetMixin',['../class_result_set_mixin.html',1,'']]],
-  ['resultsetmixin_3c_20resultset_2c_20resulttype_20_3e',['ResultSetMixin&lt; ResultSet, ResultType &gt;',['../class_result_set_mixin.html',1,'']]],
-  ['resultsetmixin_3c_20resultset_2c_20testresult_20_3e',['ResultSetMixin&lt; ResultSet, TestResult &gt;',['../class_result_set_mixin.html',1,'']]],
-  ['resultwrapper',['ResultWrapper',['../class_result_wrapper.html',1,'']]]
+  ['testresult',['TestResult',['../class_test_result.html',1,'']]],
+  ['testresultaborted',['TestResultAborted',['../class_test_result_aborted.html',1,'']]],
+  ['testresultfailed',['TestResultFailed',['../class_test_result_failed.html',1,'']]],
+  ['testresultignored',['TestResultIgnored',['../class_test_result_ignored.html',1,'']]],
+  ['testresultok',['TestResultOK',['../class_test_result_o_k.html',1,'']]],
+  ['textoutput',['TextOutput',['../class_text_output.html',1,'']]],
+  ['texttable',['TextTable',['../class_text_table.html',1,'']]]
 ];

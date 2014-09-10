@@ -1,27 +1,26 @@
 var hierarchy =
 [
+    [ "functionpattern::AnyType", "structfunctionpattern_1_1_any_type.html", null ],
     [ "rapidxml::attribute_iterator< Ch >", "classrapidxml_1_1attribute__iterator.html", null ],
     [ "enable_if", null, [
-      [ "ExpectType_< T, Functor, ret, b >", "struct_expect_type__.html", null ],
-      [ "ExpectType_< T, Functor, ret, false >", "struct_expect_type___3_01_t_00_01_functor_00_01ret_00_01false_01_4.html", null ],
-      [ "ExpectType_< T, Functor, ret,!is_same< Functor, T >::value >", "struct_expect_type__.html", [
-        [ "ExpectType< Functor, ret, T >", "struct_expect_type.html", null ]
+      [ "FunctionPattern_< EnabledRet, Functor, ReturnType, Parameters >", "struct_function_pattern__.html", null ],
+      [ "FunctionPattern_< EnabledRet, Functor, functionpattern::AnyType, Parameters...>", "struct_function_pattern___3_01_enabled_ret_00_01_functor_00_01functionpattern_1_1_any_type_00_01_parameters_8_8_8_4.html", null ],
+      [ "FunctionPattern_< EnabledRet, Functor, ReturnType, functionpattern::AnyType >", "struct_function_pattern___3_01_enabled_ret_00_01_functor_00_01_return_type_00_01functionpattern_1_1_any_type_01_4.html", null ],
+      [ "FunctionPattern_< EnabledRet, Functor, ReturnType, Parameters...>", "struct_function_pattern__.html", [
+        [ "FunctorNot< NotThis >::NotFunctionPattern< false, EnabledRet, Functor, ReturnType, Parameters...>", "struct_functor_not_1_1_not_function_pattern_3_01false_00_01_enabled_ret_00_01_functor_00_01_retufb2ef254b89dd372e341e1801901bc13.html", null ]
       ] ],
-      [ "FunctionTypeIs< Functor, ret >", "struct_function_type_is.html", null ]
+      [ "FunctorNot< NotThis >::NotFunctionPattern< functionIsSameAsNotThis, EnabledRet, Functor, ReturnType, Parameters >", "struct_functor_not_1_1_not_function_pattern.html", null ]
     ] ],
     [ "exception", null, [
       [ "rapidxml::parse_error", "classrapidxml_1_1parse__error.html", null ]
     ] ],
     [ "LTAssert::FalseAssert", "class_l_t_assert_1_1_false_assert.html", null ],
     [ "rapidxml::file< Ch >", "classrapidxml_1_1file.html", null ],
-    [ "function_traits< T >", "structfunction__traits.html", null ],
-    [ "function_traits< bool(*)()>", "structfunction__traits_3_01bool_07_5_08_07_08_4.html", null ],
-    [ "function_traits< ReturnType(ClassType::*)(Args...) const  >", "structfunction__traits_3_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4.html", null ],
-    [ "function_traits< void(*)()>", "structfunction__traits_3_01void_07_5_08_07_08_4.html", null ],
-    [ "function_traits_for_ExpectType< T1, T2 >", "structfunction__traits__for___expect_type.html", null ],
-    [ "function_traits_for_ExpectType< T, bool(*)(T)>", "structfunction__traits__for___expect_type_3_01_t_00_01bool_07_5_08_07_t_08_4.html", null ],
-    [ "function_traits_for_ExpectType< T, ReturnType(ClassType::*)(Args...) const  >", "structfunction__traits__for___expect_type_3_01_t_00_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4.html", null ],
-    [ "function_traits_for_ExpectType< T, void(*)(T)>", "structfunction__traits__for___expect_type_3_01_t_00_01void_07_5_08_07_t_08_4.html", null ],
+    [ "FunctionType< ReturnType, Parameter >", "struct_function_type.html", null ],
+    [ "FunctorNot< NotThis >", "struct_functor_not.html", null ],
+    [ "GetFunctionType< Functor >", "struct_get_function_type.html", null ],
+    [ "GetFunctionType< ReturnType(*)(Parameter...)>", "struct_get_function_type_3_01_return_type_07_5_08_07_parameter_8_8_8_08_4.html", null ],
+    [ "GetFunctionType< ReturnType(ClassType::*)(Parameter...) const  >", "struct_get_function_type_3_01_return_type_07_class_type_1_1_5_08_07_parameter_8_8_8_08_01const_01_01_4.html", null ],
     [ "GetOutputFormat< ResultType >", "class_get_output_format.html", null ],
     [ "logic_error", null, [
       [ "LTestMisuse", "class_l_test_misuse.html", [

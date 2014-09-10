@@ -1,5 +1,11 @@
 var searchData=
 [
-  ['set_5fallocator',['set_allocator',['../classrapidxml_1_1memory__pool.html#a84d3d8d2cdfc00501e1dcf26d889ae03',1,'rapidxml::memory_pool']]],
-  ['size',['size',['../classrapidxml_1_1file.html#a20191d167c6e00a88a44ca9a3a54e1c5',1,'rapidxml::file']]]
+  ['testresult',['TestResult',['../class_test_result.html',1,'']]],
+  ['testresultaborted',['TestResultAborted',['../class_test_result_aborted.html',1,'']]],
+  ['testresultfailed',['TestResultFailed',['../class_test_result_failed.html',1,'']]],
+  ['testresultignored',['TestResultIgnored',['../class_test_result_ignored.html',1,'']]],
+  ['testresultok',['TestResultOK',['../class_test_result_o_k.html',1,'']]],
+  ['textoutput',['TextOutput',['../class_text_output.html',1,'']]],
+  ['texttable',['TextTable',['../class_text_table.html',1,'']]],
+  ['type',['type',['../classrapidxml_1_1xml__node.html#a2c6a4315b98bcfa2e04fed3fa1b22c36',1,'rapidxml::xml_node::type() const '],['../classrapidxml_1_1xml__node.html#a499bbc9300c1b06821d5c08b24164c68',1,'rapidxml::xml_node::type(node_type type)']]]
 ];

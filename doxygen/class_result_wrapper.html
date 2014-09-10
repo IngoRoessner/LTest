@@ -120,26 +120,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6315300b6d3c92427368754281708a63"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6315300b6d3c92427368754281708a63"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>expect</b> (T expectedValue, string message=&quot;not expected value&quot;)</td></tr>
 <tr class="separator:a6315300b6d3c92427368754281708a63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a890ec2d3f0a01375233ac4642bb98ea7"><td class="memTemplParams" colspan="2"><a class="anchor" id="a890ec2d3f0a01375233ac4642bb98ea7"></a>
+<tr class="memitem:a40f5c1f80bd5314183f57d8e47f4dcaf"><td class="memTemplParams" colspan="2"><a class="anchor" id="a40f5c1f80bd5314183f57d8e47f4dcaf"></a>
 template&lt;typename FunctType &gt; </td></tr>
-<tr class="memitem:a890ec2d3f0a01375233ac4642bb98ea7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_expect_type.html">ExpectType</a>&lt; FunctType, bool, T &gt;<br class="typebreak"/>
-::type&#160;</td><td class="memTemplItemRight" valign="bottom"><b>expect</b> (FunctType validator, string message=&quot;validation fails&quot;)</td></tr>
-<tr class="separator:a890ec2d3f0a01375233ac4642bb98ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e756a070805e50bc32ea08743870fe6"><td class="memTemplParams" colspan="2"><a class="anchor" id="a9e756a070805e50bc32ea08743870fe6"></a>
+<tr class="memitem:a40f5c1f80bd5314183f57d8e47f4dcaf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_functor_not.html">FunctorNot</a>&lt; T &gt;<br class="typebreak"/>
+::FunctionPattern&lt; void, <br class="typebreak"/>
+FunctType, bool, T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>expect</b> (FunctType validator, string message=&quot;validation fails&quot;)</td></tr>
+<tr class="separator:a40f5c1f80bd5314183f57d8e47f4dcaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e5c85070afd6e7f8dc9d0c745fef696"><td class="memTemplParams" colspan="2"><a class="anchor" id="a6e5c85070afd6e7f8dc9d0c745fef696"></a>
 template&lt;typename FunctType &gt; </td></tr>
-<tr class="memitem:a9e756a070805e50bc32ea08743870fe6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_expect_type.html">ExpectType</a>&lt; FunctType, void, T &gt;<br class="typebreak"/>
-::type&#160;</td><td class="memTemplItemRight" valign="bottom"><b>expect</b> (FunctType validator)</td></tr>
-<tr class="separator:a9e756a070805e50bc32ea08743870fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d63ce99e0ff74a6165cba9ce6ffbde6"><td class="memTemplParams" colspan="2"><a class="anchor" id="a2d63ce99e0ff74a6165cba9ce6ffbde6"></a>
-template&lt;typename FunctType &gt; </td></tr>
-<tr class="memitem:a2d63ce99e0ff74a6165cba9ce6ffbde6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_expect_type.html">ExpectType</a>&lt; FunctType, bool(*)(T), <br class="typebreak"/>
-T &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><b>expect</b> (FunctType validator, string message=&quot;validation fails&quot;)</td></tr>
-<tr class="separator:a2d63ce99e0ff74a6165cba9ce6ffbde6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a67c85158b1409e5d505f35e9b0288a"><td class="memTemplParams" colspan="2"><a class="anchor" id="a8a67c85158b1409e5d505f35e9b0288a"></a>
-template&lt;typename FunctType &gt; </td></tr>
-<tr class="memitem:a8a67c85158b1409e5d505f35e9b0288a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_expect_type.html">ExpectType</a>&lt; FunctType, void(*)(T), <br class="typebreak"/>
-T &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><b>expect</b> (FunctType validator)</td></tr>
-<tr class="separator:a8a67c85158b1409e5d505f35e9b0288a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e5c85070afd6e7f8dc9d0c745fef696"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_functor_not.html">FunctorNot</a>&lt; T &gt;<br class="typebreak"/>
+::FunctionPattern&lt; void, <br class="typebreak"/>
+FunctType, void, T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>expect</b> (FunctType validator)</td></tr>
+<tr class="separator:a6e5c85070afd6e7f8dc9d0c745fef696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3325557a90094ce9fcffa2fb0712a0c5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3325557a90094ce9fcffa2fb0712a0c5"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>getResult</b> ()</td></tr>
 <tr class="separator:a3325557a90094ce9fcffa2fb0712a0c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,7 +145,7 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>getResult</b> ()</td></t
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_result_wrapper.html">ResultWrapper</a></li>
-    <li class="footer">Generated on Mon Sep 8 2014 19:45:31 for LTest by
+    <li class="footer">Generated on Wed Sep 10 2014 16:42:23 for LTest by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

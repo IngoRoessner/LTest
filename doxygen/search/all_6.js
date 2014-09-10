@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['insert_5fattribute',['insert_attribute',['../classrapidxml_1_1xml__node.html#a9fe659cdf4a5b3bbf5e8ffc98db5a84f',1,'rapidxml::xml_node']]],
-  ['insert_5fnode',['insert_node',['../classrapidxml_1_1xml__node.html#a666880f42a7e486d78cc45ed51c7c46d',1,'rapidxml::xml_node']]]
+  ['last_5fattribute',['last_attribute',['../classrapidxml_1_1xml__node.html#a50c03f2db3fa51f27a73d86ec29a49d3',1,'rapidxml::xml_node']]],
+  ['last_5fnode',['last_node',['../classrapidxml_1_1xml__node.html#a2ace550c18cf10da6303773972d7157f',1,'rapidxml::xml_node']]],
+  ['ltest',['LTest',['../class_l_test.html',1,'']]],
+  ['ltestmisuse',['LTestMisuse',['../class_l_test_misuse.html',1,'']]]
 ];

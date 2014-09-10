@@ -1,5 +1,8 @@
 var annotated =
 [
+    [ "functionpattern", null, [
+      [ "AnyType", "structfunctionpattern_1_1_any_type.html", null ]
+    ] ],
     [ "LTAssert", null, [
       [ "FalseAssert", "class_l_t_assert_1_1_false_assert.html", "class_l_t_assert_1_1_false_assert" ]
     ] ],
@@ -14,18 +17,14 @@ var annotated =
       [ "attribute_iterator", "classrapidxml_1_1attribute__iterator.html", "classrapidxml_1_1attribute__iterator" ],
       [ "file", "classrapidxml_1_1file.html", "classrapidxml_1_1file" ]
     ] ],
-    [ "ExpectType", "struct_expect_type.html", null ],
-    [ "ExpectType_", "struct_expect_type__.html", null ],
-    [ "ExpectType_< T, Functor, ret, false >", "struct_expect_type___3_01_t_00_01_functor_00_01ret_00_01false_01_4.html", null ],
-    [ "function_traits", "structfunction__traits.html", null ],
-    [ "function_traits< bool(*)()>", "structfunction__traits_3_01bool_07_5_08_07_08_4.html", "structfunction__traits_3_01bool_07_5_08_07_08_4" ],
-    [ "function_traits< ReturnType(ClassType::*)(Args...) const  >", "structfunction__traits_3_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4.html", "structfunction__traits_3_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4" ],
-    [ "function_traits< void(*)()>", "structfunction__traits_3_01void_07_5_08_07_08_4.html", "structfunction__traits_3_01void_07_5_08_07_08_4" ],
-    [ "function_traits_for_ExpectType", "structfunction__traits__for___expect_type.html", null ],
-    [ "function_traits_for_ExpectType< T, bool(*)(T)>", "structfunction__traits__for___expect_type_3_01_t_00_01bool_07_5_08_07_t_08_4.html", "structfunction__traits__for___expect_type_3_01_t_00_01bool_07_5_08_07_t_08_4" ],
-    [ "function_traits_for_ExpectType< T, ReturnType(ClassType::*)(Args...) const  >", "structfunction__traits__for___expect_type_3_01_t_00_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4.html", "structfunction__traits__for___expect_type_3_01_t_00_01_return_type_07_class_type_1_1_5_08_07_args_8_8_8_08_01const_01_01_4" ],
-    [ "function_traits_for_ExpectType< T, void(*)(T)>", "structfunction__traits__for___expect_type_3_01_t_00_01void_07_5_08_07_t_08_4.html", "structfunction__traits__for___expect_type_3_01_t_00_01void_07_5_08_07_t_08_4" ],
-    [ "FunctionTypeIs", "struct_function_type_is.html", null ],
+    [ "FunctionPattern_", "struct_function_pattern__.html", null ],
+    [ "FunctionPattern_< EnabledRet, Functor, functionpattern::AnyType, Parameters...>", "struct_function_pattern___3_01_enabled_ret_00_01_functor_00_01functionpattern_1_1_any_type_00_01_parameters_8_8_8_4.html", null ],
+    [ "FunctionPattern_< EnabledRet, Functor, ReturnType, functionpattern::AnyType >", "struct_function_pattern___3_01_enabled_ret_00_01_functor_00_01_return_type_00_01functionpattern_1_1_any_type_01_4.html", null ],
+    [ "FunctionType", "struct_function_type.html", "struct_function_type" ],
+    [ "FunctorNot", "struct_functor_not.html", "struct_functor_not" ],
+    [ "GetFunctionType", "struct_get_function_type.html", null ],
+    [ "GetFunctionType< ReturnType(*)(Parameter...)>", "struct_get_function_type_3_01_return_type_07_5_08_07_parameter_8_8_8_08_4.html", "struct_get_function_type_3_01_return_type_07_5_08_07_parameter_8_8_8_08_4" ],
+    [ "GetFunctionType< ReturnType(ClassType::*)(Parameter...) const  >", "struct_get_function_type_3_01_return_type_07_class_type_1_1_5_08_07_parameter_8_8_8_08_01const_01_01_4.html", "struct_get_function_type_3_01_return_type_07_class_type_1_1_5_08_07_parameter_8_8_8_08_01const_01_01_4" ],
     [ "GetOutputFormat", "class_get_output_format.html", "class_get_output_format" ],
     [ "LTest", "class_l_test.html", null ],
     [ "LTestMisuse", "class_l_test_misuse.html", "class_l_test_misuse" ],
