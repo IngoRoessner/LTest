@@ -1,5 +1,6 @@
 #include "../src/LTest.h"
 #include "chrono_lib_test.h"
+#include "addTest.h"
 
 #include <fstream>
 

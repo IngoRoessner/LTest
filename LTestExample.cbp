@@ -73,6 +73,9 @@
 		<Unit filename="src/TestResult.h" />
 		<Unit filename="src/function_traits.h" />
 		<Unit filename="src/toStringPatch.h" />
+		<Unit filename="test-src/addTest.h">
+			<Option target="test-ltest-with-ltest" />
+		</Unit>
 		<Unit filename="test-src/chrono_lib_test.h">
 			<Option target="test-ltest-with-ltest" />
 		</Unit>
