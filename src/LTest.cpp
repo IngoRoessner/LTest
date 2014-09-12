@@ -44,7 +44,7 @@ double measure_time_taken(const clock_t& before){
 }
 
 
-TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFunction){
+shared_ptr<TestResult> LTest::runTest(const testname& tname, function<bool ()> testFunction){
     getInstanz().mutedStreams.mute();
     double time_taken_sec = -1.0;
     double user_time_taken_sec = -1.0;
@@ -79,8 +79,7 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
     catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "char exception: "+patch::to_string(e));}
     catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec,"string exception: "+e);}
     catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "Unknown Exception");}
-    getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
-    return getInstanz().resultset;
+    return shared_ptr<TestResult>(result);
 }
 
 
@@ -107,7 +106,7 @@ TestResultSet LTest::runTests(){
 	return runTests(test_names_sorted_by_insertion_order);
 }
 
-TestResultSet LTest::runTest(const testname test){
+shared_ptr<TestResult> LTest::runTest(const testname test){
     function<bool ()> testFunction;
     try{
         testFunction = getInstanz().testCases.at(test);
@@ -118,17 +117,23 @@ TestResultSet LTest::runTest(const testname test){
 }
 
  TestResultSet LTest::runTests(const TestSuite testsuite, bool force){
+    list<future<shared_ptr<TestResult>>> futureResults;
 	uint current_index = 0;
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLabel()){
 			if(force || !(isIgnored(testName) || isIgnored(current_index))){
-				LTest::runTest(testName);
+                futureResults.push_back(async(launch::async, [=](){
+                    return LTest::runTest(testName);
+                }));
 			} else {
 				TestResult* result = new TestResultIgnored(testName);
                 getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
 			}
 			current_index++;
     	}
+    }
+    for(auto &futureResult : futureResults){
+        getInstanz().resultset.push_back(futureResult.get());
     }
     return getInstanz().resultset;;
 }
@@ -144,7 +149,7 @@ TestResultSet LTest::run(ostream& os, Format format){
     return returnable;
 }
 
-TestResultSet LTest::run(testname test, ostream& os, Format format){
+shared_ptr<TestResult> LTest::run(testname test, ostream& os, Format format){
     auto&& returnable = runTest(test);
     os<<getInstanz().resultset.out(format);
     clearResultSet();

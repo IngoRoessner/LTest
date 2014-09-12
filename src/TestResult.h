@@ -106,7 +106,7 @@ class TestResultOK: public TestResult{
 public :
     TestResultOK(testname tname = "no_testname_given") : TestResult(tname) {}
 
-    TestResultOK(testname tname, MuteStreamMap muteStream, double time_taken, double user_time):TestResult(TestState::OK, time_taken, user_time, muteStream, tname){}
+    TestResultOK(testname tname, MuteStreamMap& muteStream, double time_taken, double user_time):TestResult(TestState::OK, time_taken, user_time, muteStream, tname){}
 
     static constexpr TestState expectedState = TestState::OK;
 };
@@ -122,7 +122,7 @@ class TestResultFailed: public TestResult{
 public :
     TestResultFailed(testname tname = "no_testname_given") : TestResult(tname) {}
 
-    TestResultFailed(testname tname, MuteStreamMap muteStream, double time_taken, double user_time, string msg = ""):TestResult(TestState::FAILED, time_taken, user_time, muteStream, tname), message(msg){}
+    TestResultFailed(testname tname, MuteStreamMap& muteStream, double time_taken, double user_time, string msg = ""):TestResult(TestState::FAILED, time_taken, user_time, muteStream, tname), message(msg){}
 
     static constexpr TestState expectedState = TestState::FAILED;
 
@@ -136,7 +136,7 @@ class TestResultAborted: public TestResult{
 public :
     TestResultAborted(testname tname = "no_testname_given") : TestResult(tname) {}
 
-    TestResultAborted(testname tname, MuteStreamMap muteStream, double time_taken, double user_time, string msg=""):TestResult(TestState::ABORTED, time_taken, user_time, muteStream, tname), message(msg){}
+    TestResultAborted(testname tname, MuteStreamMap& muteStream, double time_taken, double user_time, string msg=""):TestResult(TestState::ABORTED, time_taken, user_time, muteStream, tname), message(msg){}
 
     static constexpr TestState expectedState = TestState::ABORTED;
 

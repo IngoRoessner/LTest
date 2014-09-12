@@ -30,12 +30,15 @@
 #include <list>
 #include <functional>
 #include <type_traits>
+#include <mutex>
 
 using namespace std;
 
 class ManagedFixtureBase{
 public:
     virtual void runAfter() = 0;
+
+    mutex fixtureMutex;
 };
 
 
@@ -80,6 +83,9 @@ public:
     }
 
     T& operator()(){
+        if(changed == false){
+            fixtureMutex.lock();
+        }
         if(changed == false && beforeFunction){
             beforeFunction(fixture);
         }
@@ -98,6 +104,9 @@ public:
     }
 
     void runAfter(){
+        if(changed){
+            fixtureMutex.unlock();
+        }
         if(changed && afterFunction){
             afterFunction(fixture);
         }

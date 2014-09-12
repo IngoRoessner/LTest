@@ -1,0 +1,12 @@
+1.0.0 -> 1.1.0
+
+	API
+		runTest(testname, function) returns now shared_ptr<TestResult> (old: TestResultSet)
+		runTest(testname) returns now shared_ptr<TestResult> (old: TestResultSet)
+		run(testname) returns now shared_ptr<TestResult> (old: TestResultSet)
+
+	Threading
+
+		each test as own thread -> used global variables should be used via managedFixture
+
+

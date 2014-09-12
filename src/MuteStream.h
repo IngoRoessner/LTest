@@ -31,6 +31,7 @@
 #include <sstream>
 #include <map>
 #include <memory>
+#include <mutex>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ class MuteStream{
         ostringstream mutedStreamBuffer;
         streambuf* mutedStreamRdbuf;
         ostream& mutedStream;
+        mutex mutestreammutex;
 
     public:
 
@@ -54,12 +56,17 @@ class MuteStream{
         }
 
         void mute(){
-            mutedStreamBuffer.str("");
-            mutedStreamRdbuf = mutedStream.rdbuf();
-            mutedStream.rdbuf(mutedStreamBuffer.rdbuf());
+            mutestreammutex.lock();
+            if(mutedStreamRdbuf == NULL){
+                mutedStreamBuffer.str("");
+                mutedStreamRdbuf = mutedStream.rdbuf();
+                mutedStream.rdbuf(mutedStreamBuffer.rdbuf());
+            }
+            mutestreammutex.unlock();
         }
 
         string flush(string testName, bool testFailed){
+            mutestreammutex.lock();
         	string output = "";
             mutedStream.rdbuf(mutedStreamRdbuf);
             output = mutedStreamBuffer.str();
@@ -71,31 +78,40 @@ class MuteStream{
                 }
             }
             mutedStreamBuffer.str("");
+            mutestreammutex.unlock();
             return output;
         }
 
 };
 
 class MuteStreamMap: public map<ostream*, shared_ptr<MuteStream>>{
+private:
+    mutex mutestreammapmutex;
 public:
 
     void setVerboseMode(ostream& os, VerboseMode mode){
+        mutestreammapmutex.lock();
         MuteStreamMap& that = *this;
         that[&os] = shared_ptr<MuteStream>(new MuteStream(os, mode));
+        mutestreammapmutex.unlock();
     }
 
     void mute(){
+        mutestreammapmutex.lock();
         for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
             it->second->mute();
         }
+        mutestreammapmutex.unlock();
     }
 
     map<ostream*, string> flush(string testName, bool testFailed){
+        mutestreammapmutex.lock();
     	map<ostream*, string> returnable;
         for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
             string&& flushed_output = it->second->flush(testName, testFailed);
             returnable.emplace(it->first, move(flushed_output));
         }
+        mutestreammapmutex.unlock();
         return returnable;
     }
 

@@ -36,6 +36,7 @@
 #include <utility>
 #include <algorithm>
 #include <iterator>
+#include <future>
 #include "LTestAssert.h"
 #include "toStringPatch.h"
 #include "MuteStream.h"
@@ -68,7 +69,7 @@ class LTest
     static bool isIgnored(string testName);
     static bool isIgnored(uint testIndex);
 
-    static TestResultSet runTest(const string& testName, function<bool ()> testFunction);
+    static shared_ptr<TestResult> runTest(const string& testName, function<bool ()> testFunction);
 
 public:
     static void setVerboseMode(ostream& os, VerboseMode mode)
@@ -119,7 +120,7 @@ public:
     static TestResultSet run(ostream& os = cout, Format format = Format::Text);
 
     //runTest() & output()
-    static TestResultSet run(string test, ostream& os = cout, Format format = Format::Text);
+    static shared_ptr<TestResult> run(string test, ostream& os = cout, Format format = Format::Text);
 
     static TestResultSet run(TestSuite testsuite, bool force = false, ostream& os = cout, Format format = Format::Text);
 
@@ -129,7 +130,7 @@ public:
     static TestResultSet runTests();
 
     //execute all tests with the given name by force (no ignores). (result output via output())
-    static TestResultSet runTest(const string test);
+    static shared_ptr<TestResult> runTest(const string test);
 
     static TestResultSet runTests(const TestSuite testsuite, bool force = false);
 
