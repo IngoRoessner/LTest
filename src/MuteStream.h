@@ -47,6 +47,7 @@ class MuteStream{
         VerboseMode _mode;
         ostream& mutedStream;
         MultiThreadStreambuf* buffer;
+        string output;
 
     public:
         mutex mutestreammutex;
@@ -65,21 +66,23 @@ class MuteStream{
             buffer = MultiThreadStreambuf::getFromOutstream(mutedStream);
         }
 
+        void print(){
+            mutedStream<<output<<endl;
+        }
+
         string flush(string testName, bool testFailed){
             mutestreammutex.lock();
-            stop();
-        	string output = buffer->flushThisThreadsOutput();
+        	string tempoutput = buffer->flushThisThreadsOutput();
             if(_mode == VerboseMode::EVERYTHING || (testFailed && _mode == VerboseMode::FAIL)){
-                if(output.size()){
-                    mutedStream<<"----------------------------------"<<endl;
-                    mutedStream<<"OUTPUT: "<<testName<<endl;
-                    mutedStream<<"----------------------------------"<<endl;
-                    mutedStream<<output<<endl<<endl;
+                if(tempoutput.size()){
+                    output += "----------------------------------\n";
+                    output += "OUTPUT: "+testName+"\n";
+                    output += "----------------------------------\n";
+                    output += tempoutput + "\n\n";
                 }
             }
-            start();
             mutestreammutex.unlock();
-            return output;
+            return tempoutput;
         }
 };
 
@@ -104,6 +107,12 @@ public:
     void stop(){
         for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
             it->second->stop();
+        }
+    }
+
+    void print(){
+        for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
+            it->second->print();
         }
     }
 
