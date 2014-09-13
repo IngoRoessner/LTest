@@ -68,6 +68,7 @@ class MuteStream{
 
         void print(){
             mutedStream<<output<<endl;
+            output="";
         }
 
         string flush(string testName, bool testFailed){

@@ -11,13 +11,13 @@
 using namespace std;
 
 
-class PublicVirtualsBuffer: public streambuf{
+class PublicVirtualsBuffer: public stringbuf{
 public:
     using streambuf::imbue;
     using streambuf::setbuf;
     using streambuf::seekoff;
     using streambuf::seekpos;
-    //using streambuf::sync;
+    using streambuf::sync;
     using streambuf::showmanyc;
     using streambuf::xsgetn;
     using streambuf::underflow;
@@ -25,20 +25,15 @@ public:
     using streambuf::pbackfail;
     using streambuf::xsputn;
     using streambuf::overflow;
-
-    int_type sync(){
-        return 0;
-    }
 };
 
-class PublicVirtualsBufferStream: iostream{
+class PublicVirtualsBufferStream:public iostream{
 public:
     PublicVirtualsBufferStream():iostream(){
         delete this->rdbuf();
         this->rdbuf(new PublicVirtualsBuffer());
     }
 
-    using iostream::rdbuf;
 };
 
 class MultiThreadStreambuf : public streambuf{
@@ -51,10 +46,8 @@ private:
 
     PublicVirtualsBuffer* getCurrentBuf(){
         threadToStreamMutex.lock();
-        auto key =this_thread::get_id();
-        PublicVirtualsBufferStream& pvbs = threadToStream[key];
-        auto iostrBuffer = pvbs.rdbuf();
-        PublicVirtualsBuffer* result = dynamic_cast<PublicVirtualsBuffer*>(iostrBuffer);
+        PublicVirtualsBufferStream& pvbs = threadToStream[this_thread::get_id()];
+        PublicVirtualsBuffer* result = dynamic_cast<PublicVirtualsBuffer*>(pvbs.rdbuf());
         threadToStreamMutex.unlock();
         return result;
     }
@@ -84,10 +77,11 @@ public:
 
     string flushThisThreadsOutput(){
         threadToStreamMutex.lock();
-        string result;
-        PublicVirtualsBufferStream& os = threadToStream[this_thread::get_id()];
+        PublicVirtualsBufferStream& stream = threadToStream[this_thread::get_id()];
 
-
+        istreambuf_iterator<char> eos;
+        string result(istreambuf_iterator<char>(stream), eos);
+        //threadToStream.erase(threadToStream.find(this_thread::get_id()));
 
         calledIds.insert(this_thread::get_id());
         threadToStreamMutex.unlock();
@@ -99,8 +93,9 @@ public:
         string result = "";
         for(auto& kv : threadToStream){
             if(!calledIds.count(kv.first)){
-                //result += kv.second.str() + "\n";
-
+                istreambuf_iterator<char> eos;
+                string temp(istreambuf_iterator<char>(kv.second), eos);
+                result += temp + "\n";
             }
         }
         threadToStreamMutex.unlock();
