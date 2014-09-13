@@ -45,7 +45,6 @@ double measure_time_taken(const clock_t& before){
 
 
 shared_ptr<TestResult> LTest::runTest(const testname& tname, function<bool ()> testFunction){
-    getInstanz().mutedStreams.mute();
     double time_taken_sec = -1.0;
     double user_time_taken_sec = -1.0;
     TestResult* result;
@@ -117,6 +116,7 @@ shared_ptr<TestResult> LTest::runTest(const testname test){
 }
 
  TestResultSet LTest::runTests(const TestSuite testsuite, bool force){
+    getInstanz().mutedStreams.start();
     list<future<shared_ptr<TestResult>>> futureResults;
 	uint current_index = 0;
     for (auto &testName : testsuite){
@@ -135,6 +135,7 @@ shared_ptr<TestResult> LTest::runTest(const testname test){
     for(auto &futureResult : futureResults){
         getInstanz().resultset.push_back(futureResult.get());
     }
+    getInstanz().mutedStreams.stop();
     return getInstanz().resultset;;
 }
 

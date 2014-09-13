@@ -32,6 +32,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include "MultiThreadStreambuf.h"
 
 using namespace std;
 
@@ -44,44 +45,42 @@ enum VerboseMode{
 class MuteStream{
     private:
         VerboseMode _mode;
-        ostringstream mutedStreamBuffer;
-        streambuf* mutedStreamRdbuf;
         ostream& mutedStream;
-        mutex mutestreammutex;
+        MultiThreadStreambuf* buffer;
 
     public:
+        mutex mutestreammutex;
 
         MuteStream(ostream& os = cout, VerboseMode mode = VerboseMode::FAIL):mutedStream(os){
             _mode = mode;
+            MultiThreadStreambuf::addToOutstream(os);
+            buffer = MultiThreadStreambuf::getFromOutstream(os);
         }
 
-        void mute(){
-            mutestreammutex.lock();
-            if(mutedStreamRdbuf == NULL){
-                mutedStreamBuffer.str("");
-                mutedStreamRdbuf = mutedStream.rdbuf();
-                mutedStream.rdbuf(mutedStreamBuffer.rdbuf());
-            }
-            mutestreammutex.unlock();
+        void start(){
+            MultiThreadStreambuf::addToOutstream(mutedStream, buffer);
+        }
+
+        void stop(){
+            buffer = MultiThreadStreambuf::getFromOutstream(mutedStream);
         }
 
         string flush(string testName, bool testFailed){
             mutestreammutex.lock();
-        	string output = "";
-            mutedStream.rdbuf(mutedStreamRdbuf);
-            output = mutedStreamBuffer.str();
+            stop();
+        	string output = buffer->flushThisThreadsOutput();
             if(_mode == VerboseMode::EVERYTHING || (testFailed && _mode == VerboseMode::FAIL)){
                 if(output.size()){
-                    mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
-                    mutedStream<<output<<endl;
-                    mutedStream<<"--------------- OUTPUT END: "<<testName<<" -----------------"<<endl;
+                    mutedStream<<"----------------------------------"<<endl;
+                    mutedStream<<"OUTPUT: "<<testName<<endl;
+                    mutedStream<<"----------------------------------"<<endl;
+                    mutedStream<<output<<endl<<endl;
                 }
             }
-            mutedStreamBuffer.str("");
+            start();
             mutestreammutex.unlock();
             return output;
         }
-
 };
 
 class MuteStreamMap: public map<ostream*, shared_ptr<MuteStream>>{
@@ -96,12 +95,16 @@ public:
         mutestreammapmutex.unlock();
     }
 
-    void mute(){
-        mutestreammapmutex.lock();
+    void start(){
         for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-            it->second->mute();
+            it->second->start();
         }
-        mutestreammapmutex.unlock();
+    }
+
+    void stop(){
+        for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
+            it->second->stop();
+        }
     }
 
     map<ostream*, string> flush(string testName, bool testFailed){
