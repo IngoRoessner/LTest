@@ -137,7 +137,7 @@ shared_ptr<TestResult> LTest::runTest(const testname test){
     }
     getInstanz().mutedStreams.stop();
     getInstanz().mutedStreams.print();
-    return getInstanz().resultset;;
+    return getInstanz().resultset;
 }
 
 TestResultSet LTest::runTests(const initializer_list<string> testsuite, bool force){

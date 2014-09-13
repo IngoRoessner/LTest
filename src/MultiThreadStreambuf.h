@@ -81,7 +81,6 @@ public:
 
         istreambuf_iterator<char> eos;
         string result(istreambuf_iterator<char>(stream), eos);
-        //threadToStream.erase(threadToStream.find(this_thread::get_id()));
 
         calledIds.insert(this_thread::get_id());
         threadToStreamMutex.unlock();
