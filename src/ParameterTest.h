@@ -80,14 +80,14 @@ public:
     }
 
     template<typename FunctType>
-    FunctorNot<T>::FunctionPattern<void, FunctType, bool, T>
+    FunctionPatternNot<T, void, FunctType, bool, T>
     expect(FunctType validator, string message = "validation fails")
     {
         validateBool(validator, message);
     }
 
     template<typename FunctType>
-    FunctorNot<T>::FunctionPattern<void, FunctType, void, T>
+    FunctionPatternNot<T, void, FunctType, void, T>
     expect(FunctType validator)
     {
         validateVoid(validator);
