@@ -70,7 +70,7 @@ int main() {
 
     // now lets observe how we can even select further on our TestResultSet
 
-    auto filterSlowTests = [&DELAY](shared_ptr<TestResult> currentTestResult) -> bool {
+    auto filterSlowTests = [](shared_ptr<TestResult> currentTestResult) -> bool {
         double executionTimeInSeconds = currentTestResult -> get_time_taken();
         double executionTimeInMillSec = executionTimeInSeconds * 1000;
         return  executionTimeInMillSec > DELAY;
