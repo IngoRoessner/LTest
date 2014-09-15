@@ -65,9 +65,10 @@ class MuteStream{
             output = mutedStreamBuffer.str();
             if(_mode == VerboseMode::EVERYTHING || (testFailed && _mode == VerboseMode::FAIL)){
                 if(output.size()){
-                    mutedStream<<"-------------- OUTPUT START: "<<testName<<" ----------------"<<endl;
-                    mutedStream<<output<<endl;
-                    mutedStream<<"--------------- OUTPUT END: "<<testName<<" -----------------"<<endl;
+                    mutedStream << "----------------------------------" << endl;;
+                    mutedStream << "OUTPUT: " << testName << endl;
+                    mutedStream << "----------------------------------" << endl;
+                    mutedStream << output << endl << endl;
                 }
             }
             mutedStreamBuffer.str("");
