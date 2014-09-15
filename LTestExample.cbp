@@ -58,6 +58,7 @@
 		<Unit filename="src/LTestAssert.h" />
 		<Unit filename="src/LTestMisuseException.h" />
 		<Unit filename="src/ManagedFixture.h" />
+		<Unit filename="src/MultiThreadStreambuf.h" />
 		<Unit filename="src/MuteStream.h" />
 		<Unit filename="src/OutputFormat/Format.h" />
 		<Unit filename="src/OutputFormat/OutputFormat.h" />
@@ -71,7 +72,6 @@
 		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_utils.hpp" />
 		<Unit filename="src/ParameterTest.h" />
 		<Unit filename="src/TestResult.h" />
-		<Unit filename="src/function_traits.h" />
 		<Unit filename="src/toStringPatch.h" />
 		<Unit filename="test-src/addTest.h">
 			<Option target="test-ltest-with-ltest" />
