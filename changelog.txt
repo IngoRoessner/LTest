@@ -1,0 +1,4 @@
+1.0.1
+	- Fix expect() ambiguous bug which occured with CLang
+	- Change format of outputs which are captured by MuteStream or setVerboseMode
+	- Change in resultset.h example 
