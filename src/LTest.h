@@ -69,7 +69,7 @@ class LTest
     static bool isIgnored(std::string testName);
     static bool isIgnored(uint testIndex);
 
-    static TestResultSet runTest(const std::string& testName, std::function<bool ()> testFunction);
+    static std::shared_ptr<TestResult> runTest(const std::string& testName, std::function<bool ()> testFunction);
 
 public:
     static void setVerboseMode(std::ostream& os, VerboseMode mode)

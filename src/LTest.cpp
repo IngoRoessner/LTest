@@ -44,7 +44,7 @@ double measure_time_taken(const clock_t& before){
 }
 
 
-TestResultSet LTest::runTest(const testname& tname, std::function<bool ()> testFunction){
+std::shared_ptr<TestResult> LTest::runTest(const testname& tname, std::function<bool ()> testFunction){
     getInstanz().mutedStreams.mute();
     double time_taken_sec = -1.0;
     double user_time_taken_sec = -1.0;
@@ -79,8 +79,7 @@ TestResultSet LTest::runTest(const testname& tname, std::function<bool ()> testF
     catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "char exception: "+patch::to_string(e));}
     catch(std::string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec,"string exception: "+e);}
     catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "Unknown Exception");}
-    getInstanz().resultset.push_back(std::shared_ptr<TestResult>(result));
-    return getInstanz().resultset;
+    return std::shared_ptr<TestResult>(result);
 }
 
 
@@ -114,7 +113,9 @@ TestResultSet LTest::runTest(const testname test){
     }catch(...){
         throw WrongTestName("try to run test \""+test+"\" which not exists");
     }
-	return runTest(test, testFunction);
+    TestResultSet resultset;
+    resultset.push_back(runTest(test, testFunction));
+	return resultset;
 }
 
  TestResultSet LTest::runTests(const TestSuite testsuite, bool force){
@@ -122,7 +123,9 @@ TestResultSet LTest::runTest(const testname test){
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLabel()){
 			if(force || !(isIgnored(testName) || isIgnored(current_index))){
-				LTest::runTest(testName);
+                for(std::shared_ptr<TestResult>& element : LTest::runTest(testName)){
+                    getInstanz().resultset.push_back(element);
+                }
 			} else {
 				TestResult* result = new TestResultIgnored(testName);
                 getInstanz().resultset.push_back(std::shared_ptr<TestResult>(result));
@@ -145,10 +148,9 @@ TestResultSet LTest::run(std::ostream& os, Format format){
 }
 
 TestResultSet LTest::run(testname test, std::ostream& os, Format format){
-    auto&& returnable = runTest(test);
-    os<<getInstanz().resultset.out(format);
-    clearResultSet();
-    return returnable;
+    TestResultSet resultset = runTest(test);
+    os<<resultset.out(format);
+    return resultset;
 }
 
 TestResultSet LTest::run(TestSuite testsuite, bool force, std::ostream& os, Format format){
