@@ -67,6 +67,6 @@
 #endif // EXAMPLE
 
 int main(){
-    //LTest::setCaptureMode(std::cout, CaptureMode::DIRECTOUT);
+    //LTest::setStreamCaptureMode(std::cout, CaptureMode::DIRECTOUT);
     EXAMPLE::main();
 }
