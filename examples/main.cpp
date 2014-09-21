@@ -57,9 +57,9 @@
             parametertest::main();
             resultset::main();
             leap_year::main();
-            std::ofstream xmlfile;
-            xmlfile.open("bin/TEST-ExampleTestsResults.xml");
+            std::ofstream xmlfile("bin/TEST-ExampleTestsResults.xml");
             LTest::run(xmlfile, Format::Xml);
+            xmlfile.close();
             return 0;
         }
     }
@@ -67,5 +67,6 @@
 #endif // EXAMPLE
 
 int main(){
+    //LTest::setCaptureMode(std::cout, CaptureMode::DIRECTOUT);
     EXAMPLE::main();
 }

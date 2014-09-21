@@ -72,9 +72,9 @@ class LTest
     static std::shared_ptr<TestResult> runTest(const std::string& testName, std::function<bool ()> testFunction);
 
 public:
-    static void setVerboseMode(std::ostream& os, VerboseMode mode)
+    static void setCaptureMode(std::ostream& os, CaptureMode mode)
     {
-        getInstanz().mutedStreams.setVerboseMode(os, mode);
+        getInstanz().mutedStreams.setCaptureMode(os, mode);
     }
 
     //adds a test function to the test list, execution via run(), runTests() or runTest()

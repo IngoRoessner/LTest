@@ -81,6 +81,25 @@ namespace LTestOut{
            return table.out();
         }
 
+        string getCapturedStreamsOut(ResultType resultset){
+            string out = "";
+            for(auto& result : resultset){
+                string resOut = result->get_system_out();
+                if(resOut.size()){
+                    out = out + "----------------------------------" + "\n";
+                    out = out + "COUT OUTPUT: " + result->get_testname() +"\n";
+                    out = out + "----------------------------------" +"\n";
+                    out = out + resOut +"\n\n";
+                }
+                resOut = result->get_system_err();
+                if(resOut.size()){
+                    out = out + "----------------------------------" + "\n";
+                    out = out + "COUT OUTPUT: " + result->get_testname() +"\n";
+                    out = out + "----------------------------------" +"\n";
+                    out = out + resOut +"\n\n";
+                }            }
+            return out;
+        }
 
         string getOut(ResultType resultset){
             table.setColumns({"TestName", "Status", "Message", "Time"});
@@ -89,7 +108,7 @@ namespace LTestOut{
             addAbortToTable(resultset);
             addIgnoreToTable(resultset);
 
-            return "\n"+table.out()+"\n\n"+getTotal(resultset)+"\n\n";
+            return "\n"+getCapturedStreamsOut(resultset)+table.out()+"\n\n"+getTotal(resultset)+"\n\n";
         }
 
     public:

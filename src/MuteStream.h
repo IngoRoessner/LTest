@@ -34,22 +34,23 @@
 
 namespace LTestSource{
 
-    enum VerboseMode{
+    enum CaptureMode{
         EVERYTHING,
         FAIL,
-        NONE
+        NONE,
+        DIRECTOUT
     };
 
     class MuteStream{
         private:
-            VerboseMode _mode;
+            CaptureMode _mode;
             std::ostringstream mutedStreamBuffer;
             std::streambuf* mutedStreamRdbuf;
             std::ostream& mutedStream;
 
         public:
 
-            MuteStream(std::ostream& os = std::cout, VerboseMode mode = VerboseMode::FAIL):mutedStream(os){
+            MuteStream(std::ostream& os = std::cout, CaptureMode mode = CaptureMode::FAIL):mutedStream(os){
                 _mode = mode;
             }
 
@@ -62,14 +63,8 @@ namespace LTestSource{
             std::string flush(std::string testName, bool testFailed){
                 std::string output = "";
                 mutedStream.rdbuf(mutedStreamRdbuf);
-                output = mutedStreamBuffer.str();
-                if(_mode == VerboseMode::EVERYTHING || (testFailed && _mode == VerboseMode::FAIL)){
-                    if(output.size()){
-                        mutedStream << "----------------------------------" << std::endl;;
-                        mutedStream << "OUTPUT: " << testName << std::endl;
-                        mutedStream << "----------------------------------" << std::endl;
-                        mutedStream << output << std::endl << std::endl;
-                    }
+                if(_mode == CaptureMode::EVERYTHING || (testFailed && _mode == CaptureMode::FAIL)){
+                    output = mutedStreamBuffer.str();
                 }
                 mutedStreamBuffer.str("");
                 return output;
@@ -80,9 +75,15 @@ namespace LTestSource{
     class MuteStreamMap: public std::map<std::ostream*, std::shared_ptr<MuteStream>>{
     public:
 
-        void setVerboseMode(std::ostream& os, VerboseMode mode){
+        void setCaptureMode(std::ostream& os, CaptureMode mode){
             MuteStreamMap& that = *this;
-            that[&os] = std::shared_ptr<MuteStream>(new MuteStream(os, mode));
+            if(mode == CaptureMode::DIRECTOUT){
+                if(that.count(&os)){
+                    that.erase(&os);
+                }
+            }else{
+                that[&os] = std::shared_ptr<MuteStream>(new MuteStream(os, mode));
+            }
         }
 
         void mute(){

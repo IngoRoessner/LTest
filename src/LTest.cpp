@@ -29,8 +29,8 @@
 double CLOCKS_PER_SEC_AS_DOUBLE = static_cast<double>(CLOCKS_PER_SEC);
 
 LTest::LTest():counter(0){
-    mutedStreams.setVerboseMode(std::cout, VerboseMode::FAIL);
-    mutedStreams.setVerboseMode(std::cerr, VerboseMode::FAIL);
+    mutedStreams.setCaptureMode(std::cout, CaptureMode::FAIL);
+    mutedStreams.setCaptureMode(std::cerr, CaptureMode::FAIL);
 }
 
 LTest& LTest::getInstanz(){
