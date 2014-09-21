@@ -31,6 +31,8 @@
 
 namespace parametertest{
 
+using namespace std;
+
 void viii(int a, int b, int c){
     cout<<"viii"<<a<<b<<c<<endl;
 }

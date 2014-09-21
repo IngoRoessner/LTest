@@ -2,3 +2,7 @@
 	- Fix expect() ambiguous bug which occured with CLang
 	- Change format of outputs which are captured by MuteStream or setVerboseMode
 	- Change in resultset.h example 
+
+1.1.0
+	- Namespace LTestSource for internal Classes, Types and Functions
+	- Namespace LTestOut for Output Classes and Types (for example Format::Text becomes LTestOut::Format::Text)

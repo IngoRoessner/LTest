@@ -29,16 +29,15 @@
 
 #include <exception>
 
-using namespace std;
 
-class LTestMisuse: public logic_error{
+class LTestMisuse: public std::logic_error{
 public:
-    LTestMisuse(string msg):logic_error(msg){}
+    LTestMisuse(std::string msg):std::logic_error(msg){}
 };
 
 class WrongTestName: public LTestMisuse{
 public:
-    WrongTestName(string msg):LTestMisuse(msg){}
+    WrongTestName(std::string msg):LTestMisuse(msg){}
 };
 
 #endif // LTESTMISUSEEXCEPTION_H_INCLUDED

@@ -29,12 +29,13 @@
 
 #include <sstream>
 #include <string>
-
-template<typename ResultType>
-class OutputFormatBase{
-public:
-    virtual std::string run(ResultType resultset)=0;
-    virtual ~OutputFormatBase(){};
-};
+namespace LTestOut{
+    template<typename ResultType>
+    class OutputFormatBase{
+    public:
+        virtual std::string run(ResultType resultset)=0;
+        virtual ~OutputFormatBase(){};
+    };
+}
 
 #endif // OUTPUTFORMATBASE_H_INCLUDED

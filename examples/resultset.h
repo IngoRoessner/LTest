@@ -70,14 +70,14 @@ int main() {
 
     // now lets observe how we can even select further on our TestResultSet
 
-    auto filterSlowTests = [](shared_ptr<TestResult> currentTestResult) -> bool {
+    auto filterSlowTests = [](std::shared_ptr<TestResult> currentTestResult) -> bool {
         double executionTimeInSeconds = currentTestResult -> get_time_taken();
         double executionTimeInMillSec = executionTimeInSeconds * 1000;
         return  executionTimeInMillSec > DELAY;
     };
 
     TestResultSet slowTests = result.getSubSet(filterSlowTests); // retrieves all tests which took longer than DELAY seconds
-    std::cout << slowTests.out() << endl;   // output the slow tests
+    std::cout << slowTests.out() << std::endl;   // output the slow tests
     return 0;
 }
 

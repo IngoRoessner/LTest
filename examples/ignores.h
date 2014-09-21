@@ -32,6 +32,7 @@
 #include <list>
 
 namespace ignores{
+using namespace std;
 
 string str = "do your tests";
 TestSuite suite = {

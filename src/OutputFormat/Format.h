@@ -26,9 +26,9 @@
 
 #ifndef FORMAT_H_
 #define FORMAT_H_
-
-enum class Format{
-    Text, Xml
-};
-
+namespace LTestOut{
+    enum class Format{
+        Text, Xml
+    };
+}
 #endif /* FORMAT_H_ */

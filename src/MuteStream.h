@@ -32,74 +32,74 @@
 #include <map>
 #include <memory>
 
-using namespace std;
+namespace LTestSource{
 
-enum VerboseMode{
-    EVERYTHING,
-    FAIL,
-    NONE
-};
+    enum VerboseMode{
+        EVERYTHING,
+        FAIL,
+        NONE
+    };
 
-class MuteStream{
-    private:
-        VerboseMode _mode;
-        ostringstream mutedStreamBuffer;
-        streambuf* mutedStreamRdbuf;
-        ostream& mutedStream;
+    class MuteStream{
+        private:
+            VerboseMode _mode;
+            std::ostringstream mutedStreamBuffer;
+            std::streambuf* mutedStreamRdbuf;
+            std::ostream& mutedStream;
 
+        public:
+
+            MuteStream(std::ostream& os = std::cout, VerboseMode mode = VerboseMode::FAIL):mutedStream(os){
+                _mode = mode;
+            }
+
+            void mute(){
+                mutedStreamBuffer.str("");
+                mutedStreamRdbuf = mutedStream.rdbuf();
+                mutedStream.rdbuf(mutedStreamBuffer.rdbuf());
+            }
+
+            std::string flush(std::string testName, bool testFailed){
+                std::string output = "";
+                mutedStream.rdbuf(mutedStreamRdbuf);
+                output = mutedStreamBuffer.str();
+                if(_mode == VerboseMode::EVERYTHING || (testFailed && _mode == VerboseMode::FAIL)){
+                    if(output.size()){
+                        mutedStream << "----------------------------------" << std::endl;;
+                        mutedStream << "OUTPUT: " << testName << std::endl;
+                        mutedStream << "----------------------------------" << std::endl;
+                        mutedStream << output << std::endl << std::endl;
+                    }
+                }
+                mutedStreamBuffer.str("");
+                return output;
+            }
+
+    };
+
+    class MuteStreamMap: public std::map<std::ostream*, std::shared_ptr<MuteStream>>{
     public:
 
-        MuteStream(ostream& os = cout, VerboseMode mode = VerboseMode::FAIL):mutedStream(os){
-            _mode = mode;
+        void setVerboseMode(std::ostream& os, VerboseMode mode){
+            MuteStreamMap& that = *this;
+            that[&os] = std::shared_ptr<MuteStream>(new MuteStream(os, mode));
         }
 
         void mute(){
-            mutedStreamBuffer.str("");
-            mutedStreamRdbuf = mutedStream.rdbuf();
-            mutedStream.rdbuf(mutedStreamBuffer.rdbuf());
-        }
-
-        string flush(string testName, bool testFailed){
-        	string output = "";
-            mutedStream.rdbuf(mutedStreamRdbuf);
-            output = mutedStreamBuffer.str();
-            if(_mode == VerboseMode::EVERYTHING || (testFailed && _mode == VerboseMode::FAIL)){
-                if(output.size()){
-                    mutedStream << "----------------------------------" << endl;;
-                    mutedStream << "OUTPUT: " << testName << endl;
-                    mutedStream << "----------------------------------" << endl;
-                    mutedStream << output << endl << endl;
-                }
+            for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
+                it->second->mute();
             }
-            mutedStreamBuffer.str("");
-            return output;
         }
 
-};
-
-class MuteStreamMap: public map<ostream*, shared_ptr<MuteStream>>{
-public:
-
-    void setVerboseMode(ostream& os, VerboseMode mode){
-        MuteStreamMap& that = *this;
-        that[&os] = shared_ptr<MuteStream>(new MuteStream(os, mode));
-    }
-
-    void mute(){
-        for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-            it->second->mute();
+        std::map<std::ostream*, std::string> flush(std::string testName, bool testFailed){
+            std::map<std::ostream*, std::string> returnable;
+            for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
+                std::string&& flushed_output = it->second->flush(testName, testFailed);
+                returnable.emplace(it->first, std::move(flushed_output));
+            }
+            return returnable;
         }
-    }
 
-    map<ostream*, string> flush(string testName, bool testFailed){
-    	map<ostream*, string> returnable;
-        for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-            string&& flushed_output = it->second->flush(testName, testFailed);
-            returnable.emplace(it->first, move(flushed_output));
-        }
-        return returnable;
-    }
-
-};
-
+    };
+}
 #endif // MUTESTREAM_H_INCLUDED

@@ -31,7 +31,6 @@
 #include <functional>
 #include <type_traits>
 
-using namespace std;
 
 class ManagedFixtureBase{
 public:
@@ -39,7 +38,7 @@ public:
 };
 
 
-class ManagedFixtureList: public list<ManagedFixtureBase*>{
+class ManagedFixtureList: public std::list<ManagedFixtureBase*>{
 public:
     static ManagedFixtureList& getInstance(){
         static  ManagedFixtureList instance;
@@ -61,8 +60,8 @@ template<typename T>
 class ManagedRefFixture: public ManagedFixtureBase{
     T& fixture;
     bool changed;
-    function<void(T&)> beforeFunction;
-    function<void(T&)> afterFunction;
+    std::function<void(T&)> beforeFunction;
+    std::function<void(T&)> afterFunction;
 public:
     ManagedRefFixture(T& t): fixture(t), changed(false){
         ManagedFixtureList::getInstance().push_back(this);
@@ -87,12 +86,12 @@ public:
         return fixture;
     }
 
-    ManagedRefFixture<T>& before(function<void(T&)> funct){
+    ManagedRefFixture<T>& before(std::function<void(T&)> funct){
         beforeFunction = funct;
         return *this;
     }
 
-    ManagedRefFixture<T>& after(function<void(T&)> funct){
+    ManagedRefFixture<T>& after(std::function<void(T&)> funct){
         afterFunction = funct;
         return *this;
     }
@@ -110,8 +109,8 @@ class ManagedRValFixture: public ManagedFixtureBase{
     T fixture_r_value;
     T& fixture;
     bool changed;
-    function<void(T&)> beforeFunction;
-    function<void(T&)> afterFunction;
+    std::function<void(T&)> beforeFunction;
+    std::function<void(T&)> afterFunction;
 public:
 
     ManagedRValFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), changed(false){
@@ -146,12 +145,12 @@ public:
         return fixture;
     }
 
-    ManagedRValFixture<T>& before(function<void(T&)> funct){
+    ManagedRValFixture<T>& before(std::function<void(T&)> funct){
         beforeFunction = funct;
         return *this;
     }
 
-    ManagedRValFixture<T>& after(function<void(T&)> funct){
+    ManagedRValFixture<T>& after(std::function<void(T&)> funct){
         afterFunction = funct;
         return *this;
     }
@@ -167,9 +166,9 @@ public:
 
 
 template <typename T>
-using ManagedFixture = typename conditional< is_reference<T>::value,
-                                                 ManagedRefFixture<typename remove_reference<T>::type>,
-												 ManagedRValFixture<typename remove_reference<T>::type>
+using ManagedFixture = typename std::conditional< std::is_reference<T>::value,
+                                                 ManagedRefFixture<typename std::remove_reference<T>::type>,
+												 ManagedRValFixture<typename std::remove_reference<T>::type>
 												>::type;
 
 

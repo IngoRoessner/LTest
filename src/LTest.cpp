@@ -29,8 +29,8 @@
 double CLOCKS_PER_SEC_AS_DOUBLE = static_cast<double>(CLOCKS_PER_SEC);
 
 LTest::LTest():counter(0){
-    mutedStreams.setVerboseMode(cout, VerboseMode::FAIL);
-    mutedStreams.setVerboseMode(cerr, VerboseMode::FAIL);
+    mutedStreams.setVerboseMode(std::cout, VerboseMode::FAIL);
+    mutedStreams.setVerboseMode(std::cerr, VerboseMode::FAIL);
 }
 
 LTest& LTest::getInstanz(){
@@ -44,21 +44,21 @@ double measure_time_taken(const clock_t& before){
 }
 
 
-TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFunction){
+TestResultSet LTest::runTest(const testname& tname, std::function<bool ()> testFunction){
     getInstanz().mutedStreams.mute();
     double time_taken_sec = -1.0;
     double user_time_taken_sec = -1.0;
     TestResult* result;
     try{
-        chrono::time_point<std::chrono::system_clock> start = chrono::system_clock::now(),
+        std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now(),
                                                       end;
         clock_t before;
         before = clock();
         try {
             bool&& test_successful = testFunction();
             user_time_taken_sec = measure_time_taken(before);
-            end = chrono::system_clock::now();
-            time_taken_sec = chrono::duration_cast<chrono::nanoseconds>(end - start).count() / 1e9;
+            end = std::chrono::system_clock::now();
+            time_taken_sec = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1e9;
             ManagedFixtureList::after();
             if(test_successful){
                 result = new TestResultOK(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec);
@@ -73,13 +73,13 @@ TestResultSet LTest::runTest(const testname& tname, function<bool ()> testFuncti
     }
     catch(LTestMisuse e){throw e;} // TODO well this code smells a bit, i needed to changes to much to add a field, DRY?
     catch(LTAssert::FalseAssert a){result = new TestResultFailed(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, a.what());}
-    catch(runtime_error e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, e.what());}
-    catch(exception e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, e.what());}
-    catch(int e){stringstream es; es<<e; result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "int exception: "+es.str());}
+    catch(std::runtime_error e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, e.what());}
+    catch(std::exception e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, e.what());}
+    catch(int e){std::stringstream es; es<<e; result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "int exception: "+es.str());}
     catch(char e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "char exception: "+patch::to_string(e));}
-    catch(string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec,"string exception: "+e);}
+    catch(std::string e){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec,"string exception: "+e);}
     catch(...){result = new TestResultAborted(tname, getInstanz().mutedStreams, time_taken_sec, user_time_taken_sec, "Unknown Exception");}
-    getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
+    getInstanz().resultset.push_back(std::shared_ptr<TestResult>(result));
     return getInstanz().resultset;
 }
 
@@ -101,14 +101,14 @@ bool LTest::isIgnored(uint testIndex){
 }
 
 TestResultSet LTest::runTests(){
-	map<uint, testname> inserted_map = getInstanz().test_inserted_order;
-	list<testname> test_names_sorted_by_insertion_order;
-	transform(inserted_map.begin(), inserted_map.end(), back_inserter(test_names_sorted_by_insertion_order), [](map<uint, testname>::value_type& val){return val.second;});
+	std::map<uint, testname> inserted_map = getInstanz().test_inserted_order;
+	std::list<testname> test_names_sorted_by_insertion_order;
+	std::transform(inserted_map.begin(), inserted_map.end(), back_inserter(test_names_sorted_by_insertion_order), [](std::map<uint, testname>::value_type& val){return val.second;});
 	return runTests(test_names_sorted_by_insertion_order);
 }
 
 TestResultSet LTest::runTest(const testname test){
-    function<bool ()> testFunction;
+    std::function<bool ()> testFunction;
     try{
         testFunction = getInstanz().testCases.at(test);
     }catch(...){
@@ -125,7 +125,7 @@ TestResultSet LTest::runTest(const testname test){
 				LTest::runTest(testName);
 			} else {
 				TestResult* result = new TestResultIgnored(testName);
-                getInstanz().resultset.push_back(shared_ptr<TestResult>(result));
+                getInstanz().resultset.push_back(std::shared_ptr<TestResult>(result));
 			}
 			current_index++;
     	}
@@ -133,52 +133,52 @@ TestResultSet LTest::runTest(const testname test){
     return getInstanz().resultset;;
 }
 
-TestResultSet LTest::runTests(const initializer_list<string> testsuite, bool force){
+TestResultSet LTest::runTests(const std::initializer_list<std::string> testsuite, bool force){
     return LTest::runTests(TestSuite(testsuite), force);
 }
 
-TestResultSet LTest::run(ostream& os, Format format){
+TestResultSet LTest::run(std::ostream& os, Format format){
 	auto&& returnable = runTests();
     os<<getInstanz().resultset.out(format);
     clearResultSet();
     return returnable;
 }
 
-TestResultSet LTest::run(testname test, ostream& os, Format format){
+TestResultSet LTest::run(testname test, std::ostream& os, Format format){
     auto&& returnable = runTest(test);
     os<<getInstanz().resultset.out(format);
     clearResultSet();
     return returnable;
 }
 
-TestResultSet LTest::run(TestSuite testsuite, bool force, ostream& os, Format format){
+TestResultSet LTest::run(TestSuite testsuite, bool force, std::ostream& os, Format format){
 	auto&& returnable = runTests(testsuite, force);
     os<<getInstanz().resultset.out(format);
     clearResultSet();
     return returnable;
 }
 
-TestResultSet LTest::run(initializer_list<string> testsuite, bool force, ostream& os, Format format){
+TestResultSet LTest::run(std::initializer_list<std::string> testsuite, bool force, std::ostream& os, Format format){
     return LTest::run(TestSuite(testsuite), force, os, format);
 }
 
-void LTest::addTestFunction(testname testName, function<bool ()> test){
+void LTest::addTestFunction(testname testName, std::function<bool ()> test){
     if(getInstanz().testCases.count(testName) > 0){
-        throw logic_error("testname '"+testName+"' is not unique");
+        throw std::logic_error("testname '"+testName+"' is not unique");
     }
 
 	uint current_count = getInstanz().counter;
     getInstanz().test_inserted_order[current_count] = testName;
-    getInstanz().testCases.emplace(move(testName), move(test));
+    getInstanz().testCases.emplace(std::move(testName), std::move(test));
     getInstanz().counter++;
 }
 
-string LTest::ignore(testname testName){
+std::string LTest::ignore(testname testName){
     getInstanz().ignores.insert(testName);
     return getIgnoreLabel();
 }
 
-string LTest::ignoreNext(unsigned int nextNTests){
+std::string LTest::ignoreNext(unsigned int nextNTests){
     unsigned int start = getInstanz().counter;
     unsigned int stop = start + nextNTests;
     for(unsigned int i = start; i < stop; i++){
@@ -187,7 +187,7 @@ string LTest::ignoreNext(unsigned int nextNTests){
     return getIgnoreLabel();
 }
 
-string LTest::ignore(TestSuite testsuite){
+std::string LTest::ignore(TestSuite testsuite){
     for (auto testName : testsuite){
         if(testName != getIgnoreLabel()){
             LTest::ignore(testName);
@@ -196,11 +196,11 @@ string LTest::ignore(TestSuite testsuite){
     return getIgnoreLabel();
 }
 
-string LTest::ignore(initializer_list<string> testsuite){
+std::string LTest::ignore(std::initializer_list<std::string> testsuite){
     return LTest::ignore(TestSuite(testsuite));
 }
 
-string LTest::getIgnoreLabel(){
+std::string LTest::getIgnoreLabel(){
     return "___LTEST::IGNORE___";
 }
 

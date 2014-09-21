@@ -57,7 +57,7 @@
             parametertest::main();
             resultset::main();
             leap_year::main();
-            ofstream xmlfile;
+            std::ofstream xmlfile;
             xmlfile.open("bin/TEST-ExampleTestsResults.xml");
             LTest::run(xmlfile, Format::Xml);
             return 0;

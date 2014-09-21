@@ -47,51 +47,51 @@
 #include "ManagedFixture.h"
 #include "FunctionPattern.h"
 
-using namespace std;
+using namespace LTestSource;
 
-using TestSuite = list<string>;
+using TestSuite = std::list<std::string>;
 
 class LTest
 {
     typedef unsigned int uint;
-    typedef map<testname, function<bool ()>> testname_to_function_mapping;
+    typedef std::map<testname, std::function<bool ()>> testname_to_function_mapping;
     testname_to_function_mapping testCases;
-    map<uint, testname> test_inserted_order;
-    set<testname> ignores;
-    set<uint> ignored_indexes;
+    std::map<uint, testname> test_inserted_order;
+    std::set<testname> ignores;
+    std::set<uint> ignored_indexes;
     TestResultSet resultset;
     LTest();
     static LTest& getInstanz();
     uint counter;
     MuteStreamMap mutedStreams;
 
-    static bool isIgnored(string testName);
+    static bool isIgnored(std::string testName);
     static bool isIgnored(uint testIndex);
 
-    static TestResultSet runTest(const string& testName, function<bool ()> testFunction);
+    static TestResultSet runTest(const std::string& testName, std::function<bool ()> testFunction);
 
 public:
-    static void setVerboseMode(ostream& os, VerboseMode mode)
+    static void setVerboseMode(std::ostream& os, VerboseMode mode)
     {
         getInstanz().mutedStreams.setVerboseMode(os, mode);
     }
 
     //adds a test function to the test list, execution via run(), runTests() or runTest()
-    static void addTestFunction(string testName, function<bool ()> test);
+    static void addTestFunction(std::string testName, std::function<bool ()> test);
 
     template<typename FunctType>
-    static FunctionPattern<string, FunctType, bool, functionpattern::AnyType>
-    addTest(string testName, FunctType test)
+    static FunctionPattern<std::string, FunctType, bool, AnyType>
+    addTest(std::string testName, FunctType test)
     {
         addTestFunction(testName, test);
         return testName;
     }
 
     template<typename FunctType>
-    static FunctionPattern<string, FunctType, void, functionpattern::AnyType>
-    addTest(string testName, FunctType test)
+    static FunctionPattern<std::string, FunctType, void, AnyType>
+    addTest(std::string testName, FunctType test)
     {
-        function<bool()> foo = [=]()
+        std::function<bool()> foo = [=]()
         {
             test();
             return true;
@@ -102,9 +102,9 @@ public:
 
 
     template<typename TestFuncType, typename ParamFuncType>
-    static string addTest(string testName, TestFuncType testFunction, ParamFuncType parameterFunction)
+    static std::string addTest(std::string testName, TestFuncType testFunction, ParamFuncType parameterFunction)
     {
-        function<bool()> foo = [=]()
+        std::function<bool()> foo = [=]()
         {
             typedef typename ParameterTestType<TestFuncType>::type TestType;
             auto tempParamTest = TestType(testFunction);
@@ -116,36 +116,36 @@ public:
     }
 
     //runTests() & output()
-    static TestResultSet run(ostream& os = cout, Format format = Format::Text);
+    static TestResultSet run(std::ostream& os = std::cout, Format format = Format::Text);
 
     //runTest() & output()
-    static TestResultSet run(string test, ostream& os = cout, Format format = Format::Text);
+    static TestResultSet run(std::string test, std::ostream& os = std::cout, Format format = Format::Text);
 
-    static TestResultSet run(TestSuite testsuite, bool force = false, ostream& os = cout, Format format = Format::Text);
+    static TestResultSet run(TestSuite testsuite, bool force = false, std::ostream& os = std::cout, Format format = Format::Text);
 
-    static TestResultSet run(initializer_list<string> testsuite, bool force = false, ostream& os = cout, Format format = Format::Text);
+    static TestResultSet run(std::initializer_list<std::string> testsuite, bool force = false, std::ostream& os = std::cout, Format format = Format::Text);
 
     //loop all tests, execute only not ignored tests (you can get the result output via output())
     static TestResultSet runTests();
 
     //execute all tests with the given name by force (no ignores). (result output via output())
-    static TestResultSet runTest(const string test);
+    static TestResultSet runTest(const std::string test);
 
     static TestResultSet runTests(const TestSuite testsuite, bool force = false);
 
-    static TestResultSet runTests(const initializer_list<string> testsuite, bool force = false);
+    static TestResultSet runTests(const std::initializer_list<std::string> testsuite, bool force = false);
 
-    static string getIgnoreLabel();
+    static std::string getIgnoreLabel();
 
     //ignore the given test
-    static string ignore(string testName);
+    static std::string ignore(std::string testName);
 
     //ignores the next #number tests
-    static string ignoreNext(unsigned int number = 1);
+    static std::string ignoreNext(unsigned int number = 1);
 
-    static string ignore(TestSuite testsuite);
+    static std::string ignore(TestSuite testsuite);
 
-    static string ignore(initializer_list<string> testsuite);
+    static std::string ignore(std::initializer_list<std::string> testsuite);
 
     static TestResultSet getResultSet();
 

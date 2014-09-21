@@ -34,158 +34,158 @@
 #include <string>
 #include "FunctionPattern.h"
 
-using namespace std;
+namespace LTestSource{
 
-const string EXCEPTION_MESSAGE = "Exception at fixture ";
+    const std::string EXCEPTION_MESSAGE = "Exception at fixture ";
 
-template<typename T>
-class ResultWrapper{
-    T result;
-    unsigned int count;
+    template<typename T>
+    class ResultWrapper{
+        T result;
+        unsigned int count;
 
-    void validateBool(function<bool(T)> validator, string message)
+        void validateBool(std::function<bool(T)> validator, std::string message)
+        {
+            bool b = false;
+            try{
+                b = validator(result);
+            }catch(LTAssert::FalseAssert a){
+                message = a.what();
+            }catch(...){
+                message = "exception in validation";
+            }
+            LTAssert::True(b, "Fixture "+patch::to_string(count)+": "+message);
+        }
+
+        void validateVoid(std::function<void(T)> validator)
+        {
+            std::string message;
+            bool b = false;
+            try{
+                validator(result);
+                b = true;
+            }catch(LTAssert::FalseAssert a){
+                message = a.what();
+            }catch(...){
+                message = "exception in validation";
+            }
+            LTAssert::True(b, "Fixture "+patch::to_string(count)+": "+message);
+        }
+
+    public:
+
+        ResultWrapper(T t, unsigned int c): result(t), count(c){}
+
+        void expect(T expectedValue, std::string message = "not expected value"){
+            LTAssert::Equal(expectedValue, result, "Fixture "+patch::to_string(count)+": "+message);
+        }
+
+        template<typename FunctType>
+        FunctionPatternNot<T, void, FunctType, bool, T>
+        expect(FunctType validator, std::string message = "validation fails")
+        {
+            validateBool(validator, message);
+        }
+
+        template<typename FunctType>
+        FunctionPatternNot<T, void, FunctType, void, T>
+        expect(FunctType validator)
+        {
+            validateVoid(validator);
+        }
+
+        T getResult(){
+            return result;
+        }
+    };
+
+    class ParameterTestBase{
+    public:
+        unsigned int count;
+    };
+
+    template<typename ReturnType, typename... ParameterTypes>
+    class ParameterTest: public ParameterTestBase{
+
+        typedef std::function<ReturnType(ParameterTypes...)> FunctionType;
+        FunctionType function_under_test;
+
+        template <class... Types>
+        ReturnType run(Types&&... args){
+            try{
+                return function_under_test(args...);
+            }
+            catch(LTAssert::FalseAssert e){
+                std::string msg = "Fixture "+patch::to_string(count)+": "+e.what();
+                throw LTAssert::FalseAssert(msg);
+            }
+            catch(...){
+                throw std::runtime_error(EXCEPTION_MESSAGE + patch::to_string(count));
+            }
+        }
+
+    public:
+
+        ParameterTest(FunctionType f){
+            function_under_test = f;
+            count = 0;
+        }
+
+        ResultWrapper<ReturnType> with(ParameterTypes... args){
+            ++count;
+            return ResultWrapper<ReturnType>(run(args...), count);
+        }
+    };
+
+
+    template<typename... ParameterTypes>
+    class ParameterTest<void, ParameterTypes...>: public ParameterTestBase{
+
+        typedef std::function<void(ParameterTypes...)> FunctionType;
+        FunctionType function_under_test;
+
+        template <class... Types>
+        void run(Types&&... args){
+            try{
+                function_under_test(args...);
+            }
+            catch(LTAssert::FalseAssert e){
+                std::string msg = "Fixture "+patch::to_string(count)+": "+e.what();
+                throw LTAssert::FalseAssert(msg);
+            }
+            catch(...){
+                throw std::runtime_error(EXCEPTION_MESSAGE+patch::to_string(count));
+            }
+        }
+
+    public:
+        ParameterTest(FunctionType f){
+            function_under_test = f;
+            count = 0;
+        }
+
+        void with(ParameterTypes... args){
+            ++count;
+            run(args...);
+        }
+    };
+
+    template<typename Functor>
+    struct ParameterTestType{
+        typedef typename ParameterTestType<decltype(&Functor::operator())>::type type;
+    };
+
+
+    template <typename ClassType, typename ReturnType, typename... ParameterTypes>
+    struct ParameterTestType<ReturnType(ClassType::*)(ParameterTypes...) const>
     {
-        bool b = false;
-        try{
-            b = validator(result);
-        }catch(LTAssert::FalseAssert a){
-            message = a.what();
-        }catch(...){
-            message = "exception in validation";
-        }
-        LTAssert::True(b, "Fixture "+patch::to_string(count)+": "+message);
-    }
+        typedef ParameterTest<ReturnType, ParameterTypes...> type;
+    };
 
-    void validateVoid(function<void(T)> validator)
+    template <typename ReturnType, typename... ParameterTypes>
+    struct ParameterTestType<ReturnType(*)(ParameterTypes...)>
     {
-        string message;
-        bool b = false;
-        try{
-            validator(result);
-            b = true;
-        }catch(LTAssert::FalseAssert a){
-            message = a.what();
-        }catch(...){
-            message = "exception in validation";
-        }
-        LTAssert::True(b, "Fixture "+patch::to_string(count)+": "+message);
-    }
-
-public:
-
-    ResultWrapper(T t, unsigned int c): result(t), count(c){}
-
-    void expect(T expectedValue, string message = "not expected value"){
-    	LTAssert::Equal(expectedValue, result, "Fixture "+patch::to_string(count)+": "+message);
-    }
-
-    template<typename FunctType>
-    FunctionPatternNot<T, void, FunctType, bool, T>
-    expect(FunctType validator, string message = "validation fails")
-    {
-        validateBool(validator, message);
-    }
-
-    template<typename FunctType>
-    FunctionPatternNot<T, void, FunctType, void, T>
-    expect(FunctType validator)
-    {
-        validateVoid(validator);
-    }
-
-    T getResult(){
-        return result;
-    }
-};
-
-class ParameterTestBase{
-public:
-    unsigned int count;
-};
-
-template<typename ReturnType, typename... ParameterTypes>
-class ParameterTest: public ParameterTestBase{
-
-    typedef function<ReturnType(ParameterTypes...)> FunctionType;
-    FunctionType function_under_test;
-
-    template <class... Types>
-    ReturnType run(Types&&... args){
-        try{
-            return function_under_test(args...);
-        }
-        catch(LTAssert::FalseAssert e){
-            string msg = "Fixture "+patch::to_string(count)+": "+e.what();
-            throw LTAssert::FalseAssert(msg);
-        }
-        catch(...){
-            throw runtime_error(EXCEPTION_MESSAGE + patch::to_string(count));
-        }
-    }
-
-public:
-
-    ParameterTest(FunctionType f){
-        function_under_test = f;
-        count = 0;
-    }
-
-    ResultWrapper<ReturnType> with(ParameterTypes... args){
-        ++count;
-        return ResultWrapper<ReturnType>(run(args...), count);
-    }
-};
-
-
-template<typename... ParameterTypes>
-class ParameterTest<void, ParameterTypes...>: public ParameterTestBase{
-
-    typedef function<void(ParameterTypes...)> FunctionType;
-    FunctionType function_under_test;
-
-    template <class... Types>
-    void run(Types&&... args){
-        try{
-            function_under_test(args...);
-        }
-        catch(LTAssert::FalseAssert e){
-            string msg = "Fixture "+patch::to_string(count)+": "+e.what();
-            throw LTAssert::FalseAssert(msg);
-        }
-        catch(...){
-            throw runtime_error(EXCEPTION_MESSAGE+patch::to_string(count));
-        }
-    }
-
-public:
-    ParameterTest(FunctionType f){
-        function_under_test = f;
-        count = 0;
-    }
-
-    void with(ParameterTypes... args){
-        ++count;
-        run(args...);
-    }
-};
-
-template<typename Functor>
-struct ParameterTestType{
-    typedef typename ParameterTestType<decltype(&Functor::operator())>::type type;
-};
-
-
-template <typename ClassType, typename ReturnType, typename... ParameterTypes>
-struct ParameterTestType<ReturnType(ClassType::*)(ParameterTypes...) const>
-{
-    typedef ParameterTest<ReturnType, ParameterTypes...> type;
-};
-
-template <typename ReturnType, typename... ParameterTypes>
-struct ParameterTestType<ReturnType(*)(ParameterTypes...)>
-{
-    typedef ParameterTest<ReturnType, ParameterTypes...> type;
-};
-
+        typedef ParameterTest<ReturnType, ParameterTypes...> type;
+    };
+}
 
 #endif // PARAMETERTEST_H_INCLUDED

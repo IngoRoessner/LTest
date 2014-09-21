@@ -71,7 +71,6 @@
 		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_utils.hpp" />
 		<Unit filename="src/ParameterTest.h" />
 		<Unit filename="src/TestResult.h" />
-		<Unit filename="src/function_traits.h" />
 		<Unit filename="src/toStringPatch.h" />
 		<Unit filename="test-src/addTest.h">
 			<Option target="test-ltest-with-ltest" />

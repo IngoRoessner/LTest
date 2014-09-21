@@ -31,35 +31,34 @@
 #include <math.h>
 #include <sstream>
 
-using namespace std;
 
 namespace LTAssert{
-    static const string MESSAGE_DEFAULT = "Assert::Equal -> Equal"; // old school type compile time constant
+    static const std::string MESSAGE_DEFAULT = "Assert::Equal -> Equal"; // old school type compile time constant
 
     class FalseAssert{
     private:
-        string text;
+        std::string text;
     public:
-        FalseAssert(string str):text(str){}
-        string what(){
+        FalseAssert(std::string str):text(str){}
+        std::string what(){
             return text;
         }
     };
 
     template<typename T1, typename T2>
-    void Equal(T1 a, T2 b, string message = MESSAGE_DEFAULT){
+    void Equal(T1 a, T2 b, std::string message = MESSAGE_DEFAULT){
         if(!(a==b)){
             throw FalseAssert(message);
         }
     }
 
     template<typename floating>
-    void Equal(floating a, floating b, floating delta, string message = MESSAGE_DEFAULT){
+    void Equal(floating a, floating b, floating delta, std::string message = MESSAGE_DEFAULT){
         bool isNearlyEqual = abs(a - b) < delta;
         if(not isNearlyEqual){
             if(message == MESSAGE_DEFAULT){
-                ostringstream messageBuilder;
-                messageBuilder << "abs(" << a << " - " << b << ") should be smaller than delta = " << delta << endl;
+                std::ostringstream messageBuilder;
+                messageBuilder << "abs(" << a << " - " << b << ") should be smaller than delta = " << delta << std::endl;
                 throw FalseAssert(messageBuilder.str());
             }
             throw FalseAssert(message);
@@ -67,7 +66,7 @@ namespace LTAssert{
     }
 
     template<typename T1, typename T2>
-    void NotEqual(T1 a, T2 b, string message = "Assert::Equal -> not Equal"){
+    void NotEqual(T1 a, T2 b, std::string message = "Assert::Equal -> not Equal"){
         if(a==b){
             throw FalseAssert(message);
         }
@@ -75,7 +74,7 @@ namespace LTAssert{
 
 
     template<typename T>
-    void True(T b, string message = "bool = false, should be true"){
+    void True(T b, std::string message = "bool = false, should be true"){
         if(!b){
             throw FalseAssert(message);
         }
@@ -83,7 +82,7 @@ namespace LTAssert{
 
 
     template<typename T>
-    void False(T b, string message = "bool = true, should be false"){
+    void False(T b, std::string message = "bool = true, should be false"){
         if(b){
             throw FalseAssert(message);
         }
@@ -91,7 +90,7 @@ namespace LTAssert{
 
 
     template<typename ExceptionType>
-    void ExpectException(function<void()> funct, string message = "expected exception was not thrown"){
+    void ExpectException(std::function<void()> funct, std::string message = "expected exception was not thrown"){
         bool exceptionIsCatched = false;
         try{
             funct();
@@ -102,7 +101,7 @@ namespace LTAssert{
     }
 
     template<typename ExceptionType>
-    void ExpectException(string expectedWhat, function<void()> funct, string message = "expected exception was not thrown"){
+    void ExpectException(std::string expectedWhat, std::function<void()> funct, std::string message = "expected exception was not thrown"){
         bool exceptionIsCatched = false;
         try{
             funct();
