@@ -46,6 +46,7 @@
 #include "LTestMisuseException.h"
 #include "ManagedFixture.h"
 #include "FunctionPattern.h"
+#include "LTestThreadPool.h"
 
 using namespace LTestSource;
 
