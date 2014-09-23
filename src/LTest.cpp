@@ -135,7 +135,9 @@ TestResultSet LTest::runTest(const testname test){
  TestResultSet LTest::runTests(const TestSuite testsuite){
 	uint current_index = 0;
     LTestSource::AsyncTaskExecuter<TestResultSet> executer;
-    mutedStreams.ignoreMute(true);
+    if(threads_){
+        mutedStreams.ignoreMute(true);
+    }
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLabel()){
 			if(force_ || !(isIgnored(testName) || isIgnored(current_index))){
@@ -160,8 +162,8 @@ TestResultSet LTest::runTest(const testname test){
                 resultset.push_back(element);
             }
         }
+        mutedStreams.ignoreMute(false);
     }
-    mutedStreams.ignoreMute(false);
     return resultset;
 }
 
