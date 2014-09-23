@@ -73,7 +73,9 @@ namespace LTestSource{
     };
 
     class MuteStreamMap: public std::map<std::ostream*, std::shared_ptr<MuteStream>>{
+        bool active;
     public:
+        MuteStreamMap():std::map<std::ostream*, std::shared_ptr<MuteStream>>(),active(true){}
 
         void setCaptureMode(std::ostream& os, CaptureMode mode){
             MuteStreamMap& that = *this;
@@ -87,18 +89,26 @@ namespace LTestSource{
         }
 
         void mute(){
-            for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-                it->second->mute();
+            if(active){
+                for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
+                    it->second->mute();
+                }
             }
         }
 
         std::map<std::ostream*, std::string> flush(std::string testName, bool testFailed){
             std::map<std::ostream*, std::string> returnable;
-            for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
-                std::string&& flushed_output = it->second->flush(testName, testFailed);
-                returnable.emplace(it->first, std::move(flushed_output));
+            if(active){
+                for (MuteStreamMap::iterator it=this->begin(); it!=this->end(); ++it){
+                    std::string&& flushed_output = it->second->flush(testName, testFailed);
+                    returnable.emplace(it->first, std::move(flushed_output));
+                }
             }
             return returnable;
+        }
+
+        void ignoreMute(bool ignore){
+            active = !ignore;
         }
 
     };

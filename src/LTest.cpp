@@ -28,7 +28,7 @@
 
 double CLOCKS_PER_SEC_AS_DOUBLE = static_cast<double>(CLOCKS_PER_SEC);
 
-LTest::LTest():counter(0),outstream_(&std::cout),format_(Format::Text),force_(false),async_(false){
+LTest::LTest():counter(0),outstream_(&std::cout),format_(LTestOut::Format::Text),force_(false),async_(0){
     mutedStreams.setCaptureMode(std::cout, CaptureMode::FAIL);
     mutedStreams.setCaptureMode(std::cerr, CaptureMode::FAIL);
 }
@@ -134,11 +134,18 @@ TestResultSet LTest::runTest(const testname test){
 
  TestResultSet LTest::runTests(const TestSuite testsuite){
 	uint current_index = 0;
+    LTestSource::AsyncTaskExecuter<TestResultSet> executer;
+    mutedStreams.ignoreMute(true);
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLabel()){
 			if(force_ || !(isIgnored(testName) || isIgnored(current_index))){
-                for(std::shared_ptr<TestResult>& element : runTest(testName)){
-                    resultset.push_back(element);
+                if(async_){
+                    LTest* that = this;
+                    executer.push_back([=](){return that->runTest(testName);});
+                }else{
+                    for(std::shared_ptr<TestResult>& element : runTest(testName)){
+                        resultset.push_back(element);
+                    }
                 }
 			} else {
 				TestResult* result = new TestResultIgnored(testName);
@@ -147,8 +154,17 @@ TestResultSet LTest::runTest(const testname test){
 			current_index++;
     	}
     }
-    return resultset;;
+    if(async_){
+        for(TestResultSet elements : executer.execute(async_)){
+            for(std::shared_ptr<TestResult>& element : elements){
+                resultset.push_back(element);
+            }
+        }
+    }
+    mutedStreams.ignoreMute(false);
+    return resultset;
 }
+
 
 TestResultSet LTest::runTests(const std::initializer_list<std::string> testsuite){
     return LTest::runTests(TestSuite(testsuite));
@@ -246,9 +262,9 @@ LTest LTest::force(){
     return newLTest;
 }
 
-LTest LTest::async(){
+LTest LTest::async(unsigned int i){
     LTest newLTest(*this);
-    newLTest.async_ = true;
+    newLTest.async_ = i;
     return newLTest;
 }
 

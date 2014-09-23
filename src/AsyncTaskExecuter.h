@@ -50,8 +50,9 @@ namespace LTestSource{
             return result;
         }
 
-        void addToResults(ResultType& element){
+        void addToResults(ResultType element){
             resultsMutex.lock();
+            //std::clog<<"add result"<<std::endl;
             results.push_back(element);
             resultsMutex.unlock();
         }
