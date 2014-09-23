@@ -24,7 +24,7 @@
  */
 
 #define ALL
-//ALL || LEAP_YEAR || MINIMAL || IGNORES || PARAMTEST || RESULTSET
+//ALL || LEAP_YEAR || MINIMAL || IGNORES || PARAMTEST || RESULTSET || ASYNC
 
 
 #if defined(LEAP_YEAR)
@@ -41,6 +41,9 @@
 #elif defined(RESULTSET)
     #define EXAMPLE resultset
     #include "resultset.h"
+#elif defined(ASYNC)
+    #define EXAMPLE async
+    #include "async.h"
 #elif defined(ALL)
     #define EXAMPLE all
     #include "leap_year.h"
@@ -48,6 +51,7 @@
     #include "ignores.h"
     #include "parametertest.h"
     #include "resultset.h"
+    #include "async.h"
     #include <fstream>
 
     namespace all{
@@ -57,6 +61,7 @@
             parametertest::main();
             resultset::main();
             leap_year::main();
+            async::main();
             std::ofstream xmlfile("bin/TEST-ExampleTestsResults.xml");
             ltest.outstream(xmlfile).format(Format::Xml).run();
             xmlfile.close();

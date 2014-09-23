@@ -6,6 +6,7 @@
 2.0.0
 	- New API for LTest. LTest::addTest becomes ltest.addTest()
 	- optional run() parameters are setted by functions (for example ltest.format(Format::Text).run())
+	- threads option to run the tests async (example: ltest.threads(4).run(); //runs tests with 4 threads)
 	- Namespace LTestSource for internal Classes, Types and Functions
 	- Namespace LTestOut for Output Classes and Types (for example Format::Text becomes LTestOut::Format::Text)
 	- setVerboseMode() renamed to setStreamCaptureMode()
