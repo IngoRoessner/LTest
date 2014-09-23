@@ -11,19 +11,19 @@ bool is_leap_year(int year){
 }
 
 TestSuite suite1 = {
-    LTest::addTest("test is leap year 2014 : ", [](){
+    ltest.addTest("test is leap year 2014 : ", [](){
         return !is_leap_year(2014);
     }),
-    LTest::addTest("test is leap year 1900 : ", [](){
+    ltest.addTest("test is leap year 1900 : ", [](){
         return !is_leap_year(1900);
     }),
-    LTest::addTest("test is leap year 2000 : ", [](){
+    ltest.addTest("test is leap year 2000 : ", [](){
         return is_leap_year(2000);
     }),
 
     //to time internsive
-    LTest::ignoreNext(),
-    LTest::addTest("test is not negative: ", [](){
+    ltest.ignoreNext(),
+    ltest.addTest("test is not negative: ", [](){
         int min_int = std::numeric_limits<int>::min()/20; //divided by 20 to reduce time
         for(int i = 0 ; i > min_int; i--){
             LTAssert::False(is_leap_year(i));
@@ -32,7 +32,7 @@ TestSuite suite1 = {
 };
 
 TestSuite suite2 = {
-    LTest::addTest("test whole leap year function", is_leap_year, [](auto test){
+    ltest.addTest("test whole leap year function", is_leap_year, [](auto test){
         test.with(2014).expect(false);
         test.with(1900).expect(false);
         test.with(2000).expect(true);
@@ -41,9 +41,9 @@ TestSuite suite2 = {
 };
 
 int main() {
-    LTest::run(suite1, true); //force to run the time intensive but ignored "test is not negative: " test
-    LTest::run(suite2);
-    LTest::run();
+    ltest.force().run(suite1); //force to run the time intensive but ignored "test is not negative: " test
+    ltest.run(suite2);
+    ltest.run();
     return 0;
 }
 

@@ -15,13 +15,13 @@ void sleep(){
 
 // lets prepare you testsuite and insert the tests
 TestSuite myTests = {
-    LTest::addTest("ok", [](){}),
+    ltest.addTest("ok", [](){}),
 
-    LTest::addTest("ok slow", [](){
+    ltest.addTest("ok slow", [](){
         sleep();
     }),
 
-    LTest::addTest("slow because of work", [](){
+    ltest.addTest("slow because of work", [](){
         std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now(), current_time;
         while(true){
             current_time = std::chrono::system_clock::now();
@@ -32,21 +32,21 @@ TestSuite myTests = {
         }
     }),
 
-    LTest::addTest("failed", [](){
+    ltest.addTest("failed", [](){
         return false;
     }),
 
-    LTest::addTest("failed slow", [](){
+    ltest.addTest("failed slow", [](){
         sleep();
         LTAssert::Equal("a", "b");
     }),
 
-    LTest::addTest("slow aborted test", [](){
+    ltest.addTest("slow aborted test", [](){
         sleep();
         throw 1;
     }),
-    LTest::ignoreNext(),
-    LTest::addTest("Well I would be slow, but I'm ignored.", [](){
+    ltest.ignoreNext(),
+    ltest.addTest("Well I would be slow, but I'm ignored.", [](){
         sleep();
     })
 };
@@ -58,7 +58,7 @@ TestSuite myTests = {
  * have a look at OutputFormat/OutputFormat.h, OutputFormatBase<ResultSetType> or the example XmlOutput.h.
  */
 int main() {
-    TestResultSet result = LTest::run(); // lets run all our added tests and retrieve the TestResultSet (= Basically a list of TestResult objects)
+    TestResultSet result = ltest.run(); // lets run all our added tests and retrieve the TestResultSet (= Basically a list of TestResult objects)
 
     // how to filter on test state
     // you can use this type wrapping syntax to filter on Ok/Failed/Aborted/Ingnored tests (see TestResult with it's subtypes for details)

@@ -3,6 +3,11 @@
 	- Change format of outputs which are captured by MuteStream or setVerboseMode
 	- Change in resultset.h example 
 
-1.1.0
+2.0.0
+	- New API for LTest. LTest::addTest becomes ltest.addTest()
+	- optional run() parameters are setted by functions (for example ltest.format(Format::Text).run())
 	- Namespace LTestSource for internal Classes, Types and Functions
 	- Namespace LTestOut for Output Classes and Types (for example Format::Text becomes LTestOut::Format::Text)
+	- setVerboseMode() renamed to setStreamCaptureMode()
+	- VerboseMode renamed to CaptureMode
+	- Additional CaptureMode DIRECTOUT

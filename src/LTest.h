@@ -56,32 +56,43 @@ class LTest
 {
     typedef unsigned int uint;
     typedef std::map<testname, std::function<bool ()>> testname_to_function_mapping;
+
+    //STATE
     testname_to_function_mapping testCases;
     std::map<uint, testname> test_inserted_order;
     std::set<testname> ignores;
     std::set<uint> ignored_indexes;
     TestResultSet resultset;
-    LTest();
-    static LTest& getInstanz();
     uint counter;
     MuteStreamMap mutedStreams;
 
-    static bool isIgnored(std::string testName);
-    static bool isIgnored(uint testIndex);
+    //OPTIONS
+    std::ostream* outstream_;
+    Format format_;
+    bool force_;
+    bool async_;
 
-    static std::shared_ptr<TestResult> runTest(const std::string& testName, std::function<bool ()> testFunction);
+    LTest();
+    LTest(LTest& other);
+    LTest& operator=(const LTest&) = delete;
+
+    bool isIgnored(std::string testName);
+    bool isIgnored(uint testIndex);
+    std::shared_ptr<TestResult> runTest(const std::string& testName, std::function<bool ()> testFunction);
 
 public:
-    static void setStreamCaptureMode(std::ostream& os, CaptureMode mode)
+    static LTest& getInstanz();
+
+    void setStreamCaptureMode(std::ostream& os, CaptureMode mode)
     {
-        getInstanz().mutedStreams.setCaptureMode(os, mode);
+        mutedStreams.setCaptureMode(os, mode);
     }
 
     //adds a test function to the test list, execution via run(), runTests() or runTest()
-    static void addTestFunction(std::string testName, std::function<bool ()> test);
+    void addTestFunction(std::string testName, std::function<bool ()> test);
 
     template<typename FunctType>
-    static FunctionPattern<std::string, FunctType, bool, AnyType>
+    FunctionPattern<std::string, FunctType, bool, AnyType>
     addTest(std::string testName, FunctType test)
     {
         addTestFunction(testName, test);
@@ -89,7 +100,7 @@ public:
     }
 
     template<typename FunctType>
-    static FunctionPattern<std::string, FunctType, void, AnyType>
+    FunctionPattern<std::string, FunctType, void, AnyType>
     addTest(std::string testName, FunctType test)
     {
         std::function<bool()> foo = [=]()
@@ -103,7 +114,7 @@ public:
 
 
     template<typename TestFuncType, typename ParamFuncType>
-    static std::string addTest(std::string testName, TestFuncType testFunction, ParamFuncType parameterFunction)
+    std::string addTest(std::string testName, TestFuncType testFunction, ParamFuncType parameterFunction)
     {
         std::function<bool()> foo = [=]()
         {
@@ -117,41 +128,51 @@ public:
     }
 
     //runTests() & output()
-    static TestResultSet run(std::ostream& os = std::cout, Format format = Format::Text);
+    TestResultSet run();
 
     //runTest() & output()
-    static TestResultSet run(std::string test, std::ostream& os = std::cout, Format format = Format::Text);
+    TestResultSet run(std::string test);
 
-    static TestResultSet run(TestSuite testsuite, bool force = false, std::ostream& os = std::cout, Format format = Format::Text);
+    TestResultSet run(TestSuite testsuite);
 
-    static TestResultSet run(std::initializer_list<std::string> testsuite, bool force = false, std::ostream& os = std::cout, Format format = Format::Text);
+    TestResultSet run(std::initializer_list<std::string> testsuite);
 
     //loop all tests, execute only not ignored tests (you can get the result output via output())
-    static TestResultSet runTests();
+    TestResultSet runTests();
 
     //execute all tests with the given name by force (no ignores). (result output via output())
-    static TestResultSet runTest(const std::string test);
+    TestResultSet runTest(const std::string test);
 
-    static TestResultSet runTests(const TestSuite testsuite, bool force = false);
+    TestResultSet runTests(const TestSuite testsuite);
 
-    static TestResultSet runTests(const std::initializer_list<std::string> testsuite, bool force = false);
+    TestResultSet runTests(const std::initializer_list<std::string> testsuite);
 
-    static std::string getIgnoreLabel();
+    std::string getIgnoreLabel();
 
     //ignore the given test
-    static std::string ignore(std::string testName);
+    std::string ignore(std::string testName);
 
     //ignores the next #number tests
-    static std::string ignoreNext(unsigned int number = 1);
+    std::string ignoreNext(unsigned int number = 1);
 
-    static std::string ignore(TestSuite testsuite);
+    std::string ignore(TestSuite testsuite);
 
-    static std::string ignore(std::initializer_list<std::string> testsuite);
+    std::string ignore(std::initializer_list<std::string> testsuite);
 
-    static TestResultSet getResultSet();
+    TestResultSet getResultSet();
 
-    static void clearResultSet();
+    void clearResultSet();
 
+//OPTIONS
+    LTest outstream(std::ostream& os);
+
+    LTest format(Format f);
+
+    LTest force();
+
+    LTest async();
 };
+
+extern LTest& ltest;
 
 #endif // LTEST_H

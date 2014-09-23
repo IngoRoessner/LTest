@@ -97,7 +97,7 @@ auto ints = manageFixture<vector<int>>()
             .before([](vector<int>& vi){vi = {1,2,3,4,5,6};});
 
 TestSuite DataTests = {
-    LTest::addTest("manageFixture vi1", [](int index){
+    ltest.addTest("manageFixture vi1", [](int index){
         return ints().at(index);
     }, [](auto test){
         test.with(0).expect(1);
@@ -112,7 +112,7 @@ TestSuite DataTests = {
         test.with(2).expect(7);
     }),
 
-    LTest::addTest("manageFixture vi2", [](int index){
+    ltest.addTest("manageFixture vi2", [](int index){
         return ints().at(index);
     }, [](auto test){
         test.with(0).expect(1);
@@ -127,91 +127,91 @@ TestSuite DataTests = {
         test.with(2).expect(7);
     }),
 
-    LTest::addTest("testInt1", [&]{out()<<"run testInt1: "<<testInt();}),
-    LTest::addTest("testInt2", [&]{out()<<"run testInt2: "<<testInt(); testInt()++;}),
-    LTest::addTest("testInt3", [&]{out()<<"run testInt3: "<<testInt();}),
+    ltest.addTest("testInt1", [&]{out()<<"run testInt1: "<<testInt();}),
+    ltest.addTest("testInt2", [&]{out()<<"run testInt2: "<<testInt(); testInt()++;}),
+    ltest.addTest("testInt3", [&]{out()<<"run testInt3: "<<testInt();}),
 
     //if you cant use c++14 generic lambdas (auto test)
-    LTest::addTest("viii", viii, [](ParameterTest<void, int, int, int> test){
+    ltest.addTest("viii", viii, [](ParameterTest<void, int, int, int> test){
         test.with(1,2,3);
         test.with(2,2,3);
         test.with(3,2,3);
     }),
 
-    LTest::addTest("iii", iii, [](auto test){
+    ltest.addTest("iii", iii, [](auto test){
         test.with(2,3).expect(1);
         test.with(4,3).expect(2);
         test.with(2,3).expect(3);
     }),
 
-    LTest::addTest("validate iii", iii, [](auto test){
+    ltest.addTest("validate iii", iii, [](auto test){
         test.with(2,3).expect([](int i){return i>0;});
         test.with(4,3).expect([](int i){return i>0;});
         test.with(2,3).expect([](int i){return i<0;});
     }),
 
-    LTest::addTest("validate Assert iii", iii, [](auto test){
+    ltest.addTest("validate Assert iii", iii, [](auto test){
         test.with(2,3).expect([](int i){LTAssert::True(true, "not true"); return i>0;});
         test.with(4,3).expect([](int i){LTAssert::True(false, "not true"); return i>0;});
         test.with(2,3).expect([](int i){LTAssert::True(true, "not true"); return i>0;});
     }),
 
-    LTest::addTest("validate void iii", iii, [](auto test){
+    ltest.addTest("validate void iii", iii, [](auto test){
         test.with(2,3).expect([](int i){LTAssert::True(true, "not true");});
         test.with(4,3).expect([](int i){LTAssert::True(false, "not true");});
         test.with(2,3).expect([](int i){LTAssert::True(true, "not true");});
     }),
 
-    LTest::addTest("validate1", [](bool b){return b;}, [](auto test){
+    ltest.addTest("validate1", [](bool b){return b;}, [](auto test){
         test.with(true).expect(validate1);
         test.with(true).expect(validate1);
         test.with(false).expect(validate1);
     }),
 
-    LTest::addTest("validate2", [](bool b){return b;}, [](auto test){
+    ltest.addTest("validate2", [](bool b){return b;}, [](auto test){
         test.with(false).expect(validate2);
         test.with(false).expect(validate2);
         test.with(true).expect(validate2);
     }),
 
-    LTest::addTest("anything iii", iii, [](auto test){
+    ltest.addTest("anything iii", iii, [](auto test){
         test.with(2,3);
         test.with(4,3);
         test.with(2,3);
     }),
 
-    LTest::addTest("iiie", iiie, [](auto test){
+    ltest.addTest("iiie", iiie, [](auto test){
         test.with(2,3).expect(1);
         test.with(4,3).expect(2);
         test.with(2,3).expect(3);
     }),
 
-    LTest::addTest("ili", ili, [](auto test){
+    ltest.addTest("ili", ili, [](auto test){
         test.with(list<int>{1,2,3,1},3).expect(1);
         test.with(list<int>{1,2,3,2},3).expect(2);
         test.with(list<int>{1,2,3,1},3).expect(3);
     }),
 
-    LTest::addTest("csi", csi, [](auto test){
+    ltest.addTest("csi", csi, [](auto test){
         test.with(string("abcde"),3).expect('d');
         test.with(string("abcde"),0).expect('a');
         test.with(string("abcde"),1).expect('a');
     }),
 
-    LTest::addTest("vi", vi, [](auto test){
+    ltest.addTest("vi", vi, [](auto test){
         test.with(1);
         test.with(2);
         test.with(3);
     }),
 
     //cast lambda to functionpointer (only capture less lambdas)
-    LTest::addTest("ir", [](int i){ir(i);}, [](auto test){
+    ltest.addTest("ir", [](int i){ir(i);}, [](auto test){
         test.with(1);
         test.with(2);
         test.with(3);
     }),
 
-    LTest::addTest(
+    ltest.addTest(
         "lambdaiii",
         [](int a, int b)->int{
             cout<<"lambdaiii"<<a<<b<<endl;
@@ -224,7 +224,7 @@ TestSuite DataTests = {
         }
     ),
 
-    LTest::addTest(
+    ltest.addTest(
         "ccsi",
         [](string s, int i){
             char* cs = const_cast<char*>(s.c_str());
@@ -238,14 +238,14 @@ TestSuite DataTests = {
     ),
 
     //add to expected output
-    LTest::addTest("ir2", ir, [](auto test){
+    ltest.addTest("ir2", ir, [](auto test){
         int i1=1, i2=2, i3=3;
         test.with(i1);
         test.with(i2);
         test.with(i3);
     }),
 
-    LTest::addTest(
+    ltest.addTest(
         "ccsi2",ccsi,
         [](auto test){
             test.with("abcde",3).expect('d');
@@ -256,7 +256,7 @@ TestSuite DataTests = {
 };
 
 int main() {
-    LTest::run();
+    ltest.run();
     return 0;
 }
 

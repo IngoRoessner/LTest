@@ -58,7 +58,7 @@
             resultset::main();
             leap_year::main();
             std::ofstream xmlfile("bin/TEST-ExampleTestsResults.xml");
-            LTest::run(xmlfile, Format::Xml);
+            ltest.outstream(xmlfile).format(Format::Xml).run();
             xmlfile.close();
             return 0;
         }

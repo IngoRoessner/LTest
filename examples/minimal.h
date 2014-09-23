@@ -5,11 +5,11 @@
 
 namespace minimal{
 
-auto testName = LTest::addTest("testname", []{return true;});
+auto testName = ltest.addTest("testname", []{return true;});
 
 int main() {
-    //LTest::run(testName);
-    LTest::run();
+    //ltest.run(testName);
+    ltest.run();
     return 0;
 }
 

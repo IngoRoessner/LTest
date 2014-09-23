@@ -36,40 +36,40 @@ using namespace std;
 
 string str = "do your tests";
 TestSuite suite = {
-    LTest::addTest("Suite testCase", [&](){cout<<"Suite testCase"<<str<<endl;}),
-    LTest::addTest("Suite testCase2", [](){cout<<"Suite testCase2"<<endl;}),
+    ltest.addTest("Suite testCase", [&](){cout<<"Suite testCase"<<str<<endl;}),
+    ltest.addTest("Suite testCase2", [](){cout<<"Suite testCase2"<<endl;}),
 
-    LTest::addTest("Suite fail cout", [](){cout<<"Suite testCase2"<<endl;}),
+    ltest.addTest("Suite fail cout", [](){cout<<"Suite testCase2"<<endl;}),
 
-    LTest::ignoreNext(),
-    LTest::addTest("Suite ignored 1", [](){cout<<"Suite ignored 1"<<endl;return false;}),
+    ltest.ignoreNext(),
+    ltest.addTest("Suite ignored 1", [](){cout<<"Suite ignored 1"<<endl;return false;}),
 
-    LTest::ignore("Suite ignored 2"),
-    LTest::addTest("Suite ignored 2", [](){cout<<"Suite ignored 2"<<endl;return false;}),
+    ltest.ignore("Suite ignored 2"),
+    ltest.addTest("Suite ignored 2", [](){cout<<"Suite ignored 2"<<endl;return false;}),
 
-    LTest::ignoreNext(2),
-    LTest::addTest("Suite ignored 3", [](){cout<<"Suite ignored 3"<<endl;return false;}),
-    LTest::addTest("Suite ignored 4", [](){cout<<"Suite ignored 4"<<endl;return false;}),
+    ltest.ignoreNext(2),
+    ltest.addTest("Suite ignored 3", [](){cout<<"Suite ignored 3"<<endl;return false;}),
+    ltest.addTest("Suite ignored 4", [](){cout<<"Suite ignored 4"<<endl;return false;}),
 
-    LTest::addTest("Suite after ignores", [](){cout<<"Suite after ignores"<<endl;}),
+    ltest.addTest("Suite after ignores", [](){cout<<"Suite after ignores"<<endl;}),
 
-    LTest::addTest("Suite with cout and cerr", [](){cout<<"This goes to std out and will be available programmatically"<<endl; cerr << "and this to cerr!"; return true;}),
+    ltest.addTest("Suite with cout and cerr", [](){cout<<"This goes to std out and will be available programmatically"<<endl; cerr << "and this to cerr!"; return true;}),
 };
 
 TestSuite ignoreSuite2 = {
-    LTest::addTest("throw1", [](){throw string("nope");}),
+    ltest.addTest("throw1", [](){throw string("nope");}),
 
-    LTest::addTest("throw2", [](){throw string("nope");}),
-    LTest::addTest("throw3", [](){throw string("nope");}),
+    ltest.addTest("throw2", [](){throw string("nope");}),
+    ltest.addTest("throw3", [](){throw string("nope");}),
 };
 
 
 int main()
 {
-    LTest::ignore(suite);
-    LTest::ignore("throw1");
-    LTest::ignore({"throw2", "throw3"});
-    LTest::run();
+    ltest.ignore(suite);
+    ltest.ignore("throw1");
+    ltest.ignore({"throw2", "throw3"});
+    ltest.run();
     return 0;
 }
 
