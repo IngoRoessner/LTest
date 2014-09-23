@@ -10,14 +10,14 @@
 namespace LTestSource{
 
     template<typename ResultType>
-    class ThreadPool:public std::list<std::function<ResultType()>>{
+    class AsyncTaskExecuter:public std::list<std::function<ResultType()>>{
         std::list<ResultType> results;
         std::mutex tasksMutex;
         std::mutex resultsMutex;
 
     public:
-        std::list<ResultType> consumeTasks(unsigned int poolSize){
-            ThreadPool& that = *this;
+        std::list<ResultType> execute(unsigned int poolSize){
+            AsyncTaskExecuter& that = *this;
             std::list<std::thread*> threads;
             for(unsigned int i = 0; i<poolSize; i++){
                 threads.push_back(new std::thread([&](){
@@ -38,11 +38,10 @@ namespace LTestSource{
 
         bool getNextTask(std::function<ResultType()>& task){
             tasksMutex.lock();
-            ThreadPool& that = *this;
             bool result;
-            if(that.size()>0){
-                task = that.front();
-                that.pop_front();
+            if(this->size()>0){
+                task = this->front();
+                this->pop_front();
                 result = true;
             }else{
                 result = false;
