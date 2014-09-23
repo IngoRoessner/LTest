@@ -28,7 +28,7 @@
 
 double CLOCKS_PER_SEC_AS_DOUBLE = static_cast<double>(CLOCKS_PER_SEC);
 
-LTest::LTest():counter(0),outstream_(&std::cout),format_(LTestOut::Format::Text),force_(false),async_(0){
+LTest::LTest():counter(0),outstream_(&std::cout),format_(LTestOut::Format::Text),force_(false),threads_(0){
     mutedStreams.setCaptureMode(std::cout, CaptureMode::FAIL);
     mutedStreams.setCaptureMode(std::cerr, CaptureMode::FAIL);
 }
@@ -44,7 +44,7 @@ LTest::LTest(LTest& other):
     outstream_(other.outstream_),
     format_(other.format_),
     force_(other.force_),
-    async_(other.async_)
+    threads_(other.threads_)
 {}
 
 LTest& LTest::getInstanz(){
@@ -139,7 +139,7 @@ TestResultSet LTest::runTest(const testname test){
     for (auto &testName : testsuite){
     	if(testName != getIgnoreLabel()){
 			if(force_ || !(isIgnored(testName) || isIgnored(current_index))){
-                if(async_){
+                if(threads_){
                     LTest* that = this;
                     executer.push_back([=](){return that->runTest(testName);});
                 }else{
@@ -154,8 +154,8 @@ TestResultSet LTest::runTest(const testname test){
 			current_index++;
     	}
     }
-    if(async_){
-        for(TestResultSet elements : executer.execute(async_)){
+    if(threads_){
+        for(TestResultSet elements : executer.execute(threads_)){
             for(std::shared_ptr<TestResult>& element : elements){
                 resultset.push_back(element);
             }
@@ -262,9 +262,9 @@ LTest LTest::force(){
     return newLTest;
 }
 
-LTest LTest::async(unsigned int i){
+LTest LTest::threads(unsigned int i){
     LTest newLTest(*this);
-    newLTest.async_ = i;
+    newLTest.threads_ = i;
     return newLTest;
 }
 

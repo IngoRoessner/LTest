@@ -70,7 +70,7 @@ class LTest
     std::ostream* outstream_;
     Format format_;
     bool force_;
-    unsigned int async_;
+    unsigned int threads_;
 
     LTest();
     LTest(LTest& other);
@@ -170,7 +170,7 @@ public:
 
     LTest force();
 
-    LTest async(unsigned int i);
+    LTest threads(unsigned int i);
 };
 
 extern LTest& ltest;
