@@ -52,12 +52,12 @@
 		<Unit filename="examples/resultset.h">
 			<Option target="Debug" />
 		</Unit>
+		<Unit filename="src/AsyncTaskExecuter.h" />
 		<Unit filename="src/FunctionPattern.h" />
 		<Unit filename="src/LTest.cpp" />
 		<Unit filename="src/LTest.h" />
 		<Unit filename="src/LTestAssert.h" />
 		<Unit filename="src/LTestMisuseException.h" />
-		<Unit filename="src/LTestThreadPool.h" />
 		<Unit filename="src/ManagedFixture.h" />
 		<Unit filename="src/MuteStream.h" />
 		<Unit filename="src/OutputFormat/Format.h" />
