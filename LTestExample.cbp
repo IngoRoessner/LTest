@@ -34,6 +34,7 @@
 			<Add option="-fexceptions" />
 			<Add option="-std=c++1y" />
 		</Compiler>
+		<Unit filename="examples/async.h" />
 		<Unit filename="examples/ignores.h">
 			<Option target="Debug" />
 		</Unit>
