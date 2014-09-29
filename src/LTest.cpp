@@ -270,4 +270,6 @@ LTest LTest::threads(unsigned int i){
     return newLTest;
 }
 
-LTest& ltest = LTest::getInstanz();
+LTest& ltest(){
+    return LTest::getInstanz();
+}

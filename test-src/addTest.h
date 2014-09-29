@@ -32,12 +32,12 @@ void mvoid(){};
 bool mbool(){return true;};
 
 TestSuite addTestSuite {
-    LTest::addTest("add test void", [](){
-        LTest::addTest("pointer void", mvoid);
+    ltest().addTest("add test void", [](){
+        ltest().addTest("pointer void", mvoid);
     }),
 
-    LTest::addTest("add test bool", [](){
-        LTest::addTest("pointer bool", mbool);
+    ltest().addTest("add test bool", [](){
+        ltest().addTest("pointer bool", mbool);
         return true;
     })
 };

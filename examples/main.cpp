@@ -63,7 +63,7 @@
             leap_year::main();
             async::main();
             std::ofstream xmlfile("bin/TEST-ExampleTestsResults.xml");
-            ltest.outstream(xmlfile).format(Format::Xml).run();
+            ltest().outstream(xmlfile).format(Format::Xml).run();
             xmlfile.close();
             return 0;
         }

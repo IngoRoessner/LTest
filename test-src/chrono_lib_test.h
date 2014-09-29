@@ -33,7 +33,7 @@ constexpr int SLEEPING_TIME = 500;
 
 TestSuite chrono_suite = {
 
-    LTest::addTest("using chrono library of c++ to measure the time", [](){
+    ltest().addTest("using chrono library of c++ to measure the time", [](){
         std::chrono::time_point<std::chrono::system_clock> start, end;
         start = std::chrono::system_clock::now();
         std::this_thread::sleep_for(std::chrono::milliseconds(SLEEPING_TIME));

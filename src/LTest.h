@@ -173,6 +173,6 @@ public:
     LTest threads(unsigned int i);
 };
 
-extern LTest& ltest;
+LTest& ltest();
 
 #endif // LTEST_H

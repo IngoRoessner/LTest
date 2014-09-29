@@ -7,8 +7,9 @@
 using namespace std;
 
 int main(){
-    LTest::run();
+    ltest().run();
     ofstream file;
     file.open("bin/TEST-LTestTests.xml");
-    LTest::run(file, Format::Xml);
+    ltest().format(Format::Xml).outstream(file).run();
+    file.close();
 }
