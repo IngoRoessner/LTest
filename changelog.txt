@@ -4,9 +4,9 @@
 	- Change in resultset.h example 
 
 2.0.0
-	- New API for LTest. LTest::addTest becomes ltest.addTest()
-	- threads option to run the tests async (example: ltest.threads(4).run(); //runs tests with 4 threads)
-	- optional run() parameters are setted by functions (for example ltest.format(Format::Text).run())
+	- New API for LTest. LTest::addTest becomes ltest().addTest()
+	- threads option to run the tests async (example: ltest().threads(4).run(); //runs tests with 4 threads)
+	- optional run() parameters are setted by functions (for example ltest().format(Format::Text).run())
 		- force()
 		- format(Format)
 		- outstream(std::ostream&)

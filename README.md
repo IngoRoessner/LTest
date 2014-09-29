@@ -14,19 +14,19 @@ bool is_leap_year(unsigned int year){
 }
 
 TestSuite suite = {
-     ltest.addTest("test is leap year 2014 : ", [](){
+     ltest().addTest("test is leap year 2014 : ", [](){
          return !is_leap_year(2014);
      }),
-     ltest.addTest("test is leap year 1900 : ", [](){
+     ltest().addTest("test is leap year 1900 : ", [](){
          return !is_leap_year(1900);
      }),
-     ltest.addTest("test is leap year 2000 : ", [](){
+     ltest().addTest("test is leap year 2000 : ", [](){
          return is_leap_year(2000);
      })
 };
 
 int main() {
-    ltest.run(suite);
+    ltest().run(suite);
     return 0;
 }
 
