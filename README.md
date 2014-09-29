@@ -4,7 +4,7 @@ LTest (short for LambdaTest) is a C++ 11 test library based on [lambdas](http://
 Because the usage of lambdas, the library was **designed for** compilers supporting the **C++ 11** standard or higher. 
 LTest does **not make use of any macro constructs** for the tests. 
 Therefore you write **plain C++** test code without any macro magic. 
-LTests supports **programmatic access** to the test results and **many output formats** (e.g. xml output jenkins CI servers).
+LTests supports **programmatic access** to the test results, **multiple output formats** (e.g. the xunit xml output for eclipse or jenkins CI servers) and **parallel test execution**.
 
 ```cpp
 #include "LTest.h"
@@ -14,19 +14,19 @@ bool is_leap_year(unsigned int year){
 }
 
 TestSuite suite = {
-     LTest::addTest("test is leap year 2014 : ", [](){
+     ltest.addTest("test is leap year 2014 : ", [](){
          return !is_leap_year(2014);
      }),
-     LTest::addTest("test is leap year 1900 : ", [](){
+     ltest.addTest("test is leap year 1900 : ", [](){
          return !is_leap_year(1900);
      }),
-     LTest::addTest("test is leap year 2000 : ", [](){
+     ltest.addTest("test is leap year 2000 : ", [](){
          return is_leap_year(2000);
      })
 };
 
 int main() {
-    LTest::run(suite);
+    ltest.run(suite);
     return 0;
 }
 
