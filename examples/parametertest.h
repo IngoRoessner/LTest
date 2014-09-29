@@ -127,6 +127,16 @@ TestSuite DataTests = {
         test.with(2).expect(7);
     }),
 
+    ltest.addTest("manageFixture vi3", [](int index){
+        return ints().at(index);
+    }, [](auto test){
+        ints() = {9,8,7};
+        test.with(0).expect(9);
+        test.with(1).expect(8);
+        test.with(2).expect(7);
+    }),
+
+
     ltest.addTest("testInt1", [&]{out()<<"run testInt1: "<<testInt();}),
     ltest.addTest("testInt2", [&]{out()<<"run testInt2: "<<testInt(); testInt()++;}),
     ltest.addTest("testInt3", [&]{out()<<"run testInt3: "<<testInt();}),
@@ -257,6 +267,7 @@ TestSuite DataTests = {
 
 int main() {
     ltest.run();
+    ltest.threads(4).run({"manageFixture vi1","manageFixture vi2","manageFixture vi3"});
     return 0;
 }
 

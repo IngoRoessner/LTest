@@ -30,7 +30,42 @@
 #include <list>
 #include <functional>
 #include <type_traits>
+#include <map>
+#include <thread>
+#include <mutex>
 
+namespace LTestSource{
+    template<typename T>
+    class FixtureSync{
+        std::map<std::thread::id, bool> change;
+        std::map<T* , std::mutex> fixturemutex;
+        std::mutex changeMutex;
+
+    public:
+        static FixtureSync& getInstance(){
+            static FixtureSync instance;
+            return instance;
+        }
+
+        bool& changed(){
+            changeMutex.lock();
+            std::thread::id thID = std::this_thread::get_id();
+            if(!change.count(thID)){
+                change[thID] = false;
+            }
+            changeMutex.unlock();
+            return change[thID];
+        }
+
+        void lock(T& fixture){
+            fixturemutex[&fixture].lock();
+        }
+
+        void unlock(T& fixture){
+            fixturemutex[&fixture].unlock();
+        }
+    };
+}
 
 class ManagedFixtureBase{
 public:
@@ -59,17 +94,17 @@ public:
 template<typename T>
 class ManagedRefFixture: public ManagedFixtureBase{
     T& fixture;
-    bool changed;
     std::function<void(T&)> beforeFunction;
     std::function<void(T&)> afterFunction;
+    LTestSource::FixtureSync<T>& sync;
 public:
-    ManagedRefFixture(T& t): fixture(t), changed(false){
+    ManagedRefFixture(T& t): fixture(t), sync(LTestSource::FixtureSync<T>::getInstance()){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
     ManagedRefFixture(const ManagedRefFixture& other):
-        fixture(other.fixture), changed(other.changed), beforeFunction(other.beforeFunction),
-        afterFunction(other.afterFunction)
+        fixture(other.fixture), beforeFunction(other.beforeFunction),
+        afterFunction(other.afterFunction),sync(LTestSource::FixtureSync<T>::getInstance())
     {
         ManagedFixtureList::getInstance().push_back(this);
     }
@@ -79,10 +114,13 @@ public:
     }
 
     T& operator()(){
-        if(changed == false && beforeFunction){
+        if(!sync.changed()){
+            sync.lock(fixture);
+        }
+        if(sync.changed() == false && beforeFunction){
             beforeFunction(fixture);
         }
-        changed = true;
+        sync.changed() = true;
         return fixture;
     }
 
@@ -97,10 +135,11 @@ public:
     }
 
     void runAfter(){
-        if(changed && afterFunction){
+        if(sync.changed() && afterFunction){
             afterFunction(fixture);
         }
-        changed = false;
+        sync.changed() = false;
+        sync.unlock(fixture);
     }
 };
 
@@ -108,27 +147,28 @@ template<typename T>
 class ManagedRValFixture: public ManagedFixtureBase{
     T fixture_r_value;
     T& fixture;
-    bool changed;
     std::function<void(T&)> beforeFunction;
     std::function<void(T&)> afterFunction;
+    LTestSource::FixtureSync<T>& sync;
 public:
 
-    ManagedRValFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), changed(false){
+    ManagedRValFixture(T&& t): fixture_r_value(t), fixture(fixture_r_value), sync(LTestSource::FixtureSync<T>::getInstance()){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ManagedRValFixture(T t): fixture_r_value(t), fixture(fixture_r_value), changed(false){
+    ManagedRValFixture(T t): fixture_r_value(t), fixture(fixture_r_value), sync(LTestSource::FixtureSync<T>::getInstance()){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
-    ManagedRValFixture(): fixture_r_value(), fixture(fixture_r_value), changed(false){
+    ManagedRValFixture(): fixture_r_value(), fixture(fixture_r_value), sync(LTestSource::FixtureSync<T>::getInstance()){
         ManagedFixtureList::getInstance().push_back(this);
     }
 
     ManagedRValFixture(const ManagedRValFixture& other): fixture_r_value(other.fixture_r_value),
         fixture(fixture_r_value),
-        changed(other.changed), beforeFunction(other.beforeFunction),
-        afterFunction(other.afterFunction)
+        beforeFunction(other.beforeFunction),
+        afterFunction(other.afterFunction),
+        sync(other.sync)
     {
         ManagedFixtureList::getInstance().push_back(this);
     }
@@ -138,10 +178,13 @@ public:
     }
 
     T& operator()(){
-        if(changed == false && beforeFunction){
+        if(!sync.changed()){
+            sync.lock(fixture);
+        }
+        if(sync.changed() == false && beforeFunction){
             beforeFunction(fixture);
         }
-        changed = true;
+        sync.changed() = true;
         return fixture;
     }
 
@@ -156,10 +199,11 @@ public:
     }
 
     void runAfter(){
-        if(changed && afterFunction){
+        if(sync.changed() && afterFunction){
             afterFunction(fixture);
         }
-        changed = false;
+        sync.changed() = false;
+        sync.unlock(fixture);
     }
 };
 
