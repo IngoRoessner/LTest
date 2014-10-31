@@ -11,23 +11,23 @@ AR = ar
 LD = g++
 WINDRES = windres
 
-INC = 
+INC =
 CFLAGS = -Wall -fexceptions -std=c++1y
-RESINC = 
-LIBDIR = 
-LIB = 
-LDFLAGS = 
+RESINC =
+LIBDIR =
+LIB =
+LDFLAGS = -pthread
 
-INC_DEBUG = $(INC)
-CFLAGS_DEBUG = $(CFLAGS) -g
-RESINC_DEBUG = $(RESINC)
-RCFLAGS_DEBUG = $(RCFLAGS)
-LIBDIR_DEBUG = $(LIBDIR)
-LIB_DEBUG = $(LIB)
-LDFLAGS_DEBUG = $(LDFLAGS)
-OBJDIR_DEBUG = obj/Debug
-DEP_DEBUG = 
-OUT_DEBUG = bin/Debug/LTestExample
+INC_STATIC_LIB = $(INC)
+CFLAGS_STATIC_LIB = $(CFLAGS)
+RESINC_STATIC_LIB = $(RESINC)
+RCFLAGS_STATIC_LIB = $(RCFLAGS)
+LIBDIR_STATIC_LIB = $(LIBDIR)
+LIB_STATIC_LIB = $(LIB)
+LDFLAGS_STATIC_LIB = $(LDFLAGS)
+OBJDIR_STATIC_LIB = obj
+DEP_STATIC_LIB =
+OUT_STATIC_LIB = libltest.a
 
 INC_TEST_LTEST_WITH_LTEST = $(INC)
 CFLAGS_TEST_LTEST_WITH_LTEST = $(CFLAGS) -O2
@@ -37,47 +37,53 @@ LIBDIR_TEST_LTEST_WITH_LTEST = $(LIBDIR)
 LIB_TEST_LTEST_WITH_LTEST = $(LIB)
 LDFLAGS_TEST_LTEST_WITH_LTEST = $(LDFLAGS) -s
 OBJDIR_TEST_LTEST_WITH_LTEST = obj/tests
-DEP_TEST_LTEST_WITH_LTEST = 
+DEP_TEST_LTEST_WITH_LTEST =
 OUT_TEST_LTEST_WITH_LTEST = bin/tests/run-ltest-tests
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/src/LTest.o $(OBJDIR_DEBUG)/examples/main.o
+INC_LTESTEXAMPLE = $(INC)
+CFLAGS_LTESTEXAMPLE = $(CFLAGS) -g
+RESINC_LTESTEXAMPLE = $(RESINC)
+RCFLAGS_LTESTEXAMPLE = $(RCFLAGS)
+LIBDIR_LTESTEXAMPLE = $(LIBDIR)
+LIB_LTESTEXAMPLE = $(LIB)
+LDFLAGS_LTESTEXAMPLE = $(LDFLAGS)
+OBJDIR_LTESTEXAMPLE = obj/Debug
+DEP_LTESTEXAMPLE =
+OUT_LTESTEXAMPLE = bin/Debug/LTestExample
+
+OBJ_STATIC_LIB = $(OBJDIR_STATIC_LIB)/src/LTest.o
 
 OBJ_TEST_LTEST_WITH_LTEST = $(OBJDIR_TEST_LTEST_WITH_LTEST)/test-src/run-ltest-tests.o $(OBJDIR_TEST_LTEST_WITH_LTEST)/src/LTest.o
 
-all: debug test_ltest_with_ltest
+OBJ_LTESTEXAMPLE = $(OBJDIR_LTESTEXAMPLE)/src/LTest.o $(OBJDIR_LTESTEXAMPLE)/examples/main.o
 
-clean: clean_debug clean_test_ltest_with_ltest
+all: static_lib test_ltest_with_ltest ltestexample
 
-before_debug: 
-	test -d bin/Debug || mkdir -p bin/Debug
-	test -d $(OBJDIR_DEBUG)/src || mkdir -p $(OBJDIR_DEBUG)/src
-	test -d $(OBJDIR_DEBUG)/examples || mkdir -p $(OBJDIR_DEBUG)/examples
+clean: clean_static_lib clean_test_ltest_with_ltest clean_ltestexample
 
-after_debug: 
+before_static_lib:
+	test -d $(OBJDIR_STATIC_LIB)/src || mkdir -p $(OBJDIR_STATIC_LIB)/src
 
-debug: before_debug out_debug after_debug
+after_static_lib:
 
-out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
-	$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
+static_lib: before_static_lib out_static_lib after_static_lib
 
-$(OBJDIR_DEBUG)/src/LTest.o: src/LTest.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/LTest.cpp -o $(OBJDIR_DEBUG)/src/LTest.o
+out_static_lib: before_static_lib $(OBJ_STATIC_LIB) $(DEP_STATIC_LIB)
+	$(AR) rcs $(OUT_STATIC_LIB) $(OBJ_STATIC_LIB)
 
-$(OBJDIR_DEBUG)/examples/main.o: examples/main.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c examples/main.cpp -o $(OBJDIR_DEBUG)/examples/main.o
+$(OBJDIR_STATIC_LIB)/src/LTest.o: src/LTest.cpp
+	$(CXX) $(CFLAGS_STATIC_LIB) $(INC_STATIC_LIB) -c src/LTest.cpp -o $(OBJDIR_STATIC_LIB)/src/LTest.o
 
-clean_debug: 
-	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
-	rm -rf bin/Debug
-	rm -rf $(OBJDIR_DEBUG)/src
-	rm -rf $(OBJDIR_DEBUG)/examples
+clean_static_lib:
+	rm -f $(OBJ_STATIC_LIB) $(OUT_STATIC_LIB)
+	rm -rf $(OBJDIR_STATIC_LIB)/src
 
-before_test_ltest_with_ltest: 
+before_test_ltest_with_ltest:
 	test -d bin/tests || mkdir -p bin/tests
 	test -d $(OBJDIR_TEST_LTEST_WITH_LTEST)/test-src || mkdir -p $(OBJDIR_TEST_LTEST_WITH_LTEST)/test-src
 	test -d $(OBJDIR_TEST_LTEST_WITH_LTEST)/src || mkdir -p $(OBJDIR_TEST_LTEST_WITH_LTEST)/src
 
-after_test_ltest_with_ltest: 
+after_test_ltest_with_ltest:
 
 test_ltest_with_ltest: before_test_ltest_with_ltest out_test_ltest_with_ltest after_test_ltest_with_ltest
 
@@ -90,11 +96,35 @@ $(OBJDIR_TEST_LTEST_WITH_LTEST)/test-src/run-ltest-tests.o: test-src/run-ltest-t
 $(OBJDIR_TEST_LTEST_WITH_LTEST)/src/LTest.o: src/LTest.cpp
 	$(CXX) $(CFLAGS_TEST_LTEST_WITH_LTEST) $(INC_TEST_LTEST_WITH_LTEST) -c src/LTest.cpp -o $(OBJDIR_TEST_LTEST_WITH_LTEST)/src/LTest.o
 
-clean_test_ltest_with_ltest: 
+clean_test_ltest_with_ltest:
 	rm -f $(OBJ_TEST_LTEST_WITH_LTEST) $(OUT_TEST_LTEST_WITH_LTEST)
 	rm -rf bin/tests
 	rm -rf $(OBJDIR_TEST_LTEST_WITH_LTEST)/test-src
 	rm -rf $(OBJDIR_TEST_LTEST_WITH_LTEST)/src
 
-.PHONY: before_debug after_debug clean_debug before_test_ltest_with_ltest after_test_ltest_with_ltest clean_test_ltest_with_ltest
+before_ltestexample:
+	test -d bin/Debug || mkdir -p bin/Debug
+	test -d $(OBJDIR_LTESTEXAMPLE)/src || mkdir -p $(OBJDIR_LTESTEXAMPLE)/src
+	test -d $(OBJDIR_LTESTEXAMPLE)/examples || mkdir -p $(OBJDIR_LTESTEXAMPLE)/examples
+
+after_ltestexample:
+
+ltestexample: before_ltestexample out_ltestexample after_ltestexample
+
+out_ltestexample: before_ltestexample $(OBJ_LTESTEXAMPLE) $(DEP_LTESTEXAMPLE)
+	$(LD) $(LIBDIR_LTESTEXAMPLE) -o $(OUT_LTESTEXAMPLE) $(OBJ_LTESTEXAMPLE)  $(LDFLAGS_LTESTEXAMPLE) $(LIB_LTESTEXAMPLE)
+
+$(OBJDIR_LTESTEXAMPLE)/src/LTest.o: src/LTest.cpp
+	$(CXX) $(CFLAGS_LTESTEXAMPLE) $(INC_LTESTEXAMPLE) -c src/LTest.cpp -o $(OBJDIR_LTESTEXAMPLE)/src/LTest.o
+
+$(OBJDIR_LTESTEXAMPLE)/examples/main.o: examples/main.cpp
+	$(CXX) $(CFLAGS_LTESTEXAMPLE) $(INC_LTESTEXAMPLE) -c examples/main.cpp -o $(OBJDIR_LTESTEXAMPLE)/examples/main.o
+
+clean_ltestexample:
+	rm -f $(OBJ_LTESTEXAMPLE) $(OUT_LTESTEXAMPLE)
+	rm -rf bin/Debug
+	rm -rf $(OBJDIR_LTESTEXAMPLE)/src
+	rm -rf $(OBJDIR_LTESTEXAMPLE)/examples
+
+.PHONY: before_static_lib after_static_lib clean_static_lib before_test_ltest_with_ltest after_test_ltest_with_ltest clean_test_ltest_with_ltest before_ltestexample after_ltestexample clean_ltestexample
 
