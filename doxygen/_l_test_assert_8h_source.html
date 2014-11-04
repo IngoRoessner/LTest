@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LTestLogo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">LTest
-   &#160;<span id="projectnumber">2.0.0</span>
+   &#160;<span id="projectnumber">2.1.0</span>
    </div>
   </td>
  </tr>
@@ -160,7 +160,7 @@ $(document).ready(function(){initNavTree('_l_test_assert_8h_source.html','');});
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="keywordtype">float</span>ing&gt;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> Equal(floating a, floating b, floating delta, std::string message = MESSAGE_DEFAULT){</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> EqualDelta(floating a, floating b, floating delta, std::string message = MESSAGE_DEFAULT){</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">bool</span> isNearlyEqual = abs(a - b) &lt; delta;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">if</span>(not isNearlyEqual){</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">if</span>(message == MESSAGE_DEFAULT){</div>
@@ -230,7 +230,7 @@ $(document).ready(function(){initNavTree('_l_test_assert_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><b>LTestAssert.h</b></li>
-    <li class="footer">Generated on Fri Oct 31 2014 14:13:05 for LTest by
+    <li class="footer">Generated on Tue Nov 4 2014 12:30:31 for LTest by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
