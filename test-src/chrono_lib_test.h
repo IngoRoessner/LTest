@@ -40,7 +40,7 @@ TestSuite chrono_suite = {
         end = std::chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = end-start;
         auto millsec = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed_seconds).count();
-        LTAssert::Equal<double>(millsec / 1e6, SLEEPING_TIME, 1.0);
+        LTAssert::EqualDelta<double>(millsec / 1e6, SLEEPING_TIME, 1.0);
     })
 };
 

@@ -53,7 +53,7 @@ namespace LTAssert{
     }
 
     template<typename floating>
-    void Equal(floating a, floating b, floating delta, std::string message = MESSAGE_DEFAULT){
+    void EqualDelta(floating a, floating b, floating delta, std::string message = MESSAGE_DEFAULT){
         bool isNearlyEqual = abs(a - b) < delta;
         if(not isNearlyEqual){
             if(message == MESSAGE_DEFAULT){
