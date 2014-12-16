@@ -11,6 +11,7 @@ set(ExampleSource
     examples/minimal.h
     examples/parametertest.h
     examples/resultset.h
+    examples/call_private.h
     src/OutputFormat/rapidxml-1.13/rapidxml.hpp
     src/OutputFormat/rapidxml-1.13/rapidxml_iterators.hpp
     src/OutputFormat/rapidxml-1.13/rapidxml_print.hpp
@@ -31,7 +32,8 @@ set(ExampleSource
     src/MuteStream.h
     src/ParameterTest.h
     src/TestResult.h
-    src/toStringPatch.h)
+    src/toStringPatch.h
+    src/hackPrivate.h)
 
  set(SelfTestSource
      src/OutputFormat/rapidxml-1.13/rapidxml.hpp
@@ -55,6 +57,7 @@ set(ExampleSource
      src/ParameterTest.h
      src/TestResult.h
      src/toStringPatch.h
+     src/hackPrivate.h
      test-src/addTest.h
      test-src/chrono_lib_test.h
      test-src/run-ltest-tests.cpp)

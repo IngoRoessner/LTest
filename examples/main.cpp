@@ -23,8 +23,8 @@
  *     THE SOFTWARE.
  */
 
-#define ALL
-//ALL || LEAP_YEAR || MINIMAL || IGNORES || PARAMTEST || RESULTSET || ASYNC
+#define PRIVATECALL
+//ALL || LEAP_YEAR || MINIMAL || IGNORES || PARAMTEST || RESULTSET || ASYNC || PRIVATECALL
 
 
 #if defined(LEAP_YEAR)
@@ -44,6 +44,9 @@
 #elif defined(ASYNC)
     #define EXAMPLE async
     #include "async.h"
+#elif defined(PRIVATECALL)
+    #define EXAMPLE private_call
+    #include "call_private.h"
 #elif defined(ALL)
     #define EXAMPLE all
     #include "leap_year.h"
