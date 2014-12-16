@@ -109,7 +109,7 @@ namespace LTestOut{
             initializer_list<string>::iterator lineIt = line.begin();
             for(auto column : columnNames){
                if(lineIt == line.end()){
-                    throw runtime_error("expect line.size == columns.size");
+                    throw runtime_error("validate line.size == columns.size");
                }
                columns[column].push_back(*lineIt);
                setColumnWhide(column, *lineIt);
