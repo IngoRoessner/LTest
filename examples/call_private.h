@@ -62,7 +62,7 @@ template class StorePrivate<zTag, &ClassWithPrivateFunctions::z>;
 namespace private_call{
 
     TestSuite PrivateCallTests = {
-            ltest().addTest("void void", [](){
+            ltest().addTest("call private method and field", [](){
                 ClassWithPrivateFunctions object;
 
                 voidVoidFooTag::call(object);

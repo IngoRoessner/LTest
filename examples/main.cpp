@@ -23,7 +23,7 @@
  *     THE SOFTWARE.
  */
 
-#define PRIVATECALL
+#define ALL
 //ALL || LEAP_YEAR || MINIMAL || IGNORES || PARAMTEST || RESULTSET || ASYNC || PRIVATECALL
 
 
@@ -55,6 +55,7 @@
     #include "parametertest.h"
     #include "resultset.h"
     #include "async.h"
+    #include "call_private.h"
     #include <fstream>
 
     namespace all{
@@ -65,6 +66,7 @@
             resultset::main();
             leap_year::main();
             async::main();
+            private_call::main();
             std::ofstream xmlfile("bin/TEST-ExampleTestsResults.xml");
             ltest().outstream(xmlfile).format(Format::Xml).run();
             xmlfile.close();
