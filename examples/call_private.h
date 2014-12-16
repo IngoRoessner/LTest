@@ -7,6 +7,8 @@
 
 class ClassWithPrivateFunctions {
     int x;
+    int y;
+    int z;
 
     void voidVoidFoo(){
         std::clog << "voidVoidFoo" << std::endl;
@@ -25,19 +27,37 @@ class ClassWithPrivateFunctions {
         this->x = x;
         return temp;
     }
+
+public:
+    void setZ(int z){
+        this->z = z;
+    }
+
+    void setY(int y){
+        this->y = y;
+    }
 };
 
 typedef CreateTag<ClassWithPrivateFunctions, void> voidVoidFooTag;
-template class StorePrivateFunction<voidVoidFooTag, &ClassWithPrivateFunctions::voidVoidFoo>;
+template class StorePrivate<voidVoidFooTag, &ClassWithPrivateFunctions::voidVoidFoo>;
 
 typedef CreateIdTag<1, ClassWithPrivateFunctions, int, int> iiFooTag;
-template class StorePrivateFunction<iiFooTag, &ClassWithPrivateFunctions::iiFoo>;
+template class StorePrivate<iiFooTag, &ClassWithPrivateFunctions::iiFoo>;
 
 typedef CreateTag<ClassWithPrivateFunctions, double, double, int> ddiFooTag;
-template class StorePrivateFunction<ddiFooTag, &ClassWithPrivateFunctions::ddiFoo>;
+template class StorePrivate<ddiFooTag, &ClassWithPrivateFunctions::ddiFoo>;
 
 typedef CreateIdTag<2, ClassWithPrivateFunctions, int, int> gsXTag;
-template class StorePrivateFunction<gsXTag, &ClassWithPrivateFunctions::getAndSetX>;
+template class StorePrivate<gsXTag, &ClassWithPrivateFunctions::getAndSetX>;
+
+typedef CreateFieldTag<ClassWithPrivateFunctions, int> xTag;
+template class StorePrivate<xTag, &ClassWithPrivateFunctions::x>;
+
+typedef CreateFieldTag<ClassWithPrivateFunctions, int, 2> yTag;
+template class StorePrivate<yTag, &ClassWithPrivateFunctions::y>;
+
+typedef CreateFieldTag<ClassWithPrivateFunctions, int, 3> zTag;
+template class StorePrivate<zTag, &ClassWithPrivateFunctions::z>;
 
 namespace private_call{
 
@@ -57,6 +77,12 @@ namespace private_call{
                 LTAssert::True(2 == gsXTag::call(object, 2));
                 LTAssert::True(2 == gsXTag::call(object, 13));
                 LTAssert::True(13 == gsXTag::call(object, 0));
+                LTAssert::True(0 == xTag::get(object));
+
+                object.setY(5);
+                object.setZ(20);
+                LTAssert::True(5 == yTag::get(object));
+                LTAssert::True(20 == zTag::get(object));
             })
     };
 
