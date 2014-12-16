@@ -80,15 +80,15 @@ namespace LTestSource{
         }
 
         template<typename FunctType>
-        FunctionPatternNot<T, void, FunctType, bool, T>
-        expect(FunctType validator, std::string message = "validation fails")
+        FunctionPattern<void, FunctType, bool, T>
+        validate(FunctType validator, std::string message = "validation fails")
         {
             validateBool(validator, message);
         }
 
         template<typename FunctType>
-        FunctionPatternNot<T, void, FunctType, void, T>
-        expect(FunctType validator)
+        FunctionPattern<void, FunctType, void, T>
+        validate(FunctType validator)
         {
             validateVoid(validator);
         }

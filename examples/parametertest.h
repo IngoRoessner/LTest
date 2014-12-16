@@ -155,33 +155,33 @@ TestSuite DataTests = {
     }),
 
     ltest().addTest("validate iii", iii, [](auto test){
-        test.with(2,3).expect([](int i){return i>0;});
-        test.with(4,3).expect([](int i){return i>0;});
-        test.with(2,3).expect([](int i){return i<0;});
+        test.with(2,3).validate([](int i){return i>0;});
+        test.with(4,3).validate([](int i){return i>0;});
+        test.with(2,3).validate([](int i){return i<0;});
     }),
 
     ltest().addTest("validate Assert iii", iii, [](auto test){
-        test.with(2,3).expect([](int i){LTAssert::True(true, "not true"); return i>0;});
-        test.with(4,3).expect([](int i){LTAssert::True(false, "not true"); return i>0;});
-        test.with(2,3).expect([](int i){LTAssert::True(true, "not true"); return i>0;});
+        test.with(2,3).validate([](int i){LTAssert::True(true, "not true"); return i>0;});
+        test.with(4,3).validate([](int i){LTAssert::True(false, "not true"); return i>0;});
+        test.with(2,3).validate([](int i){LTAssert::True(true, "not true"); return i>0;});
     }),
 
     ltest().addTest("validate void iii", iii, [](auto test){
-        test.with(2,3).expect([](int i){LTAssert::True(true, "not true");});
-        test.with(4,3).expect([](int i){LTAssert::True(false, "not true");});
-        test.with(2,3).expect([](int i){LTAssert::True(true, "not true");});
+        test.with(2,3).validate([](int i){LTAssert::True(true, "not true");});
+        test.with(4,3).validate([](int i){LTAssert::True(false, "not true");});
+        test.with(2,3).validate([](int i){LTAssert::True(true, "not true");});
     }),
 
     ltest().addTest("validate1", [](bool b){return b;}, [](auto test){
-        test.with(true).expect(validate1);
-        test.with(true).expect(validate1);
-        test.with(false).expect(validate1);
+        test.with(true).validate(validate1);
+        test.with(true).validate(validate1);
+        test.with(false).validate(validate1);
     }),
 
     ltest().addTest("validate2", [](bool b){return b;}, [](auto test){
-        test.with(false).expect(validate2);
-        test.with(false).expect(validate2);
-        test.with(true).expect(validate2);
+        test.with(false).validate(validate2);
+        test.with(false).validate(validate2);
+        test.with(true).validate(validate2);
     }),
 
     ltest().addTest("anything iii", iii, [](auto test){

@@ -81,7 +81,7 @@ class LTest
     std::shared_ptr<TestResult> runTest(const std::string& testName, std::function<bool ()> testFunction);
 
 public:
-    static LTest& getInstanz();
+    static LTest& getInstance();
 
     void setStreamCaptureMode(std::ostream& os, CaptureMode mode)
     {

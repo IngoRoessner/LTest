@@ -1,8 +1,8 @@
 /*
  *     The MIT License (MIT)
  *
- *     Copyright (c) 2014 Ingo Rössner
- *                        Dan Häberlein
+ *     Copyright (c) 2014 Ingo Rï¿½ssner
+ *                        Dan Hï¿½berlein
  *
  *     Permission is hereby granted, free of charge, to any person obtaining a copy
  *     of this software and associated documentation files (the "Software"), to deal
@@ -92,22 +92,5 @@ namespace LTestSource
     template<typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
     using FunctionPattern = typename FunctionPattern_<EnabledRet, Functor, ReturnType, Parameters...>::type;
 
-
-    template<bool functionIsSameAsNotThis, typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
-    struct NotFunctionPattern:std::enable_if<false, void>
-    {};
-
-    template<typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
-    struct NotFunctionPattern<false, EnabledRet, Functor, ReturnType, Parameters...>
-            :   FunctionPattern_<EnabledRet, Functor, ReturnType, Parameters...>
-    {};
-
-    template<typename NotThis, typename EnabledRet, typename Functor, typename ReturnType, typename... Parameters>
-    using FunctionPatternNot = typename NotFunctionPattern<
-                               std::is_same<Functor, NotThis>::value,
-                               EnabledRet,
-                               Functor,
-                               ReturnType,
-                               Parameters...>::type;
 };
 #endif // FUNCTIONPATTERN_H_INCLUDED

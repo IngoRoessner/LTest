@@ -47,7 +47,7 @@ LTest::LTest(LTest& other):
     threads_(other.threads_)
 {}
 
-LTest& LTest::getInstanz(){
+LTest& LTest::getInstance(){
     static LTest instanz;
     return instanz;
 }
@@ -271,5 +271,5 @@ LTest LTest::threads(unsigned int i){
 }
 
 LTest& ltest(){
-    return LTest::getInstanz();
+    return LTest::getInstance();
 }
