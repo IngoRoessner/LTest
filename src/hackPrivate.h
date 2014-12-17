@@ -34,7 +34,7 @@ struct CreateTag{
     typedef ReturnValue ReturnType;
 
     static ReturnValue call(ClassType& object, ParameterTypes&&... args){
-        (object.*AccessPrivate<CreateTag>::value)(args...);
+        return (object.*AccessPrivate<CreateTag>::value)(args...);
     }
 };
 
@@ -46,7 +46,7 @@ struct CreateIdTag{
     typedef ReturnValue ReturnType;
 
     static ReturnValue call(ClassType& object, ParameterTypes&&... args){
-        (object.*AccessPrivate<CreateIdTag>::value)(args...);
+        return (object.*AccessPrivate<CreateIdTag>::value)(args...);
     }
 };
 
