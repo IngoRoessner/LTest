@@ -17,3 +17,8 @@
 	- setVerboseMode() renamed to setStreamCaptureMode()
 	- VerboseMode renamed to CaptureMode
 	- Additional CaptureMode DIRECTOUT
+
+2.1.0
+	- rename ResultWrapper::expect(Funktion) to  ResultWrapper::validate(Function)
+	- rename LTest::getInstanz() to LTest::getInstance()
+	- hack to access private member function and fields (hackPrivate.h)
