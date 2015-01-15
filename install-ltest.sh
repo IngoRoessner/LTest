@@ -19,3 +19,11 @@ do
         mkdir --parents $(dirname $TARGET)
         cp $f $TARGET
 done
+
+for f in $(find src -name "*.hpp");
+do
+        name="${f#*/}"
+        TARGET=$REAL_INCLUDE_FOLDER/${name}
+        mkdir --parents $(dirname $TARGET)
+        cp $f $TARGET
+done
