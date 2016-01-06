@@ -81,10 +81,10 @@
 		<Unit filename="src/OutputFormat/TextOutput.h" />
 		<Unit filename="src/OutputFormat/TextTable.h" />
 		<Unit filename="src/OutputFormat/XmlOutput.h" />
-		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml.hpp" />
-		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_iterators.hpp" />
-		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_print.hpp" />
-		<Unit filename="src/OutputFormat/rapidxml-1.13/rapidxml_utils.hpp" />
+		<Unit filename="src/OutputFormat/rapidxml/rapidxml.hpp" />
+		<Unit filename="src/OutputFormat/rapidxml/rapidxml_iterators.hpp" />
+		<Unit filename="src/OutputFormat/rapidxml/rapidxml_print.hpp" />
+		<Unit filename="src/OutputFormat/rapidxml/rapidxml_utils.hpp" />
 		<Unit filename="src/ParameterTest.h" />
 		<Unit filename="src/TestResult.h" />
 		<Unit filename="src/toStringPatch.h" />

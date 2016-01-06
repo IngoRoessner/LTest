@@ -28,8 +28,8 @@
 #define XMLOUTPUT_H_
 
 #include <string>
-#include "rapidxml-1.13/rapidxml.hpp"
-#include "rapidxml-1.13/rapidxml_print.hpp"
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_print.hpp"
 #include "OutputFormatBase.h"
 #include "../toStringPatch.h"
 #include <sstream>
